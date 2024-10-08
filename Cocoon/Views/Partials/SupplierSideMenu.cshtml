@@ -1,0 +1,50 @@
+﻿@model G4Fit.Models.ViewModels.SideMenuVM
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-right image">
+                @if (Model.UserImage != null)
+                {
+                    <img src="~/Content/Images/Users/@Model.UserImage" style="height:45px" class="img-circle" alt="@Model.Name" />
+                }
+                else
+                {
+                    <img src="~/Content/assets/imgs/avatar.png" style="height:45px" class="img-circle" alt="@Model.Name" />
+                }
+            </div>
+            <div class="pull-left info">
+                <p>@Model.Name</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> متواجد</a>
+            </div>
+        </div>
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            <li class=" treeview">
+                <a href="@Url.Action("Index", "Suppliers")">
+                    <i class="fa fa-dashboard"></i> <span>الرئيسية</span> </i>
+                </a>
+            </li>
+
+            <li class="treeview @(Request.Url.AbsolutePath.ToLower().Contains("Services") || Request.Url.AbsolutePath.ToLower().Contains("offers") ? "active" : "")">
+                <a href="#">
+                    <i class="fa fa-tag"></i>
+                    <span>الخدمات </span>
+                    <i class="fa fa-angle-left pull-left"></i>
+                </a>
+
+                <ul class="treeview-menu @(Request.Url.AbsolutePath.ToLower().Contains("Services") || Request.Url.AbsolutePath.ToLower().Contains("offers") ? "menuopen" : "")">
+                    <li><a href="@Url.Action("Create", "SupplierServices")"><i class="fa fa-plus"></i> اضافه خدمه</a></li>
+                    <li><a href="@Url.Action("Dashboard", "SupplierServices")"><i class="fa fa-tag"></i> الخدمات الحالية</a></li>
+                </ul>
+            </li>
+
+            <li class=" treeview">
+                <a href="@Url.Action("Index", "SupplierOrders")">
+                    <i class="fa fa-shopping-cart"></i> <span>الطلبات</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+</aside>

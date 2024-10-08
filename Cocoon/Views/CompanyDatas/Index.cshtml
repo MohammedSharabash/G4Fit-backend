@@ -1,0 +1,284 @@
+﻿@model G4Fit.Models.Domains.CompanyData
+@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = "التعريف بالشركة";
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-fw fa-building"></i> @ViewBag.Title</h3>
+    </div>
+    <div class="panel-body">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <div id="accordion" class="panel-group" aria-multiselectable="true" role="tablist">
+            <div class="panel panel-success">
+                <div id="collapseOne" class="panel-collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Index", "CompanyDatas", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            if (Model != null)
+                            {
+                                @Html.HiddenFor(d => d.Id)
+                            }
+
+
+                            <div class="row" style="margin:10px;">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="DescriptionAr" class="col-sm-5 control-label">التعريف بالشركة بالعربى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.DescriptionAr, new { @class = "form-control valid", rows = 7 })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="DescriptionEn" class="col-sm-5 control-label">التعريف بالشركة بالانجليزى:</label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.DescriptionEn, new { @class = "form-control valid", rows = 7 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="VisionAr" class="col-sm-5 control-label">الرؤية بالعربى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.VisionAr, new { @class = "form-control valid", rows = 7 })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="VisionEn" class="col-sm-5 control-label">الرؤية بالانجليزى:</label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.VisionEn, new { @class = "form-control valid", rows = 7 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="MessageAr" class="col-sm-5 control-label">الرساله بالعربى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.MessageAr, new { @class = "form-control valid", rows = 7 })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="MessageEn" class="col-sm-5 control-label">الرساله بالانجليزى:</label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.MessageEn, new { @class = "form-control valid", rows = 7 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="ValuesAr" class="col-sm-5 control-label">القيم بالعربى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.ValuesAr, new { @class = "form-control valid", rows = 7 })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="ValuesEn" class="col-sm-5 control-label">القيم بالانجليزى:</label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.ValuesEn, new { @class = "form-control valid", rows = 7 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="OtherNotesAr" class="col-sm-5 control-label">اى ملحوظه اخرى بالعربى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.OtherNotesAr, new { @class = "form-control valid", rows = 7 })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="OtherNotesEn" class="col-sm-5 control-label">اى ملحوظه اخرى بالانجليزى:</label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.OtherNotesEn, new { @class = "form-control valid", rows = 7 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="FooterTextAr" class="col-sm-5 control-label">النص المكتوب فى اخر الصفحه بالعربى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.FooterTextAr, new { @class = "form-control valid", rows = 7 })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="FooterTextEn" class="col-sm-5 control-label">النص المكتوب فى اخر الصفحه بالانجليزى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.FooterTextEn, new { @class = "form-control valid", rows = 7 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="VideoUrl" class="col-sm-5 control-label">رابط فيديو اليوتيوب التعريفى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(model => model.VideoUrl, new { @class = "form-control valid" })
+                                            @Html.ValidationMessageFor(s => s.VideoUrl, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="YouTube" class="col-sm-5 control-label">قناه اليوتيوب: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(model => model.YouTube, new { @class = "form-control valid", type = "url" })
+                                            @Html.ValidationMessageFor(s => s.YouTube, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="AddressAr" class="col-sm-5 control-label">عنوان الشركة بالعربى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(model => model.AddressAr, new { @class = "form-control valid" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="AddressEn" class="col-sm-5 control-label">عنوان الشركة بالانجليزى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(model => model.AddressEn, new { @class = "form-control valid" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="WhatsApp" class="col-sm-5 control-label">الواتس اب: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(model => model.WhatsApp, new { @class = "form-control valid" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Twitter" class="col-sm-5 control-label">رابط تويتر: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(model => model.Twitter, new { @class = "form-control valid", type = "url" })
+                                            @Html.ValidationMessageFor(s => s.Twitter, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Instagram" class="col-sm-5 control-label">رابط الانستجرام: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(model => model.Instagram, new { @class = "form-control valid", type = "url" })
+                                            @Html.ValidationMessageFor(s => s.Instagram, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Facebook" class="col-sm-5 control-label">رابط فيسبوك: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(model => model.Facebook, new { @class = "form-control valid", type = "url" })
+                                            @Html.ValidationMessageFor(s => s.Facebook, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="SnapChat" class="col-sm-5 control-label"> سناب شات: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(model => model.SnapChat, new { @class = "form-control valid" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="TikTok" class="col-sm-5 control-label">تيك توك: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(model => model.TikTok, new { @class = "form-control valid" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Website" class="col-sm-5 control-label"> رابط الموقع: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(model => model.Website, new { @class = "form-control valid" })
+                                            @Html.ValidationMessageFor(s => s.Website, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Hotline" class="col-sm-5 control-label">رقم الخط الساخن: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(model => model.Hotline, new { @class = "form-control valid" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Email" class="col-sm-5 control-label"> البريد الالكترونى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control valid", type = "email" })
+                                            @Html.ValidationMessageFor(s => s.Email, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">حفظ</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

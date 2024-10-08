@@ -1,0 +1,259 @@
+﻿@model G4Fit.Models.Domains.Order
+@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = "تفاصيل الطلب رقم " + Model.Code;
+}
+<div class="row">
+    <!-- Left col -->
+    <div class="col-md-12">
+        <!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <a class="btn btn-default no-print" href="@Url.Action("Dashboard", "Orders")">العودة</a>
+                <h3 class="box-title no-print">@ViewBag.Title</h3>
+                <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="text-center" style="margin-bottom:10px;">
+                    <h4>الطلب رقم @Model.Code</h4>
+                    <h4 style="margin:10px">
+                        @switch (Model.OrderStatus)
+                        {
+                            case G4Fit.Models.Enums.OrderStatus.Placed:
+                                <span class="label label-warning">جديد</span>
+                                break;
+                            case G4Fit.Models.Enums.OrderStatus.Delivered:
+                                <span class="label label-success">تم التوصيل</span>
+                                break;
+                            case G4Fit.Models.Enums.OrderStatus.Canceled:
+                                <span class="label label-success">تم الالغاء</span>
+                                break;
+                            default:
+                                break;
+                        }
+                    </h4>
+                    <h4 style="margin:10px" class="no-print">
+                        <br />
+                        <button type="button" onclick="window.print();" class="btn"><i class="fa fa-print"></i> طباعة</button>
+                        <button id="copyToExcelBtn" type="button" class="btn btn-secondary"><i class="fa fa-copy"></i> نسخ خدمات الطلب للإكسيل</button>
+                    </h4>
+                </div>
+                <div>
+                    <table id="orderItemsTable" class="table text-center table-bordered" dir="rtl">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    اسم العميل
+                                </td>
+                                <td>
+                                    @Model.User.Name
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    رقم العميل
+                                </td>
+                                <td>
+                                    <a href="tel:@Model.User.PhoneNumber">@Model.User.PhoneNumber</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    عنوان العميل
+                                </td>
+                                @if (Model.CityId.HasValue)
+                                {
+                                    <td>
+                                        <p>الدولة: @Model.City.Country.NameAr</p>
+                                        <p>المدينة: @Model.City.NameAr</p>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        ---
+                                    </td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    عناصر الطلب
+                                </td>
+                                <td>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    اسم الخدمه
+                                                </th>
+                                                <th>
+                                                    الكمية / الإشتراك
+                                                </th>
+                                                <th>
+                                                    الحجم
+                                                </th>
+                                                <th>
+                                                    اللون
+                                                </th>
+                                                <th>
+                                                    السعر
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.Items.Where(d => d.IsDeleted == false))
+                                            {
+                                                <tr>
+                                                    <td id="ServiceName">@item.Service.NameAr</td>
+                                                    @if (!item.Service.IsTimeBoundService)
+                                                    {
+                                                        <td id="quantity">@item.Quantity</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td id="quantity">@item.Quantity أيام إشتراك</td>
+                                                    }
+                                                    <td>
+                                                        @if (item.SizeId.HasValue == true)
+                                                        {
+                                                            <span>@item.Size.Size</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>بدون حجم</span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @if (item.ColorId.HasValue == true)
+                                                        {
+                                                            <span id="color" style="background-color:@item.Color.Color">@item.Color.Color</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>بدون لون</span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @item.Price ريال سعودي
+                                                        <br />
+                                                        الاجمالى: @item.SubTotal ريال سعودي
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    سعر الطلب
+                                </td>
+                                <td dir="auto">
+                                    اجمالى الخدمات: @Model.SubTotal ريال سعودي <br />
+                                    خصم الكوبون: @Model.PromoDiscount ريال سعودي @(Model.PromoId.HasValue == true ? $"({Model.Promo.Text})" : "") <br />
+                                    رصيد المحفظه: @Model.WalletDiscount ريال سعودي <br />
+                                    الاجمالى: @Model.Total ريال سعودي <br />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    هل تم الدفع؟
+                                </td>
+                                <td>
+                                    @if (Model.IsPaid == true)
+                                    {
+                                        <span>نعم</span>
+                                    }
+                                    else
+                                    {
+                                        <span>لا</span>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    طريقه الدفع
+                                </td>
+                                <td>
+                                    @switch (Model.PaymentMethod)
+                                    {
+                                        case G4Fit.Models.Enums.PaymentMethod.Cash:
+                                            <span>الدفع كاش</span>
+                                            break;
+                                        case G4Fit.Models.Enums.PaymentMethod.Online:
+                                            <span>الدفع اون لاين</span>
+                                            break;
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    وقت الطلب
+                                </td>
+                                @if (Model.ModifiedOn.HasValue == true)
+                                {
+                                    var Time = TimeZoneInfo.ConvertTimeFromUtc(Model.ModifiedOn.Value, TimeZoneInfo.FindSystemTimeZoneById("Arab Standard Time"));
+                                    <td dir="ltr">
+                                        @Time.ToString("dd MMMM yyyy")<br />
+                                        @Time.ToString("hh:mm tt")
+                                    </td>
+                                }
+                                else
+                                {
+                                    var Time = TimeZoneInfo.ConvertTimeFromUtc(Model.CreatedOn, TimeZoneInfo.FindSystemTimeZoneById("Arab Standard Time"));
+                                    <td dir="ltr">
+                                        @Time.ToString("dd MMMM yyyy")<br />
+                                        @Time.ToString("hh:mm tt")
+                                    </td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Include jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+
+
+    $(document).ready(function () {
+        function copyItemsToExcel() {
+            var data = [];
+
+            // Iterate through rows and extract Service name, quantity, and color
+            $('#orderItemsTable tbody tr').each(function () {
+                var ServiceName = $(this).find('td#ServiceName').text().trim();
+                var quantity = $(this).find('td#quantity').text().trim();
+                var color = $(this).find('td#color').length > 0 ? $(this).find('td#color').text().trim() : "بدون لون";
+
+                // Always add ServiceName, quantity, and color (or "بدون لون")
+                data.push(ServiceName + '\t' + quantity + '\t' + color);
+            });
+
+            // Create a textarea element to copy the data to clipboard
+            var textarea = document.createElement('textarea');
+            textarea.value = data.join('\n');
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            // Alert success message
+            alert("تم النسخ إلى الحافظة بنجاح!");
+        }
+
+        // Attach click event to the copy button
+        $('#copyToExcelBtn').click(function () {
+            copyItemsToExcel();
+        });
+
+    });
+
+
+</script>

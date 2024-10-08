@@ -1,0 +1,81 @@
+﻿@model G4Fit.Models.Domains.FAQ
+@{
+    ViewBag.Title = "تعديل سؤال";
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+}
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-fw fa-edit"></i> @ViewBag.Title</h3>
+    </div>
+    <div class="panel-body">
+        <div id="accordion" class="panel-group" aria-multiselectable="true" role="tablist">
+            <div class="panel panel-success">
+                <div class="panel-heading" role="tab" id="headingOne" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <h4 class="panel-title">
+                        <a><i class="fa fa-fw fa-edit"></i>@ViewBag.Title</a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Edit", "FAQs", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(d => d.CreatedOn)
+                            @Html.HiddenFor(d => d.DeletedOn)
+                            @Html.HiddenFor(d => d.Id)
+                            @Html.HiddenFor(d => d.IsDeleted)
+                            @Html.HiddenFor(d => d.IsModified)
+                            @Html.HiddenFor(d => d.ModifiedOn)
+                            @Html.HiddenFor(d => d.RestoredOn)
+
+                            <div class="row" style="margin:10px;">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="QuestionAr" class="col-sm-5 control-label required">السؤال بالعربى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.EditorFor(model => model.QuestionAr, new { htmlAttributes = new { @class = "form-control valid", required = true } })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="QuestionEn" class="col-sm-5 control-label required">السؤال بالانجليزى:</label>
+                                        <div class="col-sm-7">
+                                            @Html.EditorFor(model => model.QuestionEn, new { htmlAttributes = new { @class = "form-control valid", required = true } })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px;">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="AnswerAr" class="col-sm-5 control-label required">الجواب بالعربى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.AnswerAr, new { @class = "form-control valid", required = true, rows = 6 })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="AnswerEn" class="col-sm-5 control-label required">الجواب بالانجليزى:</label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.AnswerEn, new { @class = "form-control valid", required = true, rows = 6 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success">تعديل</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            @Html.ActionLink("العودة إلى القائمة", "Dashboard", null, new { @class = "btn btn-default" })
+        </div>
+    </div>
+</div>
+

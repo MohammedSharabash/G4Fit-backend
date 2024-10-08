@@ -1,0 +1,60 @@
+
+PGLog 12/09/2021 05:32:36 م
+Start sending GetResponse()
+
+
+2021-09-12 17:32:37
+finish sending GetResponse()
+
+
+2021-09-12 17:32:37
+GetResponseStream is done
+
+
+2021-09-12 17:32:37
+sr is done
+
+
+2021-09-12 17:32:37
+content is done
+
+
+2021-09-12 17:32:37
+dvresponse is done {
+  "result": null,
+  "responseCode": null,
+  "authcode": null,
+  "tranid": null,
+  "trackid": null,
+  "terminalid": null,
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": "2125517301379315094",
+  "targetUrl": "https://payments.urway-tech.com/URWAYPGService/direct.jsp",
+  "postData": null,
+  "intUrl": null,
+  "responseHash": null,
+  "amount": null,
+  "cardBrand": "",
+  "maskedPAN": null,
+  "cardToken": null
+}
+
+
+2021-09-12 17:32:37
+dvresponse[targetUrl].Value != null https://payments.urway-tech.com/URWAYPGService/direct.jsp
+
+
+2021-09-12 17:32:37
+dvresponse[payid].Value != null 2125517301379315094
+

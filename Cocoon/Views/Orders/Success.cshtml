@@ -1,0 +1,46 @@
+﻿@model G4Fit.Models.Domains.Order
+@using Cocoon.Resources
+@{
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+}
+<section class="m-4 pt-1">
+    <div class="card text-center">
+        <div class="card-header font-weight-bold text-white" style="background:black;">
+            <i class="fa fa-check-circle"></i> @(culture == "ar" ? "عمليه شراء ناجحة" : "Your order has been successfully placed")
+        </div>
+        <div class="card-body m-auto">
+            <section class="Connect" id="Login">
+                <div class="container">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <h4 class="d-block"><strong>@(culture == "ar" ? "رقم الطلب" : "Order Number")</strong></h4>
+                            <h4 class="d-block">#@Model.Code</h4>
+                            <hr />
+                            <br />
+                            <a class="btn btn-info" target="_blank" href="@Url.Action("Index", "Orders")">@Website.ViewOrder</a>
+                            <br />
+                            <br />
+                            <a class="btn btn-info" target="_blank" href="@Url.Action("Invoice", "Orders", new { OrderId = Model.Id })">@Website.DownloadInvoice</a>
+                            <br />
+                            <br />
+                            <hr />
+                            <a class="btn btn-primary" href="@Url.Action("Index", "Home")">@Website.Home</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+
+@section Scripts{
+    <script>
+            $(function () {
+                Swal.fire(
+                    '@(culture == "ar" ? "تم بنجاح" : "Success")',
+                    '@(culture == "ar" ? "تم استقبال طلبكم بنجاح" : "Your order has been sent successfully")',
+                    'success'
+                )
+            })
+    </script>
+}

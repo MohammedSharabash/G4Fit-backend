@@ -1,0 +1,99 @@
+﻿@model IEnumerable<G4Fit.Models.Domains.Order>
+@using Cocoon.Resources
+@{
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+}
+<section class="member_profile">
+    <div class="container">
+        <div class="card wow fadeInUp">
+            <div class="card-header">
+                <h2 class="h3 text-right"><span><i class="fas fa-star"></i>@(culture == "ar" ? "طلبات قيد التحضير " : "New Orders")<i class="fas fa-people-carry"></i></span></h2>
+            </div>
+            <div class="card-body">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        @if (Model == null || Model.Count(s => s.OrderStatus == G4Fit.Models.Enums.OrderStatus.Placed) <= 0)
+                        {
+                            <div class="py-5 text-center m-auto">
+                                @(culture == "ar" ? "لا توجد طلبات جديدة" : "There is no new orders")
+                            </div>
+                        }
+                        else
+                        {
+                            foreach (var order in Model.OrderByDescending(s => s.CreatedOn))
+                            {
+                                <a href="/Orders/Invoice?OrderId=@order.Id">
+                                    @foreach (var Service in order.Items.Where(s => s.IsDeleted == false))
+                                    {
+                                        string ServiceImage = null;
+                                        if (Service.Service.Images != null && Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
+                                        {
+                                            ServiceImage = Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
+                                        }
+                                        <div class="swiper-slide hvr-shrink">
+                                            <img class="rounded-circle" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100px" height="100">
+                                            <h3 class="h4">@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)</h3>
+                                            <h5>#@order.Code</h5>
+                                            <div class="Date d-flex">
+                                                <div class="From">
+                                                    <p>@(culture == "ar" ? "تاريخ الطلب" : "Order Date")</p><span>@order.CreatedOn.ToString("dd MMMM yyyy")</span>
+                                                </div><i class="fas fa-truck fa-2x"></i>
+                                                @*<div class="To">
+                                                        <p>تاريخ الوصول</p><span>20/5/2020</span>
+                                                    </div>*@
+                                            </div>
+                                        </div>
+                                    }
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card wow zoomIn">
+            <div class="card-header">
+                <h2 class="h3 text-right"><span><i class="fas fa-star"></i>@(culture == "ar" ? "طلباتى السابقة " : "Previous Orders")<i class="fas fa-people-carry"></i></span></h2>
+            </div>
+            <div class="card-body">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        @if (Model == null || Model.Count(s => s.OrderStatus == G4Fit.Models.Enums.OrderStatus.Delivered) <= 0)
+                        {
+                            <div class="py-5 text-center m-auto">
+                                @(culture == "ar" ? "لا توجد طلبات سابقة" : "There is no old orders")
+                            </div>
+                        }
+                        else
+                        {
+                            foreach (var order in Model.OrderByDescending(s => s.CreatedOn))
+                            {
+                                foreach (var Service in order.Items.Where(s => s.IsDeleted == false))
+                                {
+                                    string ServiceImage = null;
+                                    if (Service.Service.Images != null && Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
+                                    {
+                                        ServiceImage = Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
+                                    }
+                                    <div class="swiper-slide hvr-shrink">
+                                        <img class="rounded-circle" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100px" height="100">
+                                        <h3 class="h4">@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)</h3>
+                                        <h5>#@order.Code</h5>
+                                        <div class="Date d-flex">
+                                            <div class="From">
+                                                <p>@(culture == "ar" ? "تاريخ الطلب" : "Order Date")</p><span>@order.CreatedOn.ToString("dd MMMM yyyy")</span>
+                                            </div><i class="fas fa-handshake fa-2x"></i>
+                                            @*<div class="To">
+                                                    <p>تاريخ الوصول</p><span>20/5/2020</span>
+                                                </div>*@
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

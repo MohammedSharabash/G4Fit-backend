@@ -1,0 +1,133 @@
+﻿@model G4Fit.Models.Domains.Order
+@using Cocoon.Resources
+@{
+    Layout = null;
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+    var About = ViewBag.About as G4Fit.Models.Domains.CompanyData;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="@(culture == "ar" ? "ar" : "en")" dir="@(culture == "ar" ? "rtl" : "ltr")">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>@Model.Code - فاتورة الطلب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="~/Content/web/css/invoice/style.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="page-wrap">
+        <div id="header">@Model.Code - فاتورة الطلب</div>
+        <div id="identity">
+            <p>G4Fit</p>
+            @if (About != null)
+            {
+                <p>@About.AddressAr</p>
+                <p>@About.AddressEn</p>
+                <p>@About.Hotline</p>
+            }
+            <img src="~/Content/web/img/G4FitLogo-removebg.png" alt="logo" />
+        </div>
+        <div id="customer">
+            <div id="customer-title">@Model.User.Name</div>
+            <table id="meta">
+                <tr>
+                    <td class="meta-head">فاتورة</td>
+                    <td><p>@Model.Code</p></td>
+                </tr>
+                <tr>
+                    <td class="meta-head">التاريخ</td>
+                    <td><p>@Model.CreatedOn.ToString("MMMM dd, yyyy hh:mm tt") GMT</p></td>
+                </tr>
+                <tr>
+                    <td class="meta-head">التكلفة</td>
+                    <td><div class="due">@Model.Total @(culture == "ar" ? "ريال سعودي" : "SAR")</div></td>
+                </tr>
+            </table>
+        </div>
+
+        <table id="items">
+            <thead>
+                <tr>
+                    <th>الخدمه</th>
+                    <th>الوصف</th>
+                    <th>سعر الوحدة</th>
+                    <th>الكمية أو الاشتراك</th>
+                    <th>الإجمالي</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items.Where(s => !s.IsDeleted))
+                {
+                    <tr class="item-row">
+                        <td class="item-name">
+                            <p>@(culture == "ar" ? item.Service.NameAr : item.Service.NameEn)</p>
+                        </td>
+                        <td class="description">
+                            <p>@(culture == "ar" ? (item.Service.DescriptionAr ?? item.Service.DescriptionEn) : item.Service.DescriptionEn)</p>
+                        </td>
+                        <td><div class="cost">@((item.Service.OfferPrice.HasValue ? item.Service.OfferPrice.Value : item.Service.OriginalPrice)) @(culture == "ar" ? "ريال سعودي" : "SAR")</div></td>
+                        @if (!item.Service.IsTimeBoundService)
+                        {
+                            <td><div class="qty">@item.Quantity</div></td>
+                        }
+                        else
+                        {
+                            <td><div class="qty">@item.Quantity أيام إشتراك</div></td>
+                        }
+                        <td><div class="price">@item.SubTotal @(culture == "ar" ? "ريال سعودي" : "SAR")</div></td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2" class="blank"></td>
+                    <td colspan="2" class="total-line">اجمالي الخدمات</td>
+                    <td class="total-value"><div id="subtotal">@Model.SubTotal @(culture == "ar" ? "ريال سعودي" : "SAR")</div></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="blank"></td>
+                    <td colspan="2" class="total-line">الاجمالي</td>
+                    <td class="total-value"><div id="total">@Model.Total @(culture == "ar" ? "ريال سعودي" : "SAR")</div></td>
+                </tr>
+                @if (Model.PackageId.HasValue == true)
+                {
+                    <tr>
+                        <td colspan="2" class="blank"></td>
+                        <td colspan="2" class="total-line">@Website.PackageDiscount</td>
+                        <td class="total-value"><div id="subtotal">@Model.PackageDiscount @(culture == "ar" ? "ريال سعودي" : "SAR")</div></td>
+                    </tr>
+                }
+                @if (Model.PromoId.HasValue == true)
+                {
+                    <tr>
+                        <td colspan="2" class="blank"></td>
+                        <td colspan="2" class="total-line">@Website.PromoDiscount</td>
+                        <td class="total-value"><div id="subtotal">@Model.PromoDiscount @(culture == "ar" ? "ريال سعودي" : "SAR")</div></td>
+                    </tr>
+                }
+                @if (Model.WalletDiscount > 0)
+                {
+                    <tr>
+                        <td colspan="2" class="blank"></td>
+                        <td colspan="2" class="total-line">@(culture == "ar" ? "خصم المحفظه" : "Wallet Discount")</td>
+                        <td class="total-value"><div id="subtotal">@Model.WalletDiscount @(culture == "ar" ? "ريال سعودي" : "SAR")</div></td>
+                    </tr>
+                }
+                @*<tr>
+                        <td colspan="2" class="blank"></td>
+                        <td colspan="2" class="total-line">@Website.DeliveryFees</td>
+                        <td class="total-value"><div id="subtotal">@Model.DeliveryFees @(culture == "ar" ? "ريال سعودي" : "SAR")</div></td>
+                    </tr>*@
+                <tr>
+                    <td colspan="2" class="blank"></td>
+                    <td colspan="2" class="total-line">المبلغ المدفوع</td>
+                    <td class="total-value"><div id="paid">@((Model.IsPaid) ? Model.Total.ToString() : "0.00") @(culture == "ar" ? "ريال سعودي" : "SAR")</div></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div id="terms">
+            <p>@(culture == "ar" ? "شكرا لاختيارك G4Fit ، نأمل أن نراكم مرة أخرى قريبا." : "Thanks for choosing G4Fit, we hope to see you again soon.")</p>
+        </div>
+    </div>
+</body>
+</html>

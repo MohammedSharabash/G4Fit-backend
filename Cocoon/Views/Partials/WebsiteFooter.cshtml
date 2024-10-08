@@ -1,0 +1,219 @@
+﻿@model G4Fit.Models.ViewModels.FooterVM
+@{
+    var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+}
+<style>
+    a {
+        color: black;
+        font-weight: 600;
+    }
+    .feature-item__content {
+        background: #000000;
+    }
+
+    .feature-item__content {
+        box-shadow: 0 5px 15px 0 rgb(0 0 0 / 10%);
+        color: #636363;
+        text-align: center;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    .feature-item__icon h3 {
+        color: #fff;
+        font-size: 18px;
+        opacity: .9;
+    }
+    .feature-item h3 {
+        font-family: dinnextltw23-medium;
+    }
+    .salla-theme_4 .feature-item__content .feature-item__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .feature-item__icon {
+        background: #080705;
+    }
+
+    .feature-item__icon {
+      
+        -webkit-box-align: center;    
+        -webkit-box-pack: center;
+        width: 100%;
+        min-height: 100px;
+        margin: 0 auto;
+        color: #fff;
+        font-size: 50px;
+        text-align: center;
+    }
+    .salla-theme_4 .feature-item__content p {
+        padding: 1rem;
+    }
+
+    .feature-item p {
+        color: #fff;
+        font-size: 14px;
+    }
+        a:hover {
+            text-decoration: none;
+        }
+
+    #payment-image {
+        width: 40%;
+    }
+    #maarof-image{
+        width:20%;
+    }
+    @@media(max-width:767px){
+        #payment-image{
+            width:100%;
+        }
+        #maarof-image {
+            width: 11%;
+        }
+    }
+</style>
+@if (culture != "ar")
+{
+    <style>
+        footer ul li {
+            direction:ltr !important;
+        }
+    </style>
+}
+<footer class="text-@(culture == "ar" ? "right" : "left")">
+    <section class="u-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-md-4 feature-item mb-1">
+                    <div class="feature-item__content">
+                        <div class="feature-item__icon">
+                            <i class="fas fa-shopping-bag" style="font-size:35px;margin:20px"></i>
+                            <h3> ⭐️جودة بضائعنا وخدماتنا⭐️ </h3>
+                        </div>
+                        <p> ✨نضمن لكم جودة السلع وتميزها✨ </p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 feature-item mb-1">
+                    <div class="feature-item__content">
+                        <div class="feature-item__icon">
+                            <i class="fas fa-money-check-alt" style="font-size:35px;margin:20px"></i>
+                            <h3> ⭐️أسعارنا المنافسة⭐️ </h3>
+                        </div>
+                        <p> ✨نضمن لكم السعر الأقل والمنافس✨ </p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 feature-item mb-1">
+                    <div class="feature-item__content">
+                        <div class="feature-item__icon">
+                            <i class="fas fa-cart-plus" style="font-size:35px;margin:20px"></i>
+                            <h3> ⭐️التوصيل السريع⭐️ </h3>
+                        </div>
+                        <p> ✨نضمن لكم سرعة التوصيل✨ </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <h6 class="mt-2" style="font-weight:bold">@(culture == "ar" ? "معلومات الشركة" : "About Company")</h6>
+                <br />
+                <ul>
+                    <li><a href="@Url.Action("About","Home")">@(culture == "ar" ? "نبذة عن G4Fit" : "About G4Fit")</a></li>
+                    <li><a href="@Url.Action("Index", "Privacy")">@(culture == "ar" ? "سياسة الخصوصية" : "Privacy policy")</a></li>
+                    <li><a href="@Url.Action("Index", "DeliveryRules")">@(culture == "ar" ? "شروط التوصيل" : "Terms of delivery")</a></li>
+                    <li><a href="@Url.Action("Index", "Terms")">@(culture == "ar" ? "الشروط والاحكام" : "Terms and Conditions")</a></li>
+                    @*<li><a href="@Url.Action("Affiliate", "Suppliers")">@(culture == "ar" ? "البيع معنا" : "Sell with us")</a></li>
+                    <li><a href="@Url.Action("Policy", "Suppliers")">@(culture == "ar" ? "شروط وأحكام البائع" : "Selling Policy")</a></li>*@
+                </ul>
+            </div>
+            <!--<div class="col-sm-6 col-md-3 col-lg-3">
+                <h6 class="mt-2" style="font-weight:bold">@(culture == "ar" ? "حمل تطبيق G4Fit على هاتفك" : "Download our application")</h6>
+                <br />
+                <ul style="list-style:none">
+                    <li>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-6 col-sm-6">
+                                <a href="#">
+                                    <img src="~/Content/assets/imgs/ios.png" class="img-fluid" />
+                                </a>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-6 col-sm-6">
+                                <a href="#">
+                                    <img src="~/Content/assets/imgs/android.png" class="img-fluid" />
+                                </a>
+                            </div>
+                        </div>
+                    </li>-->
+                    @*<li>
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <a href="https://maroof.sa/119037" target="_blank" style="font-size:15px">
+                                    <img src="~/Content/web/img/maaroof.png" id="maarof-image" class="img-fluid my-2" /><br />
+                                    الموقع موثق في موقع معروف بوزارة التجارة
+                                </a>
+                            </div>
+                        </div>
+                    </li>*@
+                <!--</ul>
+
+
+
+            </div>-->
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <h6 class="mt-2" style="font-weight:bold">@(culture == "ar" ? "تواصل مع الدعم الفنى" : "Contact technical support")</h6>
+                <br />
+                <ul>
+                    <li><a href="@Url.Action("Index", "Exchange")">@(culture == "ar" ? "سياسة الاسترجاع والاستبدال" : "Return Policy")</a></li>
+                    <li><a href="@Url.Action("Index", "CustomerSupport")">@(culture == "ar" ? "خدمة العملاء" : "Customers Service")</a></li>
+                    <li><a href="@Url.Action("Index", "HowTo")">@(culture == "ar" ? "كيفية الطلب" : "How to order")</a></li>
+                    <li><a href="@Url.Action("Index", "Informations")">@(culture == "ar" ? "التعليمات" : "Instructions")</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <h6 class="mt-2" style="font-weight:bold">@(culture == "ar" ? "اتصل بنا" : "Contact us")</h6>
+                <br />
+                <ul>
+                    <li><a href="tel:@(Model.About != null ? Model.About.Hotline : "#")">@(culture == "ar" ? "جوال" : "Mobile"): @(Model.About != null ? Model.About.Hotline : "")</a></li>
+                    <li><a href="mailto:@(Model.About != null ? Model.About.Email : "#")">@(culture == "ar" ? "البريد الالكترونى" : "Email"): @(Model.About != null ? Model.About.Email : "")</a></li>
+                    <li style="font-weight:600;color:black">
+                        @(culture == "ar" ? "تابعنا على" : "Follow us"):
+                        <br />
+                        <a style="margin:4px;" href="@(Model.About != null ? Model.About.Facebook : "#")"><i class="fab fa-facebook"></i></a>
+                        <a style="margin:4px;" href="@(Model.About != null ? Model.About.Twitter : "#")"><i class="fab fa-twitter"></i></a>
+                        <a style="margin:4px;" href="@(Model.About != null ? Model.About.Instagram : "#")"><i class="fab fa-instagram"></i></a>
+                        <a style="margin:4px;" href="@(Model.About != null ? Model.About.YouTube : "#")"><i class="fab fa-youtube"></i></a>
+                        <a style="margin:4px;" href="@(Model.About != null ? Model.About.SnapChat : "#")"><i class="fab fa-snapchat"></i></a>
+                        @if (Model.About != null && Model.About.TikTok != null)
+                        {
+            <a style="margin:4px;" href="@(Model.About != null ? Model.About.TikTok : "#")"><i class="fab fa-tiktok"></i></a>}
+                    </li>
+                </ul>
+            </div>
+            @*<div class="col-12">
+                <div class="row">
+                    <div class="col-6 text-center m-auto">
+                        <br />
+                        <br />
+                        <img id="payment-image" src="~/Content/web/img/payments.png" class="img-fluid" />
+                    </div>
+                </div>
+            </div>*@
+        </div>
+    </div>
+    <hr>
+    <p class="text-center"><i class="fas fa-star"></i> حقوق النشر محفوظة لمجموعة G4Fit التجارية &copy @DateTime.UtcNow.Year</p>
+    <p class="text-center">Powered by <a href="https://project-eg.com" target="_blank">Project-Egy</a></p>
+</footer>
+
+<!--
+
+
+                <a style="color:white;" href="mailto:@(Model.About != null ? Model.About.Email : "#")"><i class="fas fa-envelope"></i> @(culture == "ar" ? "ايميل" : "Email")</a>
+                <a style="color:white;" href="@(Model.About != null ? $"https://api.whatsapp.com/send/?phone={Model.About.WhatsApp}&text&app_absent=0" : "#")"><i class="far fa-whatsapp"></i> @(culture == "ar" ? "واتساب" : "Whatsapp")</a>
+-->

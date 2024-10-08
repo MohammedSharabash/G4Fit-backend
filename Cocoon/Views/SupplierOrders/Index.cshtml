@@ -1,0 +1,50 @@
+﻿@model List<IGrouping<G4Fit.Models.Domains.Order, G4Fit.Models.Domains.OrderItem>>
+@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = "طلبات الاعضاء";
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-fw fa-shopping-cart"></i> طلبات الاعضاء</h3>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive text-center">
+            <table id="table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>السعر</th>
+                        <th>عدد الخدمات</th>
+                        <th>التفاصيل</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td>
+                                @order.Key.Code<br />
+                                @if (order.Key.OrderStatus == G4Fit.Models.Enums.OrderStatus.Placed)
+                                {
+                                    <span class="label label-warning">جديد</span>
+                                }
+                                else
+                                {
+                                    <span class="label label-success">تم التوصيل</span>
+                                }
+                            </td>
+                            <td>
+                                @order.Sum(w => w.Price) ريال سعودي
+                            </td>
+                            <td>@order.Count() خدمه</td>
+                            <td>
+                                <a class="btn btn-info" style="margin-bottom:10px" href="@Url.Action("Details", new { OrderId = order.Key.Id })">التفاصيل</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+﻿@model G4Fit.Models.ViewModels.CreateNotificationVM
+@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = "ارسال اشعارات الى المستخدمين";
+}
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-fw fa-send"></i> @ViewBag.Title</h3>
+    </div>
+    <div class="panel-body">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        @if (TempData["SentSuccess"] != null)
+        {
+            <div class="panel-body alert alert-success text-center">
+                تم ارسال الاشعار بنجاح
+            </div>
+        }
+        @if (TempData["SentError"] != null)
+        {
+            <div class="panel-body alert alert-danger text-center">
+                برجاء التأكد من صحه المدخلات
+            </div>
+        }
+        <div id="accordion" class="panel-group" aria-multiselectable="true" role="tablist">
+            <div class="panel panel-success">
+                <div class="panel-heading collapsed" role="tab" id="headingOne" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <h4 class="panel-title">
+                        <a><i class="fa fa-send"></i> إرسال اشعار إلى المستخدمين</a>
+                    </h4>
+
+                </div>
+                <div class="panel-body">
+                    <span class="text-danger">*</span> برجاء عدم غلق الصفحه عند ارسال الاشعار حيث انه من الممكن ان يستغرق الارسال بعض الدقائق لارساله الى جميع المستخدمين.
+                </div>
+
+                <div id="collapseOne" class="panel-collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Create", "Notifications", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            <input name="IsDriver" value="false" hidden />
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="Title" class="col-sm-3 control-label required">عنوان الاشعار: </label>
+                                        <div class="col-sm-9">
+                                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control valid", required = true } })
+                                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="Body" class="col-sm-3 control-label required">محتوى الاشعار:</label>
+                                        <div class="col-sm-9">
+                                            @Html.TextAreaFor(model => model.Body, new { @class = "form-control valid", required = true })
+                                            @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="Body" class="col-sm-3 control-label required">نوع الاجهزه:</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input id="All" name="OS" value="-1" type="radio" checked />
+                                                <label for="All" style="margin:0px 6px">الجميع</label>
+                                            </div>
+                                            <div class="input-group">
+                                                <input id="Android" type="radio" name="OS" value="@((int)G4Fit.Models.Enums.OS.Android)" />
+                                                <label for="Android" style="margin:0px 6px">الاندرويد</label>
+                                            </div>
+                                            <div class="input-group">
+                                                <input id="IOS" type="radio" name="OS" value="@((int)G4Fit.Models.Enums.OS.IOS)" />
+                                                <label for="IOS" style="margin:0px 6px">اجهزه الايفون</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">إرسال</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,65 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>تسجيل الدخول</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.4 -->
+    <link href="~/Content/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link href="~/Content/assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- Theme style -->
+    <link href="~/Content/assets/dist/css/AdminLTE.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="60x60" href="~/Content/web/img/G4FitLogo-removebg.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/Content/web/img/g4fitLogo.jpg">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/web/img/g4fitLogo.jpg">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .validation-summary-errors ul {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body class="login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="#">تسجيل الدخول</a>
+        </div><!-- /.login-logo -->
+        <div class="login-box-body">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger text-center" })
+            <p class="login-box-msg">مرحباً بعودتك مره اخرى</p>
+            @using (Html.BeginForm("Login", "cp", FormMethod.Post))
+            {
+                <div class="form-group has-feedback">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    <input type="email" class="form-control" required name="Email" placeholder="البريد الالكترونى" style="text-align:center;">
+                    @Html.ValidationMessage("Email", "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group has-feedback">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    <input type="password" class="form-control" required name="Password" placeholder="كلمة المرور" style="text-align:center;">
+                    @Html.ValidationMessage("Password", "", new { @class = "text-danger" })
+                </div>
+                <div class="row" style="margin:auto;">
+                    <div class="col-lg-12">
+                        <button type="submit" class="btn btn-primary btn-block">تسجيل الدخول</button>
+                    </div>
+                </div>
+            }
+        </div><!-- /.login-box-body -->
+    </div><!-- /.login-box -->
+    <!-- jQuery 2.1.4 -->
+    <script src="~/Content/assets/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <!-- Bootstrap 3.3.4 -->
+    <script src="~/Content/assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

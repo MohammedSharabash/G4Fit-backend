@@ -1,0 +1,156 @@
+﻿@model G4Fit.Models.ViewModels.SideMenuVM
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-right image">
+                @if (Model.UserImage != null)
+                {
+                    <img src="~/Content/Images/Users/@Model.UserImage" style="height:45px" class="img-circle" alt="@Model.Name" />
+                }
+                else
+                {
+                    <img src="~/Content/assets/imgs/avatar.png" style="height:45px" class="img-circle" alt="@Model.Name" />
+                }
+            </div>
+            <div class="pull-left info">
+                <p>@Model.Name</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> متواجد</a>
+            </div>
+        </div>
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            <li class=" treeview">
+                <a href="@Url.Action("Index", "cp")">
+                    <i class="fa fa-dashboard"></i> <span>الرئيسية</span> </i>
+                </a>
+            </li>
+
+            <li class="treeview @(@Request.Url.AbsolutePath.ToLower().Contains("categories") ? "active" : "")">
+                <a href="#">
+                    <i class="fa fa-table"></i>
+                    <span>الاقسام</span>
+                    <i class="fa fa-angle-left pull-left"></i>
+                </a>
+
+                <ul class="treeview-menu @(Request.Url.AbsolutePath.ToLower().Contains("categories") || Request.Url.AbsolutePath.ToLower().Contains("promotionalsections") ? "menuopen" : "")">
+                    <li><a href="@Url.Action("Index", "Categories")"><i class="fa fa-circle-o"></i> الاقسام الرئيسية</a></li>
+                    <li><a href="@Url.Action("Index", "SubCategories")"><i class="fa fa-circle-o"></i> الاقسام الفرعية</a></li>
+                    @*<li><a href="@Url.Action("Index", "PromotionalSections")"><i class="fa fa-circle-o"></i> الاقسام الاخرى</a></li>*@
+                </ul>
+            </li>
+
+            <li class="treeview @(Request.Url.AbsolutePath.ToLower().Contains("Services") || Request.Url.AbsolutePath.ToLower().Contains("offers") ? "active" : "")">
+                <a href="#">
+                    <i class="fa fa-tag"></i>
+                    <span>الخدمات </span>
+                    <i class="fa fa-angle-left pull-left"></i>
+                </a>
+
+                <ul class="treeview-menu @(Request.Url.AbsolutePath.ToLower().Contains("Services") || Request.Url.AbsolutePath.ToLower().Contains("offers") ? "menuopen" : "")">
+                    <li><a href="@Url.Action("Create", "Services")"><i class="fa fa-plus"></i> اضافه خدمه</a></li>
+                    <li><a href="@Url.Action("Dashboard", "Services")"><i class="fa fa-tag"></i> الخدمات الحالية</a></li>
+                    <li><a href="@Url.Action("CreateServices", "Services")"><i class="fa fa-plus"></i>  إضافة خدمات بالـExcell Sheet</a></li>
+                </ul>
+            </li>
+
+            <li class=" treeview">
+                <a href="@Url.Action("Dashboard", "Orders")">
+                    <i class="fa fa-shopping-cart"></i> <span>الطلبات</span>
+                </a>
+            </li>
+
+            <li class="treeview @(Request.Url.AbsolutePath.ToLower().Contains("countries") ? "active" : "") @(Request.Url.AbsolutePath.ToLower().Contains("areas") ? "active" : "") @(Request.Url.AbsolutePath.ToLower().Contains("cities") ? "active" : "")">
+                <a href="#">
+                    <i class="fa fa-map-marker"></i>
+                    <span>الدول والمدن</span>
+                    <i class="fa fa-angle-left pull-left"></i>
+                </a>
+
+                <ul class="treeview-menu @(@Request.Url.AbsolutePath.ToLower().Contains("countries") ? "menuopen" : "")">
+                    <li><a href="@Url.Action("Index", "Countries")"><i class="fa fa-circle-o"></i> الدول</a></li>
+                </ul>
+
+                <ul class="treeview-menu @(@Request.Url.AbsolutePath.ToLower().Contains("cities") ? "menuopen" : "")">
+                    <li><a href="@Url.Action("Index", "Cities")"><i class="fa fa-circle-o"></i> المدن</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview @(Request.Url.AbsolutePath.ToLower().Contains("promocodes") ? "active" : "")">
+                <a href="#">
+                    <i class="fa fa-percent"></i>
+                    <span>كوبونات الخصم</span>
+                    <i class="fa fa-angle-left pull-left"></i>
+                </a>
+
+                <ul class="treeview-menu @(Request.Url.AbsolutePath.ToLower().Contains("promocodes") ? "menuopen" : "")">
+                    <li class="@(Request.Url.AbsolutePath.ToLower().Contains("index") ? "active" : "")"><a href="@Url.Action("Index", "PromoCodes")"><i class="fa fa-circle-o"></i> الكوبونات العامة</a></li>
+                    <li class="@(Request.Url.AbsolutePath.ToLower().Contains("specials") ? "active" : "")"><a href="@Url.Action("Specials", "PromoCodes")"><i class="fa fa-circle-o"></i> الكوبونات الخاصة</a></li>
+                </ul>
+            </li>
+
+            @{
+                var ListOfKeywords = new List<string>
+                                    {
+                                "sellingpolicy","sellwithus","company","datas","privacy","deliveryrules","terms","exchange","howto","customersupport","informations"
+                            };
+            }
+            <li class="treeview @(ListOfKeywords.Any(w => Request.Url.AbsolutePath.ToLower().Contains(w)) ? "active" : "")">
+                <a href="#">
+                    <i class="fa fa-building"></i>
+                    <span>الشركة</span>
+                    <i class="fa fa-angle-left pull-left"></i>
+                </a>
+                <ul class="treeview-menu @(ListOfKeywords.Any(w => Request.Url.AbsolutePath.ToLower().Contains(w)) ? "menuopen" : "")">
+                    <li><a href="@Url.Action("Index", "CompanyDatas")"><i class="fa fa-circle-o"></i> التعريف بالشركه </a></li>
+                    <li><a href="@Url.Action("Dashboard", "Privacy")"><i class="fa fa-circle-o"></i> سياسة الخصوصية </a></li>
+                    @*<li><a href="@Url.Action("Dashboard", "DeliveryRules")"><i class="fa fa-circle-o"></i> شروط التوصيل </a></li>*@
+                    <li><a href="@Url.Action("Dashboard", "Terms")"><i class="fa fa-circle-o"></i> الشروط والاحكام </a></li>
+                    <li><a href="@Url.Action("Dashboard", "Exchange")"><i class="fa fa-circle-o"></i> سياسة الاسترجاع والاستبدال </a></li>
+                    <li><a href="@Url.Action("Dashboard", "CustomerSupport")"><i class="fa fa-circle-o"></i> خدمة العملاء</a></li>
+                    <li><a href="@Url.Action("Dashboard", "HowTo")"><i class="fa fa-circle-o"></i> كيفية الطلب</a></li>
+                    <li><a href="@Url.Action("Dashboard", "Informations")"><i class="fa fa-circle-o"></i> التعليمات</a></li>
+                    @*<li><a href="@Url.Action("SellingPolicy", "Suppliers")"><i class="fa fa-circle-o"></i> شروط وأحكام البائع</a></li>
+                    <li><a href="@Url.Action("SellWithUs", "Suppliers")"><i class="fa fa-circle-o"></i> البيع معنا</a></li>*@
+                </ul>
+                @*<ul class="treeview-menu @(@Request.Url.AbsolutePath.ToLower().Contains("message") ? "menuopen" : "")">
+                        <li><a href="@Url.Action("Index", "CompanyMessages")"><i class="fa fa-circle-o"></i> رسائل الزوار</a></li>
+                    </ul>*@
+            </li>
+            @*<li class=" treeview">
+                    <a href="@Url.Action("Dashboard", "Packages")">
+                        <i class="fa fa-percent"></i> <span>الباقات</span>
+                    </a>
+                </li>*@
+            @*<li class=" treeview">
+                    <a href="@Url.Action("Dashboard", "Suppliers")">
+                        <i class="fa fa-users"></i> <span>البائعين</span>
+                    </a>
+                </li>*@
+            <li class=" treeview">
+                <a href="@Url.Action("Index", "Sliders")">
+                    <i class="fa fa-image"></i> <span>الاسلايدر</span>
+                </a>
+            </li>
+
+            <li class="treeview @(Request.Url.AbsolutePath.ToLower().Contains("clients") ? "active" : "")">
+                <a href="@Url.Action("Clients", "Users")">
+                    <i class="fa fa-users"></i> <span>مستخدمى التطبيق</span>
+                </a>
+            </li>
+
+            <li class=" treeview">
+                <a href="@Url.Action("Index", "Notifications")">
+                    <i class="fa fa-bullhorn"></i> <span>الاشعارات</span>
+                </a>
+            </li>
+
+            <li class=" treeview">
+                <a href="@Url.Action("Dashboard", "FAQs")">
+                    <i class="fa fa-question-circle"></i> <span>الاسئله العامه</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+</aside>

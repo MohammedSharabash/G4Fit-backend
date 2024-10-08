@@ -1,0 +1,128 @@
+﻿@model IEnumerable<G4Fit.Models.Domains.Service>
+@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = "الخدمات الحالية";
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-fw fa-tags"></i> الخدمات الحالية</h3>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive text-center">
+            <table id="table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>الترتيب</th>
+                        <th>الصورة</th>
+                        <th>اسم الخدمه</th>
+                        <th>القسم</th>
+                        <th>السعر</th>
+                        <th>الوضع الحالى</th>
+                        <th>عدد مرات البيع</th>
+                        <th>الاجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var Service in Model.OrderBy(s => s.SortingNumber))
+                    {
+                        <tr>
+
+                            <td id="sort_number_@Service.Id">@Service.SortingNumber</td>
+                            <td>
+                                @if (Service.Images.Count > 0)
+                                {
+                                    <img src="@Url.Content(Service.Images.First().ImageUrl != null ? ("~/Content/Images/Services/"+ Service.Images.First().ImageUrl) : "~/Content/assets/imgs/unnamed.jpg")" width="150" height="50" />
+
+                                }
+                                else
+                                {
+                                    <span>---</span>
+                                }
+                            </td>
+                            <td>
+                                @if (Service.SubCategory.IsDeleted == true)
+                                {
+                                    <span class="badge bg-red pt-5 pb-5">القسم الرئيسى محذوف</span>
+                                    <br /><br />}
+                                @if (Service.SubCategory.Category.IsDeleted == true)
+                                {
+                                    <span class="badge bg-red pt-5 pb-5">القسم الرئيسى محذوف</span>
+                                    <br /><br />}
+                                @if (Service.Offers != null && Service.Offers.Count(d => d.IsDeleted == false && d.IsFinished == false) > 0)
+                                {
+                                    <span class="badge bg-green pt-5 pb-5">يوجد عرض نشط</span>}
+                                @Service.NameAr
+                            </td>
+                            <td>
+                                @Service.SubCategory.NameAr <br />
+                                @Service.SubCategory.Category.NameAr
+                            </td>
+                            <td>
+                                @Service.OriginalPrice ريال سعودي
+                            </td>
+                            <td>
+                                @if (Service.IsDeleted == true)
+                                {
+                                    <span class="badge bg-red pt-5 pb-5">محذوف</span>
+                                    <br />
+                                    <br /> }
+                                else
+                                {
+                                    <span class="badge bg-green pt-5 pb-5">غير محذوف</span>
+                                    <br />
+                                    <br />}
+                                @if (Service.IsHidden == true)
+                                {
+                                    <span class="badge bg-red pt-5 pb-5">غير متاح علي الموقع</span>
+                                    <br />
+                                    <br /> }
+                                else
+                                {
+                                    <span class="badge bg-green pt-5 pb-5">متاح علي الموقع</span>}
+                            </td>
+                            <td>
+                                @Service.SellCounter مره
+                            </td>
+                            <td>
+                                <button style="margin-bottom:10px" class="btn btn-primary" type="button" id="change-sorting-btn_@Service.Id" onclick="ChangeSortingNumber('@Service.Id','@Service.SortingNumber')">تغير الترتيب</button> |
+                                <a class="btn btn-primary" style="margin-bottom:10px" href="@Url.Action("Offers", new { ServiceId = Service.Id })">العروض</a> |
+                                <a class="btn btn-primary" style="margin-bottom:10px" href="@Url.Action("Details", new { ServiceId = Service.Id })">المعلومات</a> |
+                                <a class="btn btn-warning" style="margin-bottom:10px" href="@Url.Action("ToggleHide", new { ServiceId = Service.Id })">@(Service.IsHidden == true ? "اظهار علي الموقع" : "اخفاء  من الموقع")</a> |
+                                <a class="btn btn-primary" style="margin-bottom:10px" href="@Url.Action("Edit", new { ServiceId = Service.Id })"><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-primary" style="margin-bottom:10px" href="@Url.Action("ToggleDelete", new { ServiceId = Service.Id })">@(Service.IsDeleted == true ? "استعادة" : "حذف")</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function ChangeSortingNumber(Id, oldNumber) {
+            var newNumber = parseInt(window.prompt("قم بكتابه الترتيب الجديد", oldNumber));
+            if (/^[0-9.,]+$/.test(newNumber) == true) {
+                $("#cover-spin").show();
+                $.ajax({
+                    url: "@Url.Action("SetSortingNumber","Services")",
+                    type: "POST",
+                    data: { ProdId: Id, Number: newNumber },
+                    success: function (results) {
+                        if (results.Success == true) {
+                            $("#sort_number_" + Id).text(newNumber);
+                            $("#change-sorting-btn_" + Id).attr("onclick", "ChangeSortingNumber(" + Id + "," + newNumber +")");
+                            toastr.success("تم تحديث الترتيب بنجاح");
+                        }
+                        else {
+                            toastr.error(results.Message);
+                        }
+                        $("#cover-spin").hide();
+                    }
+                })
+            }
+        }
+    </script>
+}

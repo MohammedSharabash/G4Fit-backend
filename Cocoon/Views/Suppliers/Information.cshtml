@@ -1,0 +1,133 @@
+﻿@model G4Fit.Models.Domains.Supplier
+@{
+    ViewBag.Title = "تعديل بيانات البائع " + Model.FirstName + " " + Model.LastName;
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+}
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-fw fa-edit"></i> @ViewBag.Title</h3>
+    </div>
+    <div class="panel-body">
+        <div id="accordion" class="panel-group" aria-multiselectable="true" role="tablist">
+            <div class="panel panel-success">
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Information", "Suppliers", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.HiddenFor(d => d.CreatedOn)
+                            @Html.HiddenFor(d => d.DeletedOn)
+                            @Html.HiddenFor(d => d.Id)
+                            @Html.HiddenFor(d => d.IsDeleted)
+                            @Html.HiddenFor(d => d.IsModified)
+                            @Html.HiddenFor(d => d.ModifiedOn)
+                            @Html.HiddenFor(d => d.RestoredOn)
+                            @Html.HiddenFor(d => d.TaxNumberFileUrl)
+                            @Html.HiddenFor(d => d.CommercialRegisterFileUrl)
+                            @Html.HiddenFor(d => d.FirstName)
+                            @Html.HiddenFor(d => d.IsAccepted)
+                            @Html.HiddenFor(d => d.LastName)
+                            @Html.HiddenFor(d => d.StoreName)
+                            @Html.HiddenFor(d => d.Type)
+                            @Html.HiddenFor(d => d.UserId)
+                            @Html.HiddenFor(d => d.IdentityFileUrl)
+
+                            <div class="row" style="margin:10px;">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="CommercialRegister" class="col-sm-5 control-label">الترخيص التجاري: </label>
+                                        <div class="col-sm-7">
+                                            @Html.EditorFor(model => model.CommercialRegister, new { htmlAttributes = new { @class = "form-control valid" } })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="CommercialRegister" class="col-sm-5 control-label">الترخيص التجارى (ملف):</label>
+                                        <div class="col-sm-7">
+                                            <input type="file" name="CommercialRegisterFile" id="CommercialRegister" />
+                                        </div>
+                                        @if (Model.CommercialRegisterFileUrl != null)
+                                        {
+                                            <div class="col-sm-12">
+                                                <a download href="@G4Fit.Helpers.MediaControl.GetPath(G4Fit.Helpers.FilePath.Other)@Model.CommercialRegisterFileUrl">تحميل الترخيص المرفوع</a>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px;">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="TaxNumber" class="col-sm-5 control-label">السجل الضريبى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.EditorFor(model => model.TaxNumber, new { htmlAttributes = new { @class = "form-control valid" } })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="TaxNumberFile" class="col-sm-5 control-label">السجل الضريبى (ملف):</label>
+                                        <div class="col-sm-7">
+                                            <input type="file" name="TaxNumberFile" id="TaxNumberFile" />
+                                        </div>
+                                        @if (Model.TaxNumberFileUrl != null)
+                                        {
+                                            <div class="col-sm-12">
+                                                <a download href="@G4Fit.Helpers.MediaControl.GetPath(G4Fit.Helpers.FilePath.Other)@Model.TaxNumberFileUrl">تحميل السجل الضريبى المرفوع</a>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px;">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="BankAccount" class="col-sm-5 control-label">الحساب البنكى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.EditorFor(model => model.BankAccount, new { htmlAttributes = new { @class = "form-control valid" } })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="IBAN" class="col-sm-5 control-label">الـ IBAN:</label>
+                                        <div class="col-sm-7">
+                                            @Html.EditorFor(model => model.IBAN, new { htmlAttributes = new { @class = "form-control valid" } })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px;">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="IdentityFile" class="col-sm-5 control-label">بطاقة الهوية: </label>
+                                        <div class="col-sm-7">
+                                            <input type="file" name="IdentityFile" id="IdentityFile" />
+                                        </div>
+                                        @if (Model.IdentityFileUrl != null)
+                                        {
+                                            <div class="col-sm-12">
+                                                <a download href="@G4Fit.Helpers.MediaControl.GetPath(G4Fit.Helpers.FilePath.Other)@Model.IdentityFileUrl">تحميل بطاقة الهوية المرفوعة</a>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success">حفظ</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            @Html.ActionLink("العودة إلى القائمة", "Dashboard", null, new { @class = "btn btn-default" })
+        </div>
+    </div>
+</div>
+

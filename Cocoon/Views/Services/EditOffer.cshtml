@@ -1,0 +1,56 @@
+﻿@model G4Fit.Models.ViewModels.ServiceOfferVM
+@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = "تعديل العرض";
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-fw fa-edit"></i> @ViewBag.Title</h3>
+    </div>
+    <div class="panel-body">
+        <div id="accordion" class="panel-group" aria-multiselectable="true" role="tablist">
+            <div class="panel panel-success">
+                <div id="collapseOne" class="panel-collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                        <hr />
+                        @using (Html.BeginForm("EditOffer", "Services", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.HiddenFor(s => s.ServiceId)
+                            @Html.HiddenFor(s => s.OfferId)
+                            <div class="row" style="margin:10px;">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Percentage" class="col-sm-5 control-label required">نسبة الخصم: </label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(s => s.Percentage, new { @class = "form-control" })
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                            @Html.ValidationMessageFor(d => d.Percentage, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="FinishOn" class="col-sm-5 control-label">تاريخ نهايه العرض (اختيارى): </label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(s => s.FinishOn, new { @class = "form-control", type = "date" })
+                                            @Html.ValidationMessageFor(d => d.FinishOn, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">تعديل العرض</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            @Html.ActionLink("العودة", "Offers", new { ServiceId = Model.ServiceId }, new { @class = "btn btn-default" })
+        </div>
+    </div>
+</div>

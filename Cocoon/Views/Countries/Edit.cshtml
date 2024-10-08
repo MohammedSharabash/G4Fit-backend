@@ -1,0 +1,108 @@
+﻿@model G4Fit.Models.Domains.Country
+@{
+    ViewBag.Title = "تعديل " + Model.NameAr;
+    var TimeZones = ViewBag.TimeZoneId as System.Collections.ObjectModel.ReadOnlyCollection<TimeZoneInfo>;
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+}
+
+<h1 class="text-center mb-30">@ViewBag.Title</h1>
+@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+@using (Html.BeginForm("Edit", "Countries", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(d => d.CreatedOn)
+    @Html.HiddenFor(d => d.DeletedOn)
+    @Html.HiddenFor(d => d.Id)
+    @Html.HiddenFor(d => d.ImageUrl)
+    @Html.HiddenFor(d => d.IsDeleted)
+    @Html.HiddenFor(d => d.IsModified)
+    @Html.HiddenFor(d => d.ModifiedOn)
+    @Html.HiddenFor(d => d.RestoredOn)
+    <div class="row" style="margin:10px;">
+        <div class="col-lg-6 mb-10">
+            <div class="form-group">
+                <label for="NameAr" class="col-sm-5 control-label required">اسم الدولة بالعربى: </label>
+                <div class="col-sm-7">
+                    <div class="input-group">
+                        @Html.TextBoxFor(d => d.NameAr, new { @class = "form-control valid", required = true })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-10">
+            <div class="form-group">
+                <label for="NameEn" class="col-sm-5 control-label required">اسم الدولة بالانجليزى:</label>
+                <div class="col-sm-7">
+                    <div class="input-group">
+                        @Html.TextBoxFor(d => d.NameEn, new { @class = "form-control valid", required = true })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-10">
+            <div class="form-group">
+                <label for="Image" class="col-sm-5 control-label ">العلم:</label>
+                <div class="col-sm-7">
+                    <div class="input-group">
+                        <input name="Image" accept="image/*" id="Image" type="file" class="form-control valid" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-10">
+            <div class="form-group">
+                <label for="TimeZoneId" class="col-sm-5 control-label required">التوقيت الزمنى:</label>
+                <div class="col-sm-7">
+                    <div class="input-group">
+                        <select name="TimeZoneId" id="TimeZoneId" required class="form-control">
+                            @foreach (var time in TimeZones)
+                            {
+                                <option @(Model.TimeZoneId == time.Id ? "selected" : "") value="@time.Id">@time.DisplayName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 mb-10">
+            <div class="form-group">
+                <label for="PhoneCode" class="col-sm-4 control-label required">الكود الدولى لرقم الهاتف بدون علامه الـ +:</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        @Html.TextBoxFor(d => d.PhoneCode, new { @class = "form-control valid", required = true })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-10">
+            <div class="form-group">
+                <label for="CurrencyAr" class="col-sm-4 control-label required">العملة بالعربى:</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        @Html.TextBoxFor(d => d.CurrencyAr, new { @class = "form-control valid", required = true })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-10">
+            <div class="form-group">
+                <p class="text-red">مهم جداً: يجب كتابه العمله بنظام ال ISO Code</p>
+                <label for="CurrencyEn" class="col-sm-4 control-label required">العملة بالانجليزى:</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        @Html.TextBoxFor(d => d.CurrencyEn, new { @class = "form-control valid", required = true })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <button type="submit" class="btn btn-success">تعديل</button>
+        </div>
+    </div>
+}

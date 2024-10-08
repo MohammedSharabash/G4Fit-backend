@@ -1,0 +1,42 @@
+﻿@model G4Fit.Models.Domains.OrderItem
+@using Cocoon.Resources
+@{
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+    string ServiceImage = null;
+    if (Model.Service.Images != null && Model.Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
+    {
+        ServiceImage = Model.Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
+    }
+}
+<td><i style="cursor:pointer" onclick="DeleteItem('@Model.Id')" class="fas fa-trash-alt Delete hover-G4Fit hvr-buzz"></i></td>
+<td> <img class="rounded-circle" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="50" height="50"></td>
+<td>
+    @(culture == "ar" ? Model.Service.NameAr : Model.Service.NameEn)
+    @if (Model.SizeId.HasValue == true)
+    {
+        <br /><span>@Website.Size: @Model.Size.Size</span><br />
+    }
+    @if (Model.ColorId.HasValue == true)
+    {
+        <div>
+            @Website.Color:
+            <div class="Tools d-inline">
+                <div class="Colors">
+                    <ul class="list-unstyled">
+                        <li style="background-color:@Model.Color.Color"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</td>
+<td>@(Model.Service.OfferPrice.HasValue == true ? Model.Service.OfferPrice.Value : Model.Service.OriginalPrice) @Website.SAR</td>
+@if (Model.Service.IsTimeBoundService)
+{
+    <td class="Quantity"> <b class="Total">@Model.Quantity  أيام إشتراك</b></td>
+}
+else
+{
+    <td class="Quantity"> <span onclick="IncreaseItem('@Model.Id')" class="Plus"><i class="fas fa-plus-square"></i></span><b class="Total">@Model.Quantity</b><span onclick="DecreaseItem('@Model.Id')" class="Minus"><i class="fas fa-minus-square"></i></span></td>
+}
+<td>@Model.SubTotal @Website.SAR</td>

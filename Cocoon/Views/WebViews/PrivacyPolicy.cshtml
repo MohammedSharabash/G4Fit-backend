@@ -1,0 +1,22 @@
+﻿@model G4Fit.Models.Domains.CompanyData
+@{
+    string culture = "ar";
+    if (Request.QueryString["lang"] != null)
+    {
+        culture = Request.QueryString["lang"];
+    }
+    Layout = null;
+}
+<div style="text-align:@(culture == "ar" ? "right" : "left");direction:@(culture == "ar" ? "rtl" : "ltr");word-break:break-all;margin:20px"">
+    @if (Model != null)
+    {
+        if (Model.PrivacyPolicyAr != null && culture == "ar")
+        {
+            @Html.Raw(Model.PrivacyPolicyAr)
+        }
+        if (Model.PrivacyPolicyEn != null && culture != "ar")
+        {
+            @Html.Raw(Model.PrivacyPolicyEn)
+        }
+    }
+</div>

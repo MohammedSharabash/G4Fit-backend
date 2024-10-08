@@ -1,0 +1,70 @@
+﻿@model G4Fit.Models.Domains.Supplier
+@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = "الرئيسية";
+}
+<style>
+    .info-box-number {
+        font-size: 2em;
+        text-align: center;
+    }
+
+    .info-box-text {
+        font-weight: bold;
+    }
+</style>
+<section class="content">
+    <div class="panel panel-info text-center">
+        <div class="panel-body">
+            <h3>أخر تحديث للصفحه بتوقيت</h3>
+            <h4 dir="auto">@TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Arab Standard Time")).ToLongDateString()</h4>
+            <h4 dir="auto">@TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Arab Standard Time")).ToShortTimeString()</h4>
+            <hr />
+            @*<h4>رصيد المحفظه: @Model.Wallet ريال سعودي</h4>*@
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="fa fa-tags"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">الخدمات</span>
+                    <span class="info-box-number">@Model.Services.Count(w => w.IsDeleted == false)</span>
+                </div>
+            </div>
+        </div>
+        @*<div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-orange"><i class="fa fa-shopping-basket"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">الطلبات</span>
+                    <span class="info-box-number">@Model.Orders.Count(w => w.IsDeleted == false)</span>
+                </div>
+            </div>
+        </div>*@
+        <!-- fix for small devices only -->
+        <div class="clearfix visible-sm-block"></div>
+    </div>
+    @*<div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="fa fa-money"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">اجمالى ربح الدعوات</span>
+                    <span class="info-box-number">@Model.InvitedPeoples.Where(s => s.IsDeleted == false).Sum(q => q.TotalAmountGained) ريال سعودي</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-primary"><i class="fa fa-money"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">اجمالى ربح الطلبات</span>
+                    <span class="info-box-number">@Model.Orders.Where(s => s.IsDeleted == false).Sum(q => q.TotalAmountGained) ريال سعودي</span>
+                </div>
+            </div>
+        </div>
+         fix for small devices only 
+        <div class="clearfix visible-sm-block"></div>
+    </div>*@
+</section>

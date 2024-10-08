@@ -1,0 +1,68 @@
+﻿@model G4Fit.Models.Domains.Service
+@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = Model.NameAr;
+}
+<style>
+    li {
+        margin: 15px 0px;
+    }
+</style>
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <h4>معلومات الخدمه [@Model.NameAr]:</h4>
+        <ul>
+            <li><span class="text-blue">الاسم بالعربى: </span> @Model.NameAr</li>
+            <li><span class="text-blue">الاسم بالانجليزى: </span> @Model.NameEn</li>
+            <li><span class="text-blue">الوصف بالعربى: </span> @(Model.DescriptionAr != null ? Model.DescriptionAr : "لا يوجد")</li>
+            <li><span class="text-blue">الوصف بالانجليزى: </span> @(Model.DescriptionEn != null ? Model.DescriptionEn : "لا يوجد")</li>
+            <li><span class="text-blue">السعر: </span> @(Model.OriginalPrice) ريال سعودي</li>
+            <li><span class="text-blue">القسم: </span> @Model.SubCategory.Category.NameAr - @Model.SubCategory.NameAr</li>
+            <li><span class="text-blue">حاله الظهور: </span> @(Model.IsHidden == true ? "غير مرئى فى التطبيق" : "مرئى فى التطبيق ")</li>
+            @if (!Model.IsTimeBoundService)
+            {
+
+                <li>
+                    <span class="text-blue">الالوان: </span>
+                    @if (Model.Colors != null && Model.Colors.Count(s => s.IsDeleted == false) > 0)
+                    {
+                        <ol>
+                            @foreach (var color in Model.Colors.Where(s => s.IsDeleted == false))
+                            {
+                                <li style="background-color:@color.Color">@color.Color</li>
+                            }
+                        </ol>
+                    }
+                    else
+                    {
+                        <span>لا يوجد</span>
+                    }
+                </li>
+                <li>
+                    <span class="text-blue">الاحجام: </span>
+                    @if (Model.Sizes != null && Model.Sizes.Count(s => s.IsDeleted == false) > 0)
+                    {
+                        <ol>
+                            @foreach (var size in Model.Sizes.Where(s => s.IsDeleted == false))
+                            {
+                                <li>@size.Size</li>
+                            }
+                        </ol>
+                    }
+                    else
+                    {
+                        <span>لا يوجد</span>
+                    }
+                </li>
+                <li><span class="text-blue">الكميه المتاحه: </span> @Model.Inventory</li>
+                <li><span class="text-blue">عدد مرات البيع: </span> @Model.SellCounter مره</li>
+            }
+            else
+            {
+                <li><span class="text-blue">عدد أيام الاشتراك: </span> @Model.ServiceDays يوم</li>
+                <li><span class="text-blue">عدد مرات الاشتراك: </span> @Model.SellCounter مره</li>
+            }
+        </ul>
+    </div>
+</div>
+

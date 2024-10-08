@@ -1,0 +1,109 @@
+﻿@model IEnumerable<G4Fit.Models.Domains.Supplier>
+@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = "البائعين";
+}
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title text-center"><i class="fa fa-fw fa-users"></i> @ViewBag.Title</h3>
+    </div>
+    <div class="panel-body">
+        <h4 class="text-center">عدد البائعين [@Model.Count()] بائع</h4>
+        <hr />
+        <div class="table-responsive">
+            <table id="table" cellpadding="0" cellspacing="0" border="0" class="table text-center table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>الحاله</th>
+                        <th style="width:15%">الاسم</th>
+                        <th>اسم المتجر</th>
+                        <th>رقم الهاتف</th>
+                        <th>تاريخ التسجيل</th>
+                        <th>عدد الخدمات</th>
+                        <th>التحكم</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderByDescending(d => d.CreatedOn))
+                    {
+                        <tr>
+                            <td>
+                                @if (item.IsAccepted.HasValue == false)
+                                {
+                                    <span class="badge bg-orange">جديد</span>
+                                }
+                                else
+                                {
+                                    if (item.IsAccepted == false)
+                                    {
+                                        <span class="badge bg-red">مرفوض</span>
+                                    }
+                                    else
+                                    {
+                                        if (item.IsDeleted == true)
+                                        {
+                                            <span class="badge bg-red">محظور</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-green">نشط</span>
+                                        }
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @item.FirstName @item.LastName
+                            </td>
+                            <td>
+                                @if (string.IsNullOrEmpty(item.StoreName) == false && string.IsNullOrWhiteSpace(item.StoreName) == false)
+                                {
+                                    <span>@item.StoreName</span>
+                                }
+                                else
+                                {
+                                    <span>---</span>
+                                }
+                            </td>
+                            <td>
+                                <a href="tel:@item.User.PhoneNumber">@item.User.PhoneNumber</a>
+                                @if (item.User.PhoneNumberConfirmed == false)
+                                {
+                                    <p class="text-danger">رمز التفعيل [@item.User.VerificationCode] ولم يتم تأكيد الرقم بعد</p>
+                                    <p><a class="text-success" href="@Url.Action("Verify", new { SupplierId = item.Id })"><i class="fa fa-check-circle"></i> اضغط لتأكيد الرقم</a></p>
+                                }
+                            </td>
+                            <td>
+                                @{ 
+                                    var CreatedOn = TimeZoneInfo.ConvertTimeFromUtc(item.CreatedOn, TimeZoneInfo.FindSystemTimeZoneById("Arab Standard Time"));
+                                }
+                                <span dir="auto">@CreatedOn.ToString("dd MMM, yyyy")</span><br />
+                                <span dir="auto">@CreatedOn.ToString("hh:mm tt")</span>
+                            </td>
+                            <td>
+                                @item.Services.Count(s => s.IsDeleted == false) خدمه
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Information",new { SupplierId = item.Id})">البيانات</a> |
+                                @if (item.IsAccepted.HasValue == false)
+                                {
+                                    <a href="@Url.Action("AcceptSupplier", new { SupplierId = item.Id })">الموافقه</a> <span>|</span>
+                                    <a href="@Url.Action("RejectSupplier", new { SupplierId = item.Id })">الرفض</a>
+                                }
+                                else if (item.IsAccepted == false)
+                                {
+                                    <a href="@Url.Action("AcceptSupplier", new { SupplierId = item.Id })">الموافقه</a>
+                                }
+                                else
+                                {
+                                    @Html.ActionLink(item.IsDeleted == true ? "فك الحظر" : "حظر", "ToggleBlock", new { SupplierId = item.Id })
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+

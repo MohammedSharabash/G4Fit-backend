@@ -1,0 +1,21 @@
+﻿@model G4Fit.Models.ViewModels.HTMLContentVM
+@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = "محتوى صفحه خدمه العملاء";
+}
+<div class="panel panel-primary">
+    <div class="panel-body">
+        @using (Html.BeginForm("Dashboard", "CustomerSupport", FormMethod.Post))
+        {
+            <h3>محتوى صفحه خدمه العملاء باللغة العربية:</h3>
+            <br />
+            @Html.TextAreaFor(w => w.ContentAr, new { @class = "rich-text-editor" })
+            <br />
+            <h3>محتوى صفحه خدمه العملاء باللغة الانجليزية:</h3>
+            <br />
+            @Html.TextAreaFor(w => w.ContentEn, new { @class = "rich-text-editor" })
+
+            <button type="submit" class="btn btn-success">حفظ</button>
+        }
+    </div>
+</div>

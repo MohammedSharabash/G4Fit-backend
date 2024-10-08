@@ -1,0 +1,107 @@
+﻿@{
+    var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+    string FacebookAppId = System.Configuration.ConfigurationManager.AppSettings["Facebook_App_ID"];
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta Rules-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Title Of Page-->
+    <title>G4Fit</title>
+
+    <!-- Style Files-->
+    <link rel="stylesheet" href="~/Content/web/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/web/css/fontawesome.min.css">
+    <link rel="stylesheet" href="~/Content/web/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal&amp;display=swap">
+    <link rel="stylesheet" href="~/Content/web/css/swiper.min.css">
+    <link rel="stylesheet" href="~/Content/web/css/animate.css">
+    <link rel="stylesheet" href="~/Content/web/css/hover.css">
+    <link href="~/Content/assets/plugins/Toaster/toastr.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/web/css/main.css">
+    <link rel="apple-touch-icon" sizes="60x60" href="~/Content/web/img/G4FitLogo-removebg.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/Content/web/img/G4FitLogo-removebg.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/web/img/G4FitLogo-removebg.png">
+    <style>
+        .breadcrumb-item + .breadcrumb-item::before {
+            padding-left: 0.5rem;
+        }
+
+        .breadcrumb {
+            background-color: #e9ecef7d;
+        }
+
+            .breadcrumb a {
+                font-weight: 500;
+            }
+    </style>
+</head>
+<body>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/@(culture == "ar" ? "ar_AR" : "en_US")/sdk.js#xfbml=1&version=v8.0&appId=@FacebookAppId&autoLogAppEvents=1" nonce="h7MVkO2s"></script>
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '@FacebookAppId',
+                cookie: true,
+                xfbml: true,
+                version: 'v8.0'
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <div id="cover-spin"></div>
+    <div id="header-div-data">
+        @Html.Action("WebsiteNavbar", "Partials")
+    </div>
+    @RenderBody()
+
+    @Html.Action("WebsiteFooter", "Partials")
+    <!-- Include Script Files-->
+    <script src="~/Content/web/js/jquery-3.2.1.min.js"></script>
+    <script src="~/Content/web/js/bootstrap.min.js"></script>
+    <script src="~/Content/web/js/popper.min.js"></script>
+    <script src="~/Content/web/js/fontawesome.min.js"></script>
+    <script src="~/Content/web/js/all.min.js"></script>
+    <script src="~/Content/web/js/swiper.min.js"></script>
+    @*<script src="~/Content/web/js/jquery.nicescroll.min.js"></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="~/Content/assets/plugins/Toaster/toastr.min.js"></script>
+    <script src="~/Content/web/js/wow.min.js"></script>
+    <script>new WOW().init();</script>
+    <script src="~/Content/web/js/script.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(function () {
+            $("#cover-spin").hide();
+            $("form").submit(function () {
+                if ($(this).valid()) {
+                    $("#cover-spin").show();
+                }
+            })
+        })
+    </script>
+    <script>
+        var locale = localStorage.getItem("G4Fit-locale");
+        if (locale == null) {
+            localStorage.setItem("G4Fit-locale", "@culture");
+        }
+        else {
+            if (locale != "@culture") {
+                localStorage.removeItem("G4Fit-locale");
+                localStorage.setItem("G4Fit-locale", "@culture");
+            }
+        }
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,159 @@
+﻿@using Cocoon.Resources
+@model G4Fit.Models.ViewModels.NavbarVM
+@{
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+}
+@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+{
+}
+@using (Html.BeginForm("SetCulture", "Home", FormMethod.Post, new { id = "lang_ar" }))
+{
+    <input type="hidden" name="culture" id="ar" value="ar" />
+    <input type="hidden" name="ReturnUrl" id="ReturnUrl" value="@Request.Url" />
+}
+@using (Html.BeginForm("SetCulture", "Home", FormMethod.Post, new { id = "lang_en" }))
+{
+    <input type="hidden" name="culture" id="en-us" value="en-us" />
+    <input type="hidden" name="ReturnUrl" id="ReturnUrl" value="@Request.Url" />
+}
+
+<nav class="main_nav fixed-top">
+    <div class="container">
+        <div class="Contain d-flex">
+            <div class="Logo text-right hvr-grow">
+                <!--i(class="fab fa-optin-monster fa-3x")-->
+                <a href="@Url.Action("Index", "Home")">
+                    <img src="~/Content/web/img/logo/g4fitLogo.jpg" width="90" height="60">
+                </a>
+            </div>
+            <div class="inner_links text-center wow bounceIn">
+                <i class="fas fa-caret-square-down fa-2x d-lg-none Toggler"></i>
+                <ul class="list-unstyled d-none d-lg-block">
+                    <li data-id="Home"><a href="@Url.Action("Index", "Home")?#Home">@Website.Home</a></li>
+                    <li data-id="Cats"><a href="@Url.Action("Index", "Home")?#Cats">@Website.Categories</a></li>
+                    <li data-id="New"><a href="@Url.Action("Index", "Home")?#New">@Website.Latest</a></li>
+                    <li data-id="Sell"><a href="@Url.Action("Index", "Home")?#Sell">@Website.MostSold</a></li>
+                    @*<li data-id="Offer"><a href="@Url.Action("Index", "Home")?#Offer">@Website.Offers</a></li>*@
+                    @*<li><a href="@Url.Action("Index", "Packages")">@Website.Packages</a></li>*@
+                    <li data-id="About"><a href="@Url.Action("About", "Home")">@Website.AboutUs</a></li>
+                    @if (User.Identity.IsAuthenticated == true)
+                    {
+                        <li><a href="javascript:document.getElementById('logoutForm').submit()">@Website.Logout</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="@Url.Action("Register", "Account")">@Website.Register</a></li>
+                        <li><a href="@Url.Action("Login", "Account")">@Website.Login</a></li>
+                    }
+                </ul>
+            </div>
+            <div class="Toggler text-left">
+                <ul class="list-unstyled d-flex">
+                    @if (culture == "ar")
+                    {
+                        <li class="langs hvr-pulse-grow mx-3"><a href="javascript:document.getElementById('lang_en').submit()">@*<img src="~/Content/web/img/flags/usa.svg">*@English</a></li>
+                    }
+                    else
+                    {
+                        <li class="langs hvr-pulse-grow mx-3"><a href="javascript:document.getElementById('lang_ar').submit()"> @*<img src="~/Content/web/img/flags/sar.svg">*@ اللغة العربية</a></li>
+                    }
+                    @if (User.Identity.IsAuthenticated == true)
+                    {
+                        <li class="note">
+                            <i class="fas fa-bell fa-lg"></i>
+                            @if (Model.NotificationsCount > 0)
+                            {
+                                <sup class="rounded-circle">@Model.NotificationsCount</sup>
+                            }
+                                <ul class="notifications text-right">
+                                    @if (Model.Notifications == null || Model.Notifications.Count() <= 0)
+                                    {
+                                        <li style="color:white;" class="text-center">@(culture == "ar" ? "لا توجد اشعارات متاحة" : "You don't have notifications")</li>
+                                    }
+                                    else
+                                    {
+                                        foreach (var notification in Model.Notifications)
+                                        {
+                                            <li  style="color:white;"class="hvr-pulse-grow"><img class="rounded-circle ml-3" src="~/Content/web/img/G4FitLogo-removebg.png" width="30" height="30"><span>@notification.Title</span><br /><small>@notification.Body</small></li>
+                                            <hr>
+                                        }
+                                    }
+
+                                    <li class="text-center"><a href="@Url.Action("All", "Notifications")">@Website.ViewNotifications</a></li>
+                                </ul>
+                        </li>
+                    }
+                        <li class="shopping-cart-container">
+                            <a href="@Url.Action("Cart", "Orders")">
+                                <i class="fas fa-shopping-cart fa-lg hvr-pulse-grow"></i>
+                                @if (Model.ShoppingCartCount > 0)
+                                {
+                                    <sup class="rounded-circle">@Model.ShoppingCartCount</sup>
+                                }
+                            </a>
+                            @*@if (User.Identity.IsAuthenticated == true)
+                            {
+                            <a href="@Url.Action("Cart", "Orders")">
+                                <i class="fas fa-shopping-cart fa-lg hvr-pulse-grow"></i>
+                                @if (Model.ShoppingCartCount > 0)
+                                {
+                                    <sup class="rounded-circle">@Model.ShoppingCartCount</sup>
+                                }
+                            </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("Login", "Account")"><i class="fas fa-shopping-cart fa-lg hvr-pulse-grow"></i><sup class="rounded-circle">@Model.ShoppingCartCount</sup></a>
+                            }*@
+                        </li>
+                    @if (User.Identity.IsAuthenticated == true)
+                    {
+                        if (!string.IsNullOrEmpty(Model.UserImage))
+                        {
+                            <li><img class="rounded-circle User hvr-pulse-grow" src="~/Content/Images/Users/@Model.UserImage" width="25" height="25"></li>
+                        }
+                        else
+                        {
+                            <li><img class="rounded-circle User hvr-pulse-grow" src="~/Content/web/img/logo/1.png" width="25" height="25"></li>
+                        }
+                    }
+                    <li><i class="fas fa-bars fa-lg nav_toggeler hvr-pulse-grow"></i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="side_bar links_bar text-center">
+    <ul class="list-unstyled">
+        @foreach (var cat in Model.Categories)
+        {
+            <li><a href="@Url.Action("View", "Categories", new { CatId = cat.Id })" class="text-white">@(culture=="ar"? cat.NameAr: cat.NameEn)</a></li>
+        }
+    </ul>
+</div>
+@if (User.Identity.IsAuthenticated == true)
+{
+    <div class="side_bar user_bar text-center">
+        @if (!string.IsNullOrEmpty(Model.UserImage))
+        {
+            <img class="rounded-circle" src="~/Content/Images/Users/@Model.UserImage" width="100" height="100">
+        }
+        else
+        {
+            <img class="rounded-circle" src="~/Content/web/img/logo/1.png" width="100" height="100">
+        }
+        <h3 class="h4">@Model.Username</h3>
+        @if (!string.IsNullOrEmpty(Model.UserPhoneNumber))
+        {
+            <p>@Model.UserPhoneNumber</p>
+        }
+        <ul class="list-unstyled text-@(culture == "ar" ? "right" : "left")">
+            <li><i class="@(culture == "ar" ? "fa fa-shopping-basket" : "")"></i> <a href="@Url.Action("Index", "Orders")">@(culture == "ar" ? "طلباتى" : "My Orders") <i class="@(culture != "ar" ? "fa fa-shopping-basket" : "")"></i></a></li>
+            <li><i class="@(culture == "ar" ? "fas fa-wallet" : "")"></i> <a href="@Url.Action("Index","Wallets")">@(culture == "ar" ? "محفظتى" : "My Wallet")</a> <i class="@(culture != "ar" ? "fas fa-wallet" : "")"></i></li>
+            <li><i class="@(culture == "ar" ? "fas fa-bell" : "")"></i> <a href="@Url.Action("All", "Notifications")">@Website.Notifications</a> <i class="@(culture != "ar" ? "fas fa-bell" : "")"></i></li>
+            <li><i class="@(culture == "ar" ? "fas fa-question-circle" : "")"></i> <a href="@Url.Action("Index", "FAQs")">@Website.FAQs</a> <i class="@(culture != "ar" ? "fas fa-question-circle" : "")"></i></li>
+            <li><i class="@(culture == "ar" ? "fas fa-sign-out-alt" : "")"></i> <a href="javascript:document.getElementById('logoutForm').submit()">@Website.Logout</a> <i class="@(culture != "ar" ? "fas fa-sign-out-alt" : "")"></i></li>
+        </ul>
+    </div>
+}

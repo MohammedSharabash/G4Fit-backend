@@ -1,0 +1,155 @@
+﻿@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = "الرئيسية";
+}
+
+<style>
+    .small-box:hover {
+        text-decoration: none;
+        color: #c25555;
+    }
+</style>
+<div class="panel">
+    <div class="panel-body text-center">
+        <h3 class="text-center">مرحباً بك في لوحة التحكم الخاصة بتطبيق G4Fit </h3>
+    </div>
+</div>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            @if (!User.IsInRole("ServicesManager"))
+            {
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>@ViewBag.OrdersCount <small>طلب جديد</small></h3>
+                            <p>إجمالي عدد الطلبات</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a href="/Orders/Dashboard" class="small-box-footer">المزيد <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            }
+            <!-- ./col -->
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@ViewBag.ItemsCount <small>خدمه</small></h3>
+                        <p>إجمالي عدد الخدمات</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-stats-bars"></i>
+                    </div>
+                    <a href="/Services/Dashboard" class="small-box-footer">المزيد <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            @if (!User.IsInRole("ServicesManager"))
+            {
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <!-- small box -->
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>@ViewBag.UsersCount <small>مستخدم</small></h3>
+                            <p>إجمالي عدد المستخدمين</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
+                        <a href="/Users/Clients" class="small-box-footer">المزيد <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            }
+            <!-- ./col -->
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>@ViewBag.TotalProdfit <small>ريال سعودي</small></h3>
+                        <p>إجمالي المبيعات</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">المزيد <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <!-- small box -->
+                <div class="small-box bg-secondary">
+                    <div class="inner">
+                        <h3>@ViewBag.TotalProdfitMonth <small>ريال سعودي</small></h3>
+                        <p>إجمالي المبيعات هذا الشهر</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">المزيد <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <!-- small box -->
+                <div class="small-box bg-secondary">
+                    <div class="inner">
+                        <h3>@ViewBag.OrdersTodayAmount <small>ريال سعودي</small></h3>
+                        <p>إجمالي الطلبات المستلمة هذا اليوم</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <!-- small box -->
+                <div class="small-box bg-dark">
+                    <div class="inner">
+                        <h3>@ViewBag.OrdersMonthAmount <small>ريال سعودي</small></h3>
+                        <p>إجمالي الطلبات المستلمة هذا الشهر</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@ViewBag.OrdersTodayCount <small>طلب</small></h3>
+                        <p>عدد الطلبات المستلمة هذا اليوم</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@ViewBag.OrdersMonthCount <small>طلب</small></h3>
+                        <p>عدد الطلبات المستلمة هذا الشهر</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->

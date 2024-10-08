@@ -1,0 +1,50 @@
+﻿@model G4Fit.Models.Domains.Order
+@using Cocoon.Resources
+@{
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+    var DeliveryFees = ViewBag.DeliveryFees;
+    //var Address = ViewBag.Address;
+    var PhoneNumber = ViewBag.PhoneNumber;
+}
+<tr>
+    <td>@Website.SubTotal</td>
+    <td>@Model.SubTotal @Website.SAR</td>
+</tr>
+@if (Model.PackageId.HasValue == true)
+{
+    <tr>
+        <td>@Website.PackageDiscount</td>
+        <td>@Model.PackageDiscount @Website.SAR</td>
+    </tr>
+}
+@if (Model.PromoId.HasValue == true)
+{
+    <tr>
+        <td>@Website.PromoDiscount</td>
+        <td>@Model.PromoDiscount @Website.SAR</td>
+    </tr>
+}
+@if (Model.WalletDiscount > 0)
+{
+    <tr>
+        <td>@(culture == "ar" ? "رصيد المحفظه" : "Wallet")</td>
+        <td>@Model.WalletDiscount @Website.SAR</td>
+    </tr>
+}
+<tr>
+    <td>@Website.PhoneNumber</td>
+    <td>@(culture == "ar" ? $" {PhoneNumber}" : $"{PhoneNumber}")</td>
+</tr>
+@if (ViewBag.Address != null)
+{
+    <tr>
+        <td>@Website.Address</td>
+        <td>@(culture == "ar" ? $" {ViewBag.Address}" : $"{ViewBag.Address}")</td>
+    </tr>
+}   <tr>
+</tr>
+
+<tr>
+    <td>@Website.Total</td>
+    <td>@Model.Total @Website.SAR</td>
+</tr>

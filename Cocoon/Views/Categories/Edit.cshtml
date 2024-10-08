@@ -1,0 +1,95 @@
+﻿@model G4Fit.Models.Domains.Category
+@{
+    ViewBag.Title = "تعديل " + Model.NameAr;
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+}
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-fw fa-edit"></i> الاقسام الرئيسية</h3>
+    </div>
+    <div class="panel-body">
+        <div id="accordion" class="panel-group" aria-multiselectable="true" role="tablist">
+            <div class="panel panel-success">
+                <div class="panel-heading" role="tab" id="headingOne" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <h4 class="panel-title">
+                        <a><i class="fa fa-fw fa-edit"></i> تعديل القسم</a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Edit", "Categories", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(d => d.CreatedOn)
+                            @Html.HiddenFor(d => d.DeletedOn)
+                            @Html.HiddenFor(d => d.Id)
+                            @Html.HiddenFor(d => d.ImageUrl)
+                            @Html.HiddenFor(d => d.IsDeleted)
+                            @Html.HiddenFor(d => d.IsModified)
+                            @Html.HiddenFor(d => d.ModifiedOn)
+                            @Html.HiddenFor(d => d.SortingNumber)
+                            @Html.HiddenFor(d => d.RestoredOn)
+
+                            <div class="row" style="margin:10px;">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="NameAr" class="col-sm-5 control-label required">اسم القسم بالعربى: </label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                @Html.EditorFor(model => model.NameAr, new { htmlAttributes = new { @class = "form-control valid", required = true } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="NameEn" class="col-sm-5 control-label required">اسم القسم بالانجليزى:</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                @Html.EditorFor(model => model.NameEn, new { htmlAttributes = new { @class = "form-control valid", required = true } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            if (Model.ImageUrl != null)
+                            {
+                                <div class="row" style="margin:10px">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="Image" class="col-sm-5 control-label">صوره القسم:</label>
+                                            <div class="col-sm-7">
+                                                <div class="input-group">
+                                                    <img src="~/Content/Images/Categories/@Model.ImageUrl" width="150" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Image" class="col-sm-5 control-label">تعديل صوره القسم:</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                <input class="form-control" type="file" name="Image" id="Image" accept="image/*" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success">تعديل</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            @Html.ActionLink("العودة إلى القائمة", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    </div>
+</div>
+

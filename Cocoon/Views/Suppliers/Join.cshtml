@@ -1,0 +1,99 @@
+﻿@using Cocoon.Resources
+@model G4Fit.Models.ViewModels.SupplierJoinVM
+@{
+    var Countries = ViewBag.Countries as List<G4Fit.Models.Domains.Country>;
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+}
+<section class="m-5 pt-3">
+    <div class="card text-center">
+        <div class="card-header font-weight-bold text-white" style="background:black;">
+            @(culture == "ar" ? "البيع معنا" : "Selling with G4Fit")
+        </div>
+        <div class="card-body m-auto">
+            <section class="Connect">
+                <div class="container">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="Login">
+                                @using (Html.BeginForm("Join", "Suppliers", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    @Html.ValidationMessage("Error", "", new { @class = "text-danger", style = "margin-bottom:10px;display:block" })
+                                <div class="form-group text-@(culture == "ar" ? "right" : "left")" style="direction:@(culture == "ar" ? "rtl" : "ltr") !important">
+                                    <label class="font-weight-bold">@Website.SupplierType</label><br />
+                                    @Html.RadioButtonFor(w => w.SupplierType, G4Fit.Models.Enums.SupplierType.Seller, new { Id = "Seller", @checked = true })
+                                    <label for="Seller">@(culture == "ar" ? "البائعين" : "Sellers")</label><br />
+                                    @Html.RadioButtonFor(w => w.SupplierType, G4Fit.Models.Enums.SupplierType.RetailCustomers, new { Id = "Retail" })
+                                    <label for="Retail">@(culture == "ar" ? "عملاء التجزئة" : "Retail Customers")</label>
+                                    @Html.ValidationMessageFor(s => s.SupplierType, "", new { @class = "text-danger" })
+                                </div>
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(s => s.FirstName, new { @class = "form-control text-center", placeholder = Website.FirstName })<i class="fa fa-user-circle fa-fw"></i>
+                                        @Html.ValidationMessageFor(s => s.FirstName, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(s => s.LastName, new { @class = "form-control text-center", placeholder = Website.LastName })<i class="fa fa-user-circle fa-fw"></i>
+                                        @Html.ValidationMessageFor(s => s.LastName, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(s => s.Email, new { @class = "form-control text-center", placeholder = Website.Email, type = "email" })<i class="fa fa-envelope fa-fw"></i>
+                                        @Html.ValidationMessageFor(s => s.Email, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-7">
+                                                @Html.TextBoxFor(s => s.PhoneNumber, new { @class = "form-control text-center", placeholder = Website.PhoneNumberPlaceholder, type = "number" })<i style="left:29px" class="fa fa-phone fa-fw"></i>
+                                            </div>
+                                            <div class="col-5">
+                                                <select name="CountryId" id="CountryId" required class="form-control" style="direction:@(culture == "ar" ? "" : "ltr")">
+                                                    @foreach (var country in Countries)
+                                                    {
+                                                        <option value="@country.Id">@(culture == "ar" ? country.NameAr : country.NameEn) (@(culture != "ar" ? "+" : "")@country.PhoneCode@(culture == "ar" ? "+" : ""))</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(s => s.PhoneNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(s => s.Password, new { @class = "form-control text-center", placeholder = Website.PasswordPlaceholder, type = "password" })<i class="fa fa-user-lock fa-fw"></i>
+                                        @Html.ValidationMessageFor(s => s.Password, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(s => s.ConfirmPassword, new { @class = "form-control text-center", placeholder = Website.ConfirmPasswordPlaceholder, type = "password" })<i class="fa fa-user-lock fa-fw"></i>
+                                        @Html.ValidationMessageFor(s => s.ConfirmPassword, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(s => s.StoreName, new { @class = "form-control text-center", placeholder = Website.StoreName })<i class="fa fa-building fa-fw"></i>
+                                        @Html.ValidationMessageFor(s => s.StoreName, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="checkbox" id="accept-policy-checkbox" onclick="ChangeSubmitBtn(this)"/>
+                                        <label for="accept-policy-checkbox">@(culture == "ar" ? "لقد قرأت ووافقت على " : "I have read and accepted the ")<a href="@Url.Action("Policy", "Suppliers")">@(culture == "ar" ? "شروط وأحكام البائع" : "Supplier terms & conditions")</a></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn text-white" disabled id="submit-btn" style="background-color:black;" type="submit">@Website.Join</button>
+                                    </div>
+                                }
+                            </div>
+                            <a href="@Url.Action("Login", "Account")" class="text-black"><strong>@(culture == "ar" ? "لديك حساب؟ تسجيل الدخول" : "Already registered? Login now")</strong></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    <script>
+        function ChangeSubmitBtn(element) {
+            if ($(element).is(":checked") == true) {
+                $("#submit-btn").attr("disabled", false);
+            }
+            else {
+                $("#submit-btn").attr("disabled", true);
+            }
+        }
+    </script>
+}

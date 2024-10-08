@@ -1,0 +1,330 @@
+﻿@model G4Fit.Models.Domains.Order
+@using Cocoon.Resources
+@{
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+    var SuggestedServices = ViewBag.SuggestedServices as List<G4Fit.Models.Domains.Service>;
+    var SimilarServices = ViewBag.SimilarServices as List<G4Fit.Models.Domains.Service>;
+    var user = ViewBag.User as G4Fit.Models.Domains.ApplicationUser;
+}
+<style>
+    .Cart .cart_total .suggest_item {
+        max-width: 20%
+    }
+</style>
+<style>
+    .swiper-slide {
+        height: 305px !important;
+        width: 215px !important;
+    }
+
+    h6 {
+        font-size: 15px;
+    }
+
+    .swiper-slide img {
+        height: 60%;
+        object-fit: unset;
+    }
+
+    .Tools {
+        font-size: initial;
+    }
+
+        .Tools .main_info {
+            float: unset;
+            padding-top: 10px;
+        }
+</style>
+<section class="Cart">
+    @if (Model == null)
+    {
+        <div class="text-center py-5 my-5">
+            @(culture == "ar" ? "لا يوجد عناصر فى عربه التسوق" : "No items in your basket")<br /><br />
+            <a class="btn bg-black text-white" href="@Url.Action("Index", "Home")">@(culture == "ar" ? "التسوق الان" : "Shop Now")</a>
+        </div>
+    }
+    else
+    {
+        <div class="cart_items wow fadeInDown">
+            <div class="container">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center">
+                        <thead class="bg-dark">
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>@Website.ServiceName</td>
+                                <td>@Website.Price</td>
+                                <td>@Website.Quantity</td>
+                                <td>@Website.Total</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items.Where(s => s.IsDeleted == false))
+                            {
+                                <tr id="item_@item.Id">
+                                    @Html.Partial("_OrderItem", item)
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="cart_total">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="table-responsive wow fadeInRight">
+                            <table class="table table-bordered table-striped text-center">
+                                <tbody>
+                                    <tr>
+                                        <td>@(culture == "ar" ? "كوبون الخصم" : "Coupon")</td>
+                                        <td><input id="coupon-text" value="@(Model.PromoId.HasValue == true ? Model.Promo.Text : "")" class="form-control" /></td>
+                                    </tr>
+                                <tbody />
+                                <tr>
+                                    <td style="background-color:white;" colspan="1" align="right"><a class="btn btn-success btn-block" href="javascript:void(0)" onclick="ApplyCoupoun()">@(culture == "ar" ? "تفعيل" : "Activate")</a></td>
+                                    <td style="background-color:white;" colspan="1" align="right" id="remove-coupon-btn" class="@(Model.PromoId.HasValue == false ? "d-none" : "")"><a class="btn btn-danger btn-block" href="javascript:void(0)" onclick="RemoveCoupoun()">@(culture == "ar" ? "الغاء" : "Remove")</a></td>
+                                </tr>
+                            </table>
+                            <table class="table table-bordered table-striped text-center">
+                                <tbody id="order-fees-container">
+                                    @Html.Partial("_OrderFees", Model)
+                                <tbody />
+
+                                <tr>
+                                    @if (user.Address != null)
+                                    {
+                                        <td style="background-color:white;" colspan="2" align="right">
+                                            <a class="btn btn-success btn-block" href="@Url.Action("Checkout", "Orders")">
+                                                @(culture == "ar" ? "اتمام عمليه الشراء" : "Checkout")
+                                            </a>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td style="background-color:white;" colspan="2" align="right">
+                                            @*<a class="btn btn-success btn-block" href="#updateAdress">*@
+                                            <a class="btn btn-success btn-block" href="javascript:void(0)" onclick="showUpdateAddress()">
+                                                @(culture == "ar" ? "يرجي تحديث العنوان حتي يتم اتمام عمليه الشراء " : "Please Update Address before Make Checkout")
+                                            </a>
+                                        </td>
+                                    }
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    @if (SuggestedServices != null && SuggestedServices.Count() > 0)
+                    {
+                        <div class="col-sm-12 col-md-7 mb-3">
+                            <div class="card text-right wow fadeInLeft">
+                                <div class="card-header"><span>@(culture == "ar" ? "خدمات مشابهة قد تعجبك" : "Our Suggestions")</span></div>
+                                <div class="card-body d-flex">
+                                    @foreach (var Service in SuggestedServices)
+                                    {
+                                        string ServiceImage = null;
+                                        if (Service.Images != null && Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
+                                        {
+                                            ServiceImage = Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
+                                        }
+                                        <div class="suggest_item text-center">
+                                            <a style="font-weight:100" href="@Url.Action("View", "Services", new { Id = Service.Id })"><img src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" class="rounded-circle" width="100%" height="100"></a>
+                                            <h6 style="max-height:50px"><a style="font-weight:100;overflow:hidden" href="@Url.Action("View", "Services", new { Id = Service.Id })">@(culture == "ar" ? Service.NameAr : Service.DescriptionEn)</a></h6>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        if (user.Address == null)
+        {
+            <div class="container mt-5" id="updateAdress" style="display: none;">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white text-center" style="font-size: 18px;">
+                                @(culture == "ar" ? "تحديث بيانات المستخدم" : "Update User Information")
+                            </div>
+                            <div class="card-body">
+                                @using (Ajax.BeginForm("UpdateUserData", "Orders", new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnSuccess = "OnSuccess", OnFailure = "OnFailure", LoadingElementId = "loader" }, new { enctype = "multipart/form-data" }))
+                                {
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="Address" class="control-label required" style="font-weight: bold; display: flex;">@(culture == "ar" ? "العنوان:" : "Address:")</label>
+                                                <input type="text" name="Address" class="form-control" value="@user.Address" placeholder="@(culture == "ar" ? "أدخل العنوان" : "Enter Address")" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="PhoneNumber" class="control-label required" style="font-weight: bold; display: flex;">@(culture == "ar" ? "رقم الهاتف:" : "Phone Number:")</label>
+                                                <input type="text" name="PhoneNumber" class="form-control" value="@user.PhoneNumber" placeholder="@(culture == "ar" ? "أدخل رقم الهاتف" : "Enter Phone Number")" required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-4">
+                                        <button type="submit" class="btn btn-success" style="font-size: 18px; padding: 10px 20px;">
+                                            @(culture == "ar" ? "تحديث البيانات" : "Update Information")
+                                            <i class="fa fa-spinner fa-spin" id="loader" style="display:none;"></i>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    }
+
+</section>
+@section Scripts{
+    <script>
+        function IncreaseItem(Id) {
+            //$("#cover-spin").show();
+            $.ajax({
+                url: "@Url.Action("IncreaseItem", "Orders")",
+                type: "GET",
+                data: { OrderItemId: Id },
+                success: function (results) {
+                    if (results.Success != false) {
+                        $("#item_" + Id).empty();
+                        $("#item_" + Id).html(results);
+                        CalculateOrderFees();
+                    }
+                    else {
+                        toastr.error(results.Message);
+                    }
+                    $("#cover-spin").hide();
+                }
+            })
+        }
+
+        function DecreaseItem(Id) {
+            //$("#cover-spin").show();
+            $.ajax({
+                url: "@Url.Action("DecreaseItem", "Orders")",
+                type: "GET",
+                data: { OrderItemId: Id },
+                success: function (results) {
+                    if (results.Success == false) {
+                        toastr.error(results.Message);
+                    }
+                    else {
+                        $("#item_" + Id).empty();
+                        $("#item_" + Id).html(results);
+                        CalculateOrderFees();
+                    }
+                    $("#cover-spin").hide();
+                }
+            })
+        }
+
+        function DeleteItem(Id) {
+            //$("#cover-spin").show();
+            $.ajax({
+                url: "@Url.Action("DeleteItem", "Orders")",
+                type: "DELETE",
+                data: { OrderItemId: Id },
+                success: function (results) {
+                    if (results.Success != false) {
+                        if (results.Message == "refresh") {
+                            window.location.reload();
+                        }
+                        else {
+                            RenderWebsiteNavbar();
+                            CalculateOrderFees();
+                        }
+                    }
+                    else {
+                        toastr.error(results.Message);
+                    }
+                    $("#cover-spin").hide();
+                }
+            })
+        }
+
+        function ApplyCoupoun() {
+            var Text = $("#coupon-text").val();
+            if (Text == "" || Text == null) {
+                toastr.error("@(culture == "ar" ? "من فضلك قم بكتابه كوبون صحيح" : "Please enter valid coupon")")
+            }
+            else {
+                $("#cover-spin").show();
+            $.ajax({
+                url: "@Url.Action("ApplyCoupon", "Orders")",
+                type: "POST",
+                data: { Text: Text },
+                success: function (results) {
+                    if (results.Success != false) {
+                        toastr.success(results.Message);
+                        $("#remove-coupon-btn").removeClass("d-none");
+                        CalculateOrderFees();
+                    }
+                    else {
+                        toastr.error(results.Message);
+                    }
+                    $("#cover-spin").hide();
+                }
+            })
+            }
+    }
+
+    function RemoveCoupoun() {
+                $("#cover-spin").show();
+            $.ajax({
+                url: "@Url.Action("RemoveCoupoun", "Orders")",
+                type: "POST",
+                success: function (results) {
+                    if (results.Success != false) {
+                        CalculateOrderFees();
+                        $("#remove-coupon-btn").addClass("d-none");
+                        $("#coupon-text").val("");
+                    }
+                    else {
+                        toastr.error(results.Message);
+                    }
+                    $("#cover-spin").hide();
+                }
+            })
+        }
+
+        function CalculateOrderFees() {
+            $.ajax({
+                url: "@Url.Action("_OrderFees", "Orders")",
+                type: "GET",
+                success: function (results) {
+                    $("#order-fees-container").empty();
+                    $("#order-fees-container").html(results);
+                }
+            })
+        }
+    </script>
+    @if (TempData["OrderPlaced"] != null)
+    {
+        <script>
+            $(function () {
+                Swal.fire(
+                    '@(culture == "ar" ? "تم بنجاح" : "Success")',
+                    '@(culture == "ar" ? "تم استقبال طلبكم بنجاح" : "Your order has been sent successfully")',
+                    'success'
+                )
+            })
+        </script>
+    }
+    <script>
+        function showUpdateAddress() {
+            //document.getElementById('updateAdress').style.display = 'block';
+            var updateAddressDiv = document.getElementById('updateAdress');
+            updateAddressDiv.style.display = 'block';
+            updateAddressDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+}

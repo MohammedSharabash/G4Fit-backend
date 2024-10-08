@@ -1,0 +1,121 @@
+﻿@model G4Fit.Models.ViewModels.CheckoutVM
+@using Cocoon.Resources
+@{
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+    var Countries = ViewBag.Countries as List<G4Fit.Models.Domains.Country>;
+    var Cities = ViewBag.Cities as List<G4Fit.Models.Domains.City>;
+}
+<section class="m-4 pt-1">
+    @if (TempData["PaymentError"] != null)
+    {
+        <p class="alert alert-danger text-center">
+            @(culture == "ar" ? " عفواً ، برجاء المحاوله لاحقاً او التواصل مع اداره الموقع" : "Sorry, please try again later or contact our customer service")
+        </p>
+    }
+    <div class="card text-center">
+        <div class="card-header font-weight-bold text-white" style="background:black;">
+            @(culture == "ar" ? "اتمام عمليه الشراء" : "Checkout")
+        </div>
+        <div class="card-body m-auto">
+            <section class="Connect" id="Login">
+                <div class="container">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="Login">
+                                @using (Html.BeginForm("Checkout", "Orders", FormMethod.Post))
+                                {
+                                    <div class="form-group">
+                                        <label for="PaymentMethod">@(culture == "ar" ? "وسيلة الدفع" : "Payment Method")</label>
+                                        <select class="form-control text-center" required name="PaymentMethod" id="PaymentMethod">
+                                            <option selected value="@G4Fit.Models.Enums.PaymentMethod.Cash">@(culture == "ar" ? "كاش" : "Cash")</option>
+                                        </select>
+                                        @*@Html.EnumDropDownListFor(s => s.PaymentMethod, new { @class = "form-control text-center" })*@
+                                        @Html.ValidationMessageFor(s => s.PaymentMethod, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="CountryId">@(culture == "ar" ? "الدولة" : "Country")</label>
+                                        <select class="form-control" id="CountryId">
+                                            @foreach (var country in Countries)
+                                            {
+                                                if (ViewBag.CountryId == country.Id)
+                                                {
+                                                    <option selected value="@country.Id">@(culture == "ar" ? country.NameAr : country.NameEn)</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@country.Id">@(culture == "ar" ? country.NameAr : country.NameEn)</option>
+                                                }
+                                            }
+                                        </select>
+                                        @Html.ValidationMessage("CountryId", "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="CityId">@(culture == "ar" ? "المدينة" : "City")</label>
+                                        <select class="form-control" id="CityId" name="CityId"></select>
+                                        @Html.ValidationMessageFor(s => s.CityId, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="CityId">@(culture == "ar" ? "العنوان بالتفصيل" : "Address In Details")</label>
+                                        <input class="form-control" id="Address" name="Address" />
+                                        @Html.ValidationMessageFor(s => s.Address, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn text-white" style="background-color:black;" type="submit">@(culture == "ar" ? "اتمام الشراء" : "Confirm Purchashing")</button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+
+@section Scripts{
+    <script>
+        $("#CountryId").change(function () {
+            var Id = $(this).val();
+            var culture = '@culture';
+                var List = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Cities.Select(x => new { x.Id, x.CountryId, x.NameAr, x.NameEn })));
+            let obj = List.filter(o => o.CountryId == Id);
+            $("#CityId").empty();
+            if (obj != null && obj != undefined && obj.length > 0) {
+                for (var i = 0; i < obj.length; i++) {
+                    var Name = "";
+                    if (culture == "ar") {
+                        Name = obj[i].NameAr;
+                    }
+                    else {
+                        Name = obj[i].NameEn;
+                    }
+                    $("#CityId").append("<option value='" + obj[i].Id + "'>" + Name +"</option>")
+                }
+            }
+            else {
+                var Name = "";
+                if (culture == "ar") {
+                    Name = "لا توجد مدن متاحه";
+                }
+                else {
+                    Name = "No cities available";
+                }
+                $("#CityId").append("<option value>" + Name +"</option>")
+            }
+        })
+
+        $("#CountryId").trigger("change");
+    </script>
+    @if (TempData["PaymentFailed"] != null)
+    {
+        <script>
+            $(function () {
+                Swal.fire(
+                    '@(culture == "ar" ? "خطأ" : "Error")',
+                    '@TempData["PaymentFailed"]',
+                    'error'
+                )
+            })
+        </script>
+    }
+}

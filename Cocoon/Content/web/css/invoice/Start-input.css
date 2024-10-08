@@ -1,0 +1,32 @@
+.Start-input-counter {
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center the content horizontally */
+    align-items: center; /* Center the content vertically */
+    margin: 20px; /* Add some space around the container */
+}
+
+#dateInput {
+    padding: 10px 15px; /* Add padding for better spacing */
+    font-size: 16px; /* Increase font size */
+    border: 2px solid #506c8c; /* Change border color */
+    border-radius: 5px; /* Rounded corners */
+    outline: none; /* Remove default outline */
+    transition: border-color 0.3s ease; /* Smooth transition for border color */
+}
+
+    #dateInput:focus {
+        border-color: #f4c23a; /* Change border color on focus */
+        box-shadow: 0 0 5px rgba(244, 194, 58, 0.5); /* Add shadow on focus */
+    }
+
+    /* Optional: Style for invalid input */
+    #dateInput:invalid {
+        border-color: #88492d; /* Change border color for invalid state */
+    }
+
+/* Optional: Add some styles for mobile responsiveness */
+@media (max-width: 600px) {
+    #dateInput {
+        width: 100%; /* Full width on smaller screens */
+    }
+}

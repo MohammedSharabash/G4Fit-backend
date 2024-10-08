@@ -1,0 +1,125 @@
+﻿@model G4Fit.Models.Domains.PromoCode
+@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = "تعديل كوبون الخصم";
+}
+<div class="panel">
+    <div class="panel-body">
+
+        @using (Html.BeginForm())
+        {
+        <div class="form-horizontal">
+            <h4>@ViewBag.Title</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.CreatedOn)
+            @Html.HiddenFor(model => model.DeletedOn)
+            @Html.HiddenFor(model => model.IsDeleted)
+            @Html.HiddenFor(model => model.IsFinished)
+            @Html.HiddenFor(model => model.ModifiedOn)
+            @Html.HiddenFor(model => model.NumberOfUse)
+
+            <div class="alert alert-info text-center">
+                فى حاله ترك الكود فارغاً سيتم توليد كود عشوائياً
+            </div>
+
+            <div class="form-group">
+                <label for="Code" class="control-label col-md-2">الكود</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Text, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="StartOn" class="control-label col-md-2">تاريخ النهاية</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FinishOn, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                    @Html.ValidationMessageFor(model => model.FinishOn, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="alert alert-info text-center">
+                يمكنك الاختيار مابين كتابه الخصم يدوياً نقدى ، او بنسبه مئوية
+            </div>
+
+            <div class="form-group">
+                <label for="DiscountPercentage" class="control-label col-md-2">النسبة المئوية للخصم</label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.DiscountPercentage, new { htmlAttributes = new { @class = "form-control", type = "number", min = 0, max = 100 } })
+                        <span class="input-group-addon">%</span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.DiscountPercentage, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="DiscountMoney" class="control-label col-md-2">مبلغ الخصم نقداً</label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.DiscountMoney, new { htmlAttributes = new { @class = "form-control", type = "number", min = 0, step = "any" } })
+                        <span class="input-group-addon">ريال سعودي</span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.DiscountMoney, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="MinimumOrderCost" class="control-label col-md-2">الحد الادنى من سعر الطلب لاستخدام الخصم (اختيارى)</label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.MinimumOrderCost, new { htmlAttributes = new { @class = "form-control", type = "number", min = 0, step = "any" } })
+                        <span class="input-group-addon">ريال سعودي</span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.MinimumOrderCost, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="MaximumDiscountMoney" class="control-label col-md-2">الحد الاقصى للخصم (اختيارى)</label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.MaximumDiscountMoney, new { htmlAttributes = new { @class = "form-control", type = "number", min = 0, step = "any" } })
+                        <span class="input-group-addon">ريال سعودي</span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.MaximumDiscountMoney, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="NumberOfAllowedUsingTimes" class="control-label col-md-2 required">عدد مرات الاستخدام المتاحة لكل مستخدم</label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.NumberOfAllowedUsingTimes, new { htmlAttributes = new { @class = "form-control", type = "number", min = 1, step = "1", required = true } })
+                        <span class="input-group-addon">مستخدم</span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.NumberOfAllowedUsingTimes, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="CouponQuantity" class="control-label col-md-2">الكمية المتوفرة من الكوبون (اختيارى)</label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.CouponQuantity, new { htmlAttributes = new { @class = "form-control", type = "number", min = 0, step = "any" } })
+                        <span class="input-group-addon">كوبون</span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.CouponQuantity, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="حفظ" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("العودة", "Index", null, new { @class = "btn btn-default" })
+</div>

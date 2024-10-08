@@ -1,0 +1,182 @@
+﻿@model G4Fit.Models.Domains.Category
+@using Cocoon.Resources
+@{
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+    long? SubId = null;
+    G4Fit.Models.Domains.SubCategory subCategory = null;
+    List<G4Fit.Models.Domains.Service> Services = null;
+    if (ViewBag.SubId != null)
+    {
+        SubId = ViewBag.SubId as long?;
+        subCategory = Model.SubCategories.FirstOrDefault(w => w.Id == SubId);
+        Services = subCategory.Services.Where(s => s.IsDeleted == false && (s.Inventory > 0 || s.IsTimeBoundService) && s.IsHidden == false).OrderBy(w => w.SortingNumber).ToList();
+    }
+    else
+    {
+        subCategory = Model.SubCategories.FirstOrDefault(w => w.IsDeleted == false);
+        if (subCategory != null)
+        {
+            Services = subCategory.Services.Where(s => s.IsDeleted == false && (s.Inventory > 0 || s.IsTimeBoundService) && s.IsHidden == false).OrderBy(w => w.SortingNumber).ToList();
+        }
+    }
+}
+<style>
+    .swiper-slide {
+        height: 305px !important;
+        width: 215px !important;
+    }
+
+    h6 {
+        font-size: 15px;
+    }
+
+    .swiper-slide img {
+        height: 60%;
+        object-fit: unset;
+    }
+
+    .Tools {
+        font-size: initial;
+    }
+
+        .Tools .main_info {
+            float: unset;
+            padding-top: 10px;
+        }
+</style>
+<style>
+    .vertical-menu {
+        width: 200px; /* Set a width if you like */
+    }
+
+        .vertical-menu a {
+            background-color: #eee; /* Grey background color */
+            color: black; /* Black text color */
+            display: block; /* Make the links appear below each other */
+            padding: 12px; /* Add some padding */
+            text-decoration: none; /* Remove underline from links */
+        }
+
+            .vertical-menu a:hover {
+                background-color: #ccc; /* Dark grey background on mouse-over */
+            }
+
+            .vertical-menu a.active {
+                background-color: #c39f57; /* Add a green color to the "active/current" link */
+                color: white;
+            }
+
+    .Spicial .spicial_items .card {
+        box-shadow: unset;
+    }
+</style>
+<div class="container-fluid">
+    <section class="Spicial">
+        <nav aria-label="breadcrumb mx-3" dir="auto">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="fa fa-home mx-1"></i>@(culture == "ar" ? "الصفحة الرئيسية" : "Home")</a></li>
+                @if (SubId.HasValue == false)
+                {
+                    <li class="breadcrumb-item active" aria-current="page"><a href="@Request.Url">@(culture == "ar" ? Model.NameAr : Model.NameEn)</a></li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item"><a href="@Url.Action("View", "Categories", new { CatId = Model.Id })">@(culture == "ar" ? Model.NameAr : Model.NameEn)</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="@Request.Url">@(culture == "ar" ? subCategory.NameAr : subCategory.NameEn)</a></li>
+                }
+            </ol>
+        </nav>
+        <div class="spicial_items">
+            <div class="row">
+                <div class="col-sm-12 col-md-4 col-lg-2">
+                    <div class="vertical-menu text-@(culture == "ar" ? "right":"left")">
+                        @if (Model.SubCategories.Any(w => w.IsDeleted == false) == false)
+                        {
+                            <a>@(culture == "ar" ? "لا توجد اقسام فرعيه متاحه" : "There is no sub sections available")</a>
+                        }
+                        @foreach (var subcategory in Model.SubCategories.Where(s => s.IsDeleted == false))
+                        {
+                            <a class="@(subCategory != null && subCategory.Id == subcategory.Id ? "active" : "")" href="@Url.Action("View", "Categories", new { CatId = Model.Id, SubId = subcategory.Id })">@(culture == "ar" ? subcategory.NameAr : subcategory.NameEn)</a>
+                        }
+                    </div>
+                </div>
+                <div class="pt-3 pt-xl-0 pt-md-0 pt-sm-0 col-sm-12 col-md-8 col-lg-10">
+                    <div class="card wow fadeInDown">
+                        <div class="card-header">
+                            <h2 class="h5 text-right">
+                                <span>
+                                    <i class="fas fa-star"></i>
+                                    @if (subCategory != null)
+                                    {
+                                        <span>@(culture == "ar" ? subCategory.NameAr : subCategory.NameEn)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@(culture == "ar" ? Model.NameAr : Model.NameEn)</span>
+                                    }
+                                    <i class="fas fa-people-carry"></i>
+                                </span>
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="swiper-container">
+                                <div class="swiper-wrapper">
+                                    @if (Services == null || Services.Any() == false)
+                                    {
+                                        <div class="my-5 py-5 text-center m-auto">
+                                            @(culture == "ar" ? "لا توجد خدمات متاحة" : "There is no available Services")
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        foreach (var Service in Services.Where(s => s.IsDeleted == false && s.IsHidden == false).OrderByDescending(s => s.SellCounter))
+                                        {
+                                            string ServiceImage = null;
+                                            if (Service.Images != null && Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
+                                            {
+                                                ServiceImage = Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
+                                            }
+                                            <div class="swiper-slide hvr-underline-from-center">
+                                                <a href="@Url.Action("View", "Services", new { Id = Service.Id })"><img src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100%" height="400"></a>
+                                                <div class="Tools">
+                                                    <div class="main_info">
+                                                        <h6><a class="text-black" href="@Url.Action("View", "Services", new { Id = Service.Id })">@(culture == "ar" ? Service.NameAr : Service.NameEn)</a></h6>
+                                                        @*<p><a href="@Url.Action("View", "Categories", new { CatId = Service.SubCategoryId })" class="text-black">@(culture == "ar" ? Service.SubCategory.NameAr : Service.SubCategory.NameEn)</a></p>*@
+                                                    </div>
+                                                    <div class="sub_info"><span>@(Service.OfferPrice.HasValue ? Service.OfferPrice.Value : Service.OriginalPrice) @Website.SAR</span>@*<i class="fas fa-cart-plus fa-lg hvr-pulse-grow" onclick="AddToCart(this,'@Service.Id', 1)"></i>*@</div>
+                                                    <div class="clearfix"></div>
+                                                    @*@if (Service.Colors != null && Service.Colors.Count(s => s.IsDeleted == false) > 0)
+                                                        {
+                                                            <div class="Colors text-right">
+                                                                <ul class="list-unstyled">
+                                                                    @foreach (var color in Service.Colors.Where(s => s.IsDeleted == false))
+                                                                    {
+                                                                        <li style="background-color:@color.Color;cursor:pointer;" class="@(color.Id == Service.Colors.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")" data-color="@color.Id"></li>
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        }
+                                                        @if (Service.Sizes != null && Service.Sizes.Count(s => s.IsDeleted == false) > 0)
+                                                        {
+                                                            <div class="Size text-right">
+                                                                <ul class="list-unstyled">
+                                                                    @foreach (var size in Service.Sizes.Where(s => s.IsDeleted == false))
+                                                                    {
+                                                                        <li style="cursor:pointer;" class="@(size.Id == Service.Sizes.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")" data-size="@size.Id">@size.Size</li>
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        }*@
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

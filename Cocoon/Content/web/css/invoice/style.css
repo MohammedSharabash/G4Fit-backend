@@ -1,0 +1,381 @@
+/* style.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    background-color: #f4f4f4;
+    line-height: 1.6;
+}
+
+#page-wrap {
+    width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+#header {
+    text-align: center;
+    font-size: 24px;
+    padding: 10px 0;
+    background-color: #333;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+}
+
+#identity {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+    #identity p {
+        margin: 5px 0;
+        font-weight: bold;
+        color: #666;
+    }
+
+    #identity img {
+        width: 150px;
+        margin-top: 10px;
+    }
+
+#customer {
+    margin-top: 20px;
+}
+
+#customer-title {
+    font-size: 24px;
+    font-weight: bold;
+    float: left;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+#meta {
+    float: right;
+    width: 300px;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+}
+
+    #meta td {
+        padding: 5px;
+        text-align: right;
+        vertical-align: top;
+        color: #666;
+    }
+
+    #meta .meta-head {
+        text-align: left;
+        background: #eee;
+        padding: 5px;
+        font-weight: bold;
+    }
+
+#items {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+}
+
+    #items th, #items td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+        color: #333;
+    }
+
+    #items th {
+        background-color: #f2f2f2;
+        text-transform: uppercase;
+    }
+
+    #items .item-row td {
+        border: 0;
+        padding: 8px 10px;
+    }
+
+#terms {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+    #terms textarea {
+        width: 100%;
+        min-height: 80px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-size: 14px;
+        color: #666;
+    }
+
+/* print.css */
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    #page-wrap, #page-wrap * {
+        visibility: visible;
+    }
+
+    #page-wrap {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    #header {
+        text-align: center;
+        font-size: 24px;
+        padding: 10px 0;
+        background-color: #333;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        margin-bottom: 20px;
+    }
+
+    #identity {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+
+        #identity p {
+            margin: 5px 0;
+            font-weight: bold;
+            color: #666;
+        }
+
+        #identity img {
+            width: 150px;
+            margin-top: 10px;
+        }
+
+    #customer {
+        margin-top: 20px;
+    }
+
+    #customer-title {
+        font-size: 24px;
+        font-weight: bold;
+        float: left;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    #meta {
+        float: right;
+        width: 300px;
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+    }
+
+        #meta td {
+            padding: 5px;
+            text-align: right;
+            vertical-align: top;
+            color: #666;
+        }
+
+        #meta .meta-head {
+            text-align: left;
+            background: #eee;
+            padding: 5px;
+            font-weight: bold;
+        }
+
+    #items {
+        width: 100%;
+        margin-top: 30px;
+        border-collapse: collapse;
+    }
+
+        #items th, #items td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            color: #333;
+        }
+
+        #items th {
+            background-color: #f2f2f2;
+            text-transform: uppercase;
+        }
+
+        #items .item-row td {
+            border: 0;
+            padding: 8px 10px;
+        }
+
+    #terms {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+
+        #terms textarea {
+            width: 100%;
+            min-height: 80px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+#page-wrap {
+    width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+#header {
+    text-align: center;
+    font-size: 24px;
+    padding: 10px 0;
+    background-color: #333;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+}
+
+#identity {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+    #identity p {
+        margin: 5px 0;
+        font-weight: bold;
+        color: #666;
+    }
+
+    #identity img {
+        width: 150px;
+        margin-top: 10px;
+    }
+
+#customer {
+    margin-top: 20px;
+}
+
+#customer-title {
+    font-size: 24px;
+    font-weight: bold;
+    float: left;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+#meta {
+    float: right;
+    width: 300px;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+}
+
+    #meta td {
+        padding: 5px;
+        text-align: right;
+        vertical-align: top;
+        color: #666;
+    }
+
+    #meta .meta-head {
+        text-align: left;
+        background: #eee;
+        padding: 5px;
+        font-weight: bold;
+    }
+
+#items {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+}
+
+    #items th, #items td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+        color: #333;
+    }
+
+    #items th {
+        background-color: #f2f2f2;
+        text-transform: uppercase;
+    }
+
+    #items .item-row td {
+        border: 0;
+        padding: 8px 10px;
+    }
+
+#terms {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+    #terms textarea {
+        width: 100%;
+        min-height: 80px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-size: 14px;
+        color: #666;
+    }
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    #page-wrap, #page-wrap * {
+        visibility: visible;
+    }
+
+    #page-wrap {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+}

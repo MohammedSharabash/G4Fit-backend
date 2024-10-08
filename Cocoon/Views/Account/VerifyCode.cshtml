@@ -1,0 +1,81 @@
+﻿@using Cocoon.Resources
+@{
+    ViewBag.Title = Website.VerifyAccount;
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+}
+<style>
+    ul {
+        list-style: none;
+    }
+</style>
+<section class="m-5 pt-3">
+    <div class="card text-center d-block">
+        <div class="card-header font-weight-bold text-white" style="background:black;">
+            @Website.VerifyAccount
+        </div>
+        <div class="card-body m-auto">
+            <div class="contact-form spad p-0">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="contact__form__title">
+                                <div class="text-center my-4">
+                                    <h3><i class="text-success fa fa-check-circle"></i></h3>
+                                    <h4>@Website.VerificationCodeSentToPhone</h4>
+                                </div>
+                                <div class="my-3">
+                                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 m-auto">
+                        @using (Html.BeginForm("VerifyCode", "Account", FormMethod.Post, new { @class = "text-center m-auto" }))
+                        {
+                            <input name="Provider" hidden value="@TempData["UserEmail"]" />
+                            <input name="Password" hidden value="@TempData["UserPassword"]" />
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3">
+                                    <input type="number" class="text-center p-0 form-control" id="Vcode1" name="Vcode1" required>
+                                </div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input type="number" class="text-center p-0 form-control" name="Vcode2" required>
+                                </div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input type="number" class="text-center p-0 form-control" name="Vcode3" required>
+                                </div>
+                                <div class="col-lg-3 col-md-3">
+                                    <input type="number" class="text-center p-0 form-control" name="Vcode4" required>
+                                </div>
+                                <div class="col-lg-12 my-3 text-center">
+                                    <button type="submit" class="btn text-white" style="background-color:black">@Website.Verify</button>
+                                </div>
+                                <div class="col-lg-12 text-center mt-2">
+                                    <a href="@Url.Action("ResendVcode","Account")">@Website.ResendCode</a><br />
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(function () {
+            $("#Vcode1").focus();
+            $('input').keypress(function () {
+                if ($(this).val().length >= 1) {
+                    $(this).val($(this).val().slice(0, 1));
+                    return false;
+                }
+                $(this).parent().next('div').find('input').focus();
+            });
+        })
+    </script>
+}

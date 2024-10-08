@@ -1,0 +1,33 @@
+﻿@model List<G4Fit.Models.Domains.FAQ>
+@using Cocoon.Resources
+@{
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+}
+<section class="Questions">
+    <div class="container">
+        <div class="accordion wow fadeInRight" id="accordionExample">
+            @if (Model == null || Model.Any() == false)
+            {
+                <div class="py-5 my-5 text-center">
+                    @(culture == "ar" ? "لا توجد اسئله متاحة" : "There is no FAQs available")
+                </div>
+            }
+            else
+            {
+                foreach (var faq in Model)
+                {
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-@(culture == "ar" ? "right" : "left")" type="button" data-toggle="collapse" data-target="#collapse_@faq.Id" aria-expanded="true" aria-controls="collapse_@faq.Id">@(culture == "ar" ? faq.QuestionAr : faq.QuestionEn)</button>
+                            </h2>
+                        </div>
+                        <div class="collapse @(faq.Id == Model.FirstOrDefault().Id ? "show" : "")" id="collapse_@faq.Id">
+                            <div class="card-body">@(culture == "ar" ? faq.AnswerAr : faq.AnswerEn)</div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>

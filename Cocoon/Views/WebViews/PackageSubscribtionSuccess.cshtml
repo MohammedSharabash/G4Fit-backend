@@ -1,0 +1,79 @@
+﻿@model G4Fit.Models.Domains.UserPackage
+@{
+    Layout = null;
+    var culture = "ar";//ViewBag.culture;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta Rules-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Title Of Page-->
+    <title>G4Fit</title>
+
+    <!-- Style Files-->
+    <link rel="stylesheet" href="~/Content/web/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/web/css/fontawesome.min.css">
+    <link rel="stylesheet" href="~/Content/web/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal&amp;display=swap">
+    <link rel="stylesheet" href="~/Content/web/css/swiper.min.css">
+    <link rel="stylesheet" href="~/Content/web/css/animate.css">
+    <link rel="stylesheet" href="~/Content/web/css/hover.css">
+    <link href="~/Content/assets/plugins/Toaster/toastr.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/web/css/main.css">
+    <link rel="apple-touch-icon" sizes="60x60" href="~/Content/web/img/G4FitLogo-removebg.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/Content/web/img/G4FitLogo-removebg.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/web/img/G4FitLogo-removebg.png">
+</head>
+<body>
+    <section class="m-4 pt-1">
+        <div class="card text-center">
+            <div class="card-header font-weight-bold text-white" style="background:black;">
+                <i class="fa fa-check-circle"></i> @(culture == "ar" ? "تم الاشتراك فى الباقة بنجاح" : "Your subscription has been successfully placed")
+            </div>
+            <div class="card-body m-auto">
+                <section class="Connect" id="Login">
+                    <div class="container">
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <h4 class="d-block"><strong>@(culture == "ar" ? "رقم الطلب" : "Order Number")</strong></h4>
+                                <h4 class="d-block">#@Model.TrackId</h4>
+                                <hr />
+                                <a class="btn btn-primary" style="background-color: #f9b82f;
+    border-color: #d3b982;" href="#" onclick="returnMobile()">@(culture == "ar" ? "انهاء" : "Finish")</a>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</section>
+<script src="~/Content/web/js/jquery-3.2.1.min.js"></script>
+<script src="~/Content/web/js/bootstrap.min.js"></script>
+<script src="~/Content/web/js/popper.min.js"></script>
+<script src="~/Content/web/js/fontawesome.min.js"></script>
+<script src="~/Content/web/js/all.min.js"></script>
+<script src="~/Content/web/js/swiper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="~/Content/assets/plugins/Toaster/toastr.min.js"></script>
+<script src="~/Content/web/js/wow.min.js"></script>
+<script>new WOW().init();</script>
+<script src="~/Content/web/js/script.js"></script>
+@Scripts.Render("~/bundles/jqueryval")
+<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+<script>
+            $(function () {
+                Swal.fire(
+                    '@(culture == "ar" ? "تم بنجاح" : "Success")',
+                    '@(culture == "ar" ? "تم الاشتراك فى الباقة بنجاح" : "Your subscription has been placed successfully")',
+                    'success'
+                )
+    })
+    function returnMobile() {
+        Android.returnMobile();
+        IOS.returnMobile();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+﻿@model G4Fit.Models.ViewModels.ServicesVM
+@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = "ملف اكسيل الخدمات";
+    var Categories = ViewBag.Categories as SelectList;
+}
+
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-fw fa-edit"></i> @ViewBag.Title</h3>
+    </div>
+    <div class="panel-body">
+        <div id="accordion" class="panel-group" aria-multiselectable="true" role="tablist">
+            <div class="panel panel-success">
+                <div class="panel-heading" role="tab" id="headingOne" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <h4 class="panel-title">
+                        <a><i class="fa fa-fw fa-download"></i>تحميل ملف Excell Sheet الخاص بإضافة الخدمات محدده بوقت </a>
+                    </h4>
+                </div>
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        <div>
+                            <p style="color:red; font-size:16px;">يرجي العلم ان يتم اضافة البيانات كما هو موضح بالملف , وانه لا يتم اضافة صور او لون او حجم للخدمه ويمكنك اضافتها لاحقاً عن طريق تعديل بيانات كل خدمه . </p>
+                            <button id="downloadButton" class="btn btn-info mb-5">تحميل</button>
+                        </div>
+                        <div class="panel panel-primary">
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" style="font-size:14px" class="col-sm-4 control-label">أكواد جميع الاقسام <p style="color:darkred; font-size:12px">يرجي مراجعة الاكواد جيداً حتي تتم اضافتها بشكل صحيح</p></label>
+                                        <div class="col-sm-8">
+                                            <div style="max-height: 150px; overflow-y: auto;">
+                                                <table class="table table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>اسم القسم</th>
+                                                            <th>الكود</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var category in Categories)
+                                                        {
+                                                            <tr>
+                                                                <td>@category.Text</td>
+                                                                <td><kbd style="color:white; font-size:16px">@category.Value</kbd></td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel-body">
+    <div id="accordion" class="panel-group" aria-multiselectable="true" role="tablist">
+        <div class="panel panel-success">
+            <div class="panel-heading" role="tab" id="headingOne" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <h4 class="panel-title">
+                    <a><i class="fa fa-fw fa-plus"></i>انشاء خدمات جديدة</a>
+                </h4>
+            </div>
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    @using (Html.BeginForm("CreateServices", "Services", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+                    {
+                        <div class="row" style="margin:10px">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="" class="col-sm-5 control-label">إدخال ملف الإكسل الخاص بالخدمات :</label>
+                                    <div class="col-sm-7">
+                                        <div class="input-group">
+                                            <input name="file" id="file" required type="file" class="form-control" />
+                                            @Html.ValidationMessageFor(d => d.file, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">انشاء</button>
+                    }
+                </div>
+                <div class="form-horizontal">
+
+                    <div id="model-errors" style="display:none;">
+                        <ul class="text-danger" id="ul-errors"></ul>
+                        <hr />
+                    </div>
+
+                    <div>
+                        @Html.ActionLink("العودة للخلف", "Index")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#downloadButton').click(function (e) {
+            e.preventDefault();
+            window.open('@Url.Action("DownloadFile", "Services")', '_blank');
+        });
+    });
+</script>

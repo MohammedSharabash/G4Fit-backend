@@ -1,0 +1,23 @@
+﻿@model G4Fit.Models.ViewModels.HTMLContentVM
+@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = "محتوى صفحه البيع معنا";
+}
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <h4>برجاء العلم بان الرابط الخاص بصفحه التسجيل كبائع هو: <a href="https://G4Fit.sa/Suppliers/Join">https://G4Fit.sa/Suppliers/Join</a></h4>
+        @using (Html.BeginForm("SellWithUs", "Suppliers", FormMethod.Post))
+        {
+            <h3>محتوى صفحه البيع معنا باللغة العربية:</h3>
+            <br />
+            @Html.TextAreaFor(w => w.ContentAr, new { @class = "rich-text-editor" })
+            <br />
+            <h3>محتوى صفحه البيع معنا باللغة الانجليزية:</h3>
+            <br />
+            @Html.TextAreaFor(w => w.ContentEn, new { @class = "rich-text-editor" })
+
+            <button type="submit" class="btn btn-success">حفظ</button>
+        }
+    </div>
+</div>
+

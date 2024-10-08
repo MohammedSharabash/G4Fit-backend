@@ -1,0 +1,40 @@
+﻿@model IEnumerable<G4Fit.Models.Domains.Notification>
+    @using Cocoon.Resources
+@{ 
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+}
+<section class="notification">
+    <nav class="note_nav wow bounceInDown">
+        <div class="container">
+            <div class="nav_container d-flex">
+                <h1 class="h4 text-@(culture == "ar" ? "right" : "left")">@Website.Notifications (@Model.Count(s => s.IsSeen == false))</h1>
+            </div>
+            <p><a href="@Url.Action("MarkSeen", "Notifications")">@(culture == "ar" ? "تعليم الكل كمقروء" : "Mark all as seen")</a></p>
+        </div>
+    </nav>
+    <div class="note_content">
+        <div class="container">
+            <ul class="list-unstyled wow fadeInDown" data-wow-duration="3s">
+                @if (Model == null || Model.Any() == false)
+                {
+                    <li>
+                        <div class="my-5 py-5 text-center">
+                            @(culture == "ar" ? "لا توجد اشعارات متاحة" : "You don't have notifications")
+                        </div>
+                    </li>
+                }
+                @foreach (var notification in Model)
+                {
+                    <li>
+                        <div class="media text-right">
+                            <img class="ml-3 rounded-circle" src="~/Content/web/img/G4FitLogo-removebg.png" width="50" height="50" alt="note">
+                            <div class="media-body">
+                                <h5 class="mt-0">@notification.Title</h5>@notification.Body
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</section>

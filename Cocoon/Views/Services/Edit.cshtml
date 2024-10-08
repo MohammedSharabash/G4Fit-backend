@@ -1,0 +1,422 @@
+﻿@model G4Fit.Models.ViewModels.EditServiceVM
+@{
+    ViewBag.Title = "تعديل الخدمه " + Model.NameAr;
+    var Service = ViewBag.Service as G4Fit.Models.Domains.Service;
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    var Categories = ViewBag.Categories as List<G4Fit.Models.Domains.SubCategory>;
+}
+<style>
+    .status-label {
+        padding: 5px 10px; /* padding لإنشاء مساحة داخلية */
+        font-size: 1.2rem; /* حجم الخط */
+        font-weight: bold; /* جعل النص غامق */
+        color: #ffffff; /* لون النص - يمكنك تغييره */
+        background-color: #007bff; /* لون الخلفية */
+        border: 2px solid #007bff; /* لون الإطار */
+        border-radius: 5px; /* جعل الحواف مدورة قليلاً */
+        transition: background-color 0.3s, border-color 0.3s; /* تأثير انتقال عند تغيير الخلفية */
+    }
+
+        /* تأثيرات عند التمرير */
+        .status-label:hover {
+            background-color: #0056b3; /* لون الخلفية عند التمرير */
+            border-color: #0056b3; /* لون الإطار عند التمرير */
+            cursor: pointer; /* تغيير شكل المؤشر عند التمرير */
+        }
+</style>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-fw fa-edit"></i> @ViewBag.Title</h3>
+    </div>
+    <div class="panel-body">
+        <div id="accordion" class="panel-group" aria-multiselectable="true" role="tablist">
+            <div class="panel panel-success">
+                <div id="collapseOne" class="panel-collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        <div id="model-errors" style="display:none;">
+                            <ul class="text-danger" id="ul-errors"></ul>
+                            <hr />
+                        </div>
+                        @using (Ajax.BeginForm("Edit", "Services", new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnSuccess = "OnSuccess", OnFailure = "OnFailure", LoadingElementId = "loader" }, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.HiddenFor(s => s.ServiceId)
+                            <div class="row" style="margin:10px;">
+                                <div class="col-lg-12 text-danger mb-15">
+                                    <h4>&bull; بيانات الخدمه</h4>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Category" class="col-sm-5 control-label required">القسم الرئيسى: </label>
+                                        <div class="col-sm-7">
+                                            <select name="CategoryId" id="CategoryId" class="select2 form-control" required>
+                                                @foreach (var category in Categories.OrderBy(w => w.Category.NameAr).ThenBy(s => s.NameAr))
+                                                {
+                                                    <option @(Model.CategoryId == category.Id ? "selected" : "") value="@category.Id">@category.NameAr - @category.Category.NameAr</option>
+                                                }
+                                            </select>
+                                            @Html.ValidationMessageFor(d => d.CategoryId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px;">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="NameAr" class="col-sm-5 control-label required">اسم الخدمه بالعربى: </label>
+                                        <div class="col-sm-7">
+                                            @Html.EditorFor(model => model.NameAr, new { htmlAttributes = new { @class = "form-control valid", required = true } })
+                                            @Html.ValidationMessageFor(d => d.NameAr, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="NameEn" class="col-sm-5 control-label required">اسم الخدمه بالانجليزى:</label>
+                                        <div class="col-sm-7">
+                                            @Html.EditorFor(model => model.NameEn, new { htmlAttributes = new { @class = "form-control valid", required = true } })
+                                            @Html.ValidationMessageFor(d => d.NameEn, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="DescriptionAr" class="col-sm-5 control-label">وصف الخدمه بالعربى:</label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.DescriptionAr, htmlAttributes: new { @class = "form-control", rows = 4 })
+                                            @Html.ValidationMessageFor(d => d.DescriptionAr, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="DescriptionEn" class="col-sm-5 control-label">وصف الخدمه بالانجليزى:</label>
+                                        <div class="col-sm-7">
+                                            @Html.TextAreaFor(model => model.DescriptionEn, htmlAttributes: new { @class = "form-control", rows = 4 })
+                                            @Html.ValidationMessageFor(d => d.DescriptionEn, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin:10px;">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Price" class="col-sm-5 control-label required">سعر الخدمه:</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control valid", required = true } })
+                                                <span class="input-group-addon">ريال سعودي</span>
+                                            </div>
+                                            @Html.ValidationMessageFor(d => d.Price, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Images" class="col-sm-5 control-label">اضافه صور للخدمه:</label>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="file" multiple name="NewImages" id="Images" accept="image/*" />
+                                            @Html.ValidationMessageFor(d => d.Images, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px;">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="IsTimeBoundService" class="col-sm-5 control-label ">هل الخدمة محددة بوقت؟  <span title="تغيير القيمه" id="timeBoundLabel" class="status-label">لا</span></label>
+
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                @Html.CheckBoxFor(model => model.IsTimeBoundService, new { @class = "", required = true, @id = "IsTimeBoundService", onchange = "updateLabel()" })
+                                            </div>
+                                            @Html.ValidationMessageFor(d => d.IsTimeBoundService, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6" id="inventory-container">
+                                    <div class="form-group">
+                                        <label for="Inventory" class="col-sm-5 control-label required">كمية الخدمة:</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(model => model.Inventory, new { @class = "form-control valid", type = "number", required = true, @id = "Inventory" })
+                                            </div>
+                                            @Html.ValidationMessageFor(d => d.Inventory, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6" id="service-days-container" style="display:none;">
+                                    <div class="form-group">
+                                        <label for="ServiceDays" class="col-sm-5 control-label required">عدد أيام الاشتراك بالخدمة:</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(model => model.ServiceDays, new { @class = "form-control valid", type = "number", required = true, @id = "ServiceDays" })
+                                            </div>
+                                            @Html.ValidationMessageFor(d => d.ServiceDays, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row" id="Features-container"  style="margin:10px;">
+                                <hr />
+                                <div class="col-lg-12 text-danger mb-15">
+                                    <h4>&bull; مواصفات الخدمه</h4>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Features_0__FeatureAr" class="col-sm-2 control-label">الوان الخدمه: </label>
+                                        <div class="col-sm-10">
+                                            @foreach (var color in Service.Colors.Where(s => s.IsDeleted == false))
+                                            {
+                                                <p style="color:@color.Color" id="Color_@color.Id">
+                                                    @color.Color
+                                                    <button type="button" class="fa fa-times btn-danger btn btn-sm" onclick="DeleteColor('@color.Id')"></button>
+                                                </p>
+                                            }
+                                            <div class="field_wrapper_color">
+                                                <div>
+                                                    <a href="javascript:void(0);" class="add_button_color btn btn-outline-primary my-3" title="Add field"><i class="fa fa-plus"></i> اضافه لون</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Features_0__FeatureAr" class="col-sm-2 control-label">احجام الخدمه: </label>
+                                        <div class="col-sm-10">
+                                            @foreach (var size in Service.Sizes.Where(s => s.IsDeleted == false))
+                                            {
+                                                <p id="Size_@size.Id">
+                                                    @size.Size
+                                                    <button type="button" class="fa fa-times btn-danger btn btn-sm" onclick="DeleteSize('@size.Id')"></button>
+                                                </p>
+                                            }
+                                            <div class="field_wrapper_size">
+                                                <div>
+                                                    <a href="javascript:void(0);" class="add_button_size btn btn-outline-primary my-3" title="Add field"><i class="fa fa-plus"></i> اضافه حجم</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            if (Model.Images != null && Model.Images.Count() > 0)
+                            {
+                                <hr />
+                                <div class="col-lg-12 text-danger mb-15">
+                                    <h4>&bull; صور الخدمه</h4>
+                                </div>
+                                <div class="row" style="margin:10px;">
+                                    @foreach (var image in Model.Images)
+                                    {
+                                        <div class="col-lg-4" style="margin-bottom:10px" id="Image_@image.ImageId">
+                                            <a target="_blank" href="~/Content/Images/Services/@image.ImageUrl"><img width="150" src="~/Content/Images/Services/@image.ImageUrl" /></a>
+                                            <button type="button" class="fa fa-times btn-danger btn btn-sm" onclick="DeleteImage('@image.ImageId')"></button>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            <button type="submit" class="btn btn-success" id="add-Service-btn">حفظ التعديلات <i class="fa fa-spinner fa-spin" id="loader" style="display:none;"></i></button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            @Html.ActionLink("العودة", "Dashboard", null, new { @class = "btn btn-default" })
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var maxField = 15; //Input fields increment limitation
+            var addButtonColor = $('.add_button_color'); //Add button selector
+            var addButtonSize = $('.add_button_size'); //Add button selector
+            var wrapperColor = $('.field_wrapper_color'); //Input field wrapper
+            var wrapperSize = $('.field_wrapper_size'); //Input field wrapper
+            var fieldHTMLColor = '<div class="my-3 row"><div class="col-sm-6"><input type="color" placeholder="اللون" required name="Colors[]" value="" class="form-control d-inline"/></div><a href="javascript:void(0);" class="remove_button_color btn btn-outline-primary d-inline mx-3" title="Remove field"><a href="javascript:void(0);" class="remove_button_color btn btn-outline-primary d-inline mx-3" title="Remove field"><i class="fa fa-minus"></i> حذف اللون</a></div>'; //New input field html
+            var fieldHTMLSize = '<div class="my-3 row"><div class="col-sm-6"><input type="text" placeholder="الحجم" required name="Sizes[]" value="" class="form-control d-inline"/></div><a href="javascript:void(0);" class="remove_button_size btn btn-outline-primary d-inline mx-3" title="Remove field"><a href="javascript:void(0);" class="remove_button_size btn btn-outline-primary d-inline mx-3" title="Remove field"><i class="fa fa-minus"></i> حذف الحجم</a></div>'; //New input field html
+            var ColorCounter = 1; //Initial field counter is 1
+            var SizeCounter = 1; //Initial field counter is 1
+
+            //Once add button is clicked
+            $(addButtonColor).click(function () {
+                //Check maximum number of input fields
+                if (ColorCounter < maxField) {
+                    ColorCounter++; //Increment field counter
+                    $(wrapperColor).append(fieldHTMLColor); //Add field html
+                }
+            });
+
+            $(addButtonSize).click(function () {
+                //Check maximum number of input fields
+                if (SizeCounter < maxField) {
+                    SizeCounter++; //Increment field counter
+                    $(wrapperSize).append(fieldHTMLSize); //Add field html
+                }
+            });
+
+            //Once remove button is clicked
+            $(wrapperColor).on('click', '.remove_button_color', function (e) {
+                e.preventDefault();
+                $(this).parent('div').remove(); //Remove field html
+                ColorCounter--; //Decrement field counter
+            });
+
+            $(wrapperSize).on('click', '.remove_button_size', function (e) {
+                e.preventDefault();
+                $(this).parent('div').remove(); //Remove field html
+                SizeCounter--; //Decrement field counter
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        function OnBegin() {
+            $("#model-errors").hide();
+            $("#ul-errors").empty();
+            $("#add-Service-btn").attr("disabled", true);
+        }
+        function OnSuccess(results) {
+            if (results.Success == true) {
+                window.location.href = "/Services/Dashboard";
+            }
+            else {
+                for (var i = 0; i < results.Errors.length; i++) {
+                    $("#ul-errors").append("<li>" + results.Errors[i] + "</li>");
+                }
+                toastr.error("يوجد أخطاء ، برجاء المراجعه فى اعلى الصفحه");
+                $("#model-errors").show();
+                $("#add-Service-btn").attr("disabled", false);
+                $("#cover-spin").hide();
+            }
+
+        }
+        function OnFailure(data) {
+            alert("حدث خطأ ما، برجاء المحاوله لاحقاً");
+        }
+
+        function DeleteColor(Id) {
+            if (confirm("حذف هذا اللون؟")) {
+                $("#cover-spin").show();
+                $.ajax({
+                    url: "@Url.Action("DeleteColor","Services")",
+                    type: "GET",
+                    data: { ColorId: Id },
+                    success: function (results) {
+                        if (results.Success == true) {
+                            $("#Color_" + Id).remove();
+                        }
+                        else {
+                            toastr.error("هذا اللون غير متاح");
+                        }
+                        $("#cover-spin").hide();
+                    }
+                })
+            }
+        }
+
+        function DeleteSize(Id) {
+            if (confirm("حذف هذا الحجم؟")) {
+                $("#cover-spin").show();
+                $.ajax({
+                    url: "@Url.Action("DeleteSize","Services")",
+                    type: "GET",
+                    data: { SizeId: Id },
+                    success: function (results) {
+                        if (results.Success == true) {
+                            $("#Size_" + Id).remove();
+                        }
+                        else {
+                            toastr.error("هذا الحجم غير متاح");
+                        }
+                        $("#cover-spin").hide();
+                    }
+                })
+            }
+        }
+
+        function DeleteImage(Id) {
+            if (confirm("حذف هذه الصوره؟")) {
+                $("#cover-spin").show();
+                $.ajax({
+                    url: "@Url.Action("DeleteImage","Services")",
+                    type: "GET",
+                    data: { ImageId: Id },
+                    success: function (results) {
+                        if (results.Success == true) {
+                            $("#Image_" + Id).remove();
+                        }
+                        else {
+                            toastr.error("هذه الصوره غير متاحة");
+                        }
+                        $("#cover-spin").hide();
+                    }
+                })
+            }
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var isTimeBoundServiceCheckbox = document.getElementById("IsTimeBoundService");
+            var inventoryContainer = document.getElementById("inventory-container");
+            var FeaturesContainer = document.getElementById("Features-container");
+            var inventoryInput = document.getElementById("Inventory");
+            var serviceDaysContainer = document.getElementById("service-days-container");
+
+            // Function to toggle fields based on checkbox status
+            function toggleFields() {
+                if (isTimeBoundServiceCheckbox.checked) {
+                    // Show ServiceDays, hide Inventory and set its value to 1
+                    serviceDaysContainer.style.display = "block";
+                    FeaturesContainer.style.display = "none";
+                    inventoryContainer.style.display = "none";
+                } else {
+                    // Hide ServiceDays, show Inventory and clear value
+                    serviceDaysContainer.style.display = "none";
+                    FeaturesContainer.style.display = "block";
+                    inventoryContainer.style.display = "block";
+                }
+            }
+
+            // Add event listener to checkbox
+            isTimeBoundServiceCheckbox.addEventListener("change", toggleFields);
+
+            // Initialize the form fields based on the initial checkbox state
+            toggleFields();
+        });
+
+        function updateLabel() {
+            var checkbox = document.getElementById('IsTimeBoundService');
+            var label = document.getElementById('timeBoundLabel');
+
+            if (checkbox.checked) {
+                label.textContent = "نعم"; // إذا كانت القيمة true، اجعل النص "نعم"
+            } else {
+                label.textContent = "لا"; // إذا كانت القيمة false، اجعل النص "لا"
+            }
+        }
+
+        // استدعاء الدالة عند تحميل الصفحة للتأكد من أن النص صحيح
+        document.addEventListener('DOMContentLoaded', function () {
+            updateLabel();
+        });
+
+    </script>
+}

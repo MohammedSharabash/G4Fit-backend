@@ -1,0 +1,66 @@
+﻿@model G4Fit.Models.ViewModels.ResendVcodeModel
+@using Cocoon.Resources
+@{
+    ViewBag.Title = Website.VerifyAccount;
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+}
+<section class="m-5 pt-3">
+    <div class="card text-center d-block">
+        <div class="card-header font-weight-bold text-white" style="background:black;">
+            @Website.ResendCode
+        </div>
+        <div class="card-body m-auto">
+            <div class="container">
+                <div class="row text-center">
+
+                    <div class="col-12">
+                        @using (Html.BeginForm("ResendVcode", "Account", FormMethod.Post, new { @class = "form-horizontal text-center m-auto", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <h4>
+                                @if (culture == "ar")
+                                {<span>برجاء كتابة رقم الهاتف المسجل لدينا لاعاده ارسال الرمز التأكيدى</span> }
+                                else
+                                {<span>Please write down your phone number to resend you the verification code</span>}
+                            </h4>
+                            <hr />
+                            if (TempData["VCodeSentSuccess"] != null)
+                            {
+                                <div class="col-12 m-4">
+                                    <div class="alert alert-success text-center">
+                                        @if (culture == "ar")
+                                        {
+                                            <span>تم اعاده ارسال الرمز التأكيدى بنجاح</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Verification code sent to your mobile successfully</span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-5">
+                                    <a style="font-size:1.5em" class="mb-5" href="@Url.Action("Login","Account")">@Website.Login</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group text-center m-auto mb-4">
+                                    <label class="col-md-4 m-4" for="Provider">@Website.PhoneNumber</label>
+                                    <div class="col-md-8 text-center m-auto">
+                                        @Html.TextBoxFor(m => m.Provider, new { @class = "form-control text-center m-auto", type = "numnber", required = true })
+                                        @Html.ValidationMessageFor(s => s.Provider, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group mt-4">
+                                    <div class="col-md-offset-2 col-md-12">
+                                        <input type="submit" class="btn text-white bg-black" value="@Website.Submit" />
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

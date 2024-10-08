@@ -1,0 +1,69 @@
+﻿@model G4Fit.Models.Domains.City
+@{
+    var Countries = ViewBag.Countries as List<G4Fit.Models.Domains.Country>;
+    ViewBag.Title = "تعديل " + Model.NameAr;
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+}
+
+<h1 class="text-center mb-30">@ViewBag.Title</h1>
+@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+@using (Html.BeginForm("Edit", "Cities", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(d => d.CreatedOn)
+    @Html.HiddenFor(d => d.DeletedOn)
+    @Html.HiddenFor(d => d.Id)
+    @Html.HiddenFor(d => d.IsDeleted)
+    @Html.HiddenFor(d => d.IsModified)
+    @Html.HiddenFor(d => d.ModifiedOn)
+    @Html.HiddenFor(d => d.RestoredOn)
+    <div class="panel panel-primary p-10">
+        <div class="row" style="margin:10px;">
+            <div class="col-lg-6 mb-10">
+                <div class="form-group">
+                    <label for="CountryId" class="col-sm-5 control-label required">الدولة:</label>
+                    <div class="col-sm-7">
+                        @Html.DropDownListFor(s => s.CountryId, new SelectList(Countries, "Id", "NameAr", Model.CountryId), new { @class = "form-control", required = true })
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-lg-6">
+                <div class="form-group">
+                    <label for="DeliveryFees" class="col-sm-5 control-label required">رسوم التوصيل:</label>
+                    <div class="col-sm-7">
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.DeliveryFees, new { htmlAttributes = new { @class = "form-control valid", required = true } })
+                            <span class="input-group-addon">ريال سعودي</span>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        </div>
+        <div class="row" style="margin:10px;">
+            <div class="col-lg-6 mb-10">
+                <div class="form-group">
+                    <label for="NameAr" class="col-sm-5 control-label required">اسم المدينة بالعربى: </label>
+                    <div class="col-sm-7">
+                        @Html.TextBoxFor(d => d.NameAr, new { @class = "form-control valid", required = true })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-10">
+                <div class="form-group">
+                    <label for="NameEn" class="col-sm-5 control-label required">اسم المدينة بالانجليزى:</label>
+                    <div class="col-sm-7">
+                        @Html.TextBoxFor(d => d.NameEn, new { @class = "form-control valid", required = true })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <button type="submit" class="btn btn-success">تعديل</button>
+            </div>
+        </div>
+
+
+
+    </div>
+
+}

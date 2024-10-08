@@ -1,0 +1,21 @@
+﻿@model G4Fit.Models.ViewModels.HTMLContentVM
+    @{ 
+        Layout = "~/Views/Dashboard/Layout.cshtml";
+        ViewBag.Title = "سياسة الاستخدام والخصوصية";
+    }
+<div class="panel panel-primary">
+    <div class="panel-body">
+        @using (Html.BeginForm("Dashboard", "Privacy", FormMethod.Post))
+        {
+            <h3>سياسة الاستخدام والخصوصية باللغة العربية:</h3>
+            <br />
+            @Html.TextAreaFor(w => w.ContentAr, new { @class = "rich-text-editor" })
+            <br />
+            <h3>سياسة الاستخدام والخصوصية باللغة الانجليزية:</h3>
+            <br />
+            @Html.TextAreaFor(w => w.ContentEn, new { @class = "rich-text-editor" })
+
+            <button type="submit" class="btn btn-success">حفظ</button>
+        }
+    </div>
+</div>

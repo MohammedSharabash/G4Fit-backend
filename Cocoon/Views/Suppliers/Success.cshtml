@@ -1,0 +1,46 @@
+﻿@using Cocoon.Resources
+@{
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+}
+<section class="m-5 pt-3">
+    <div class="card text-center">
+        <div class="card-header font-weight-bold text-white" style="background:black;">
+            @(culture == "ar" ? "البيع معنا" : "Selling with G4Fit")
+        </div>
+        <div class="card-body m-auto">
+            <section class="Connect">
+                <div class="container">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="Login">
+                                </div>
+                            <div>
+                                <i class="fa fa-check-circle" style="font-size:4em;color:green"></i>
+                                <br />
+                                <br />
+                                <h4>
+                                    @(culture == "ar" ? "تم استقبال طلب انضمامكم بنجاح وسيتم مراجعته من قبل الاداره والتواصل معكم" : "Your application for joining has been successfully received, and it will be reviewed by G4Fit and one of our representative will be in touch with you")
+                                </h4>
+                            </div>
+                            <a href="@Url.Action("Login", "Account")" class="text-black"><strong>@(culture == "ar" ? "تسجيل الدخول" : "Login now")</strong></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    <script>
+        function ChangeSubmitBtn(element) {
+            if ($(element).is(":checked") == true) {
+                $("#submit-btn").attr("disabled", false);
+            }
+            else {
+                $("#submit-btn").attr("disabled", true);
+            }
+        }
+    </script>
+}

@@ -1,0 +1,25 @@
+﻿@model G4Fit.Models.Domains.CompanyData
+@using Cocoon.Resources
+@{
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+}
+<style>
+    p {
+        font-weight: 500
+    }
+</style>
+<div class="container-fluid text-@(culture == "ar" ? "right" : "left") mb-5" dir="@(culture == "ar" ? "rtl" : "ltr")" style="word-break:break-all">
+    <h4 class="text-center">@(culture == "ar" ? "كيفية الطلب" : "How to order")</h4>
+    <hr />
+    @if (Model != null)
+    {
+        if (Model.HowToOrderAr != null && culture == "ar")
+        {
+            @Html.Raw(Model.HowToOrderAr)
+        }
+        if (Model.HowToOrderEn != null && culture != "ar")
+        {
+            @Html.Raw(Model.HowToOrderEn)
+        }
+    }
+</div>
