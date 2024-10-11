@@ -1502,9 +1502,12 @@
     <Content Include="Content\web\G4Fit_Data\videos\12.mp4" />
     <Content Include="Content\web\img\g4fitLogo-removebg.png" />
     <Content Include="Content\web\img\g4fitLogo.jpg" />
+    <Content Include="Content\web\img\logo-removebg.png" />
+    <Content Include="Content\web\img\logo.jpg" />
     <Content Include="Content\web\img\logo\1.png" />
     <Content Include="Content\web\img\logo\bg3.jpeg" />
     <Content Include="Content\web\img\logo\g4fitLogo.jpg" />
+    <Content Include="Content\web\img\logo\logo.jpg" />
     <Content Include="Content\web\img\logo\texture.png" />
     <Content Include="Content\web\img\payments.png" />
     <Content Include="Content\web\js\all.min.js" />
@@ -1633,6 +1636,7 @@
     <None Include="Properties\PublishProfiles\FolderProfile4.pubxml" />
     <None Include="Properties\PublishProfiles\site9545-WebDeploy1.pubxml" />
     <None Include="Properties\PublishProfiles\site9548-WebDeploy.pubxml" />
+    <None Include="Properties\PublishProfiles\site9548-WebDeploy1.pubxml" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\jquery-3.5.1.min.js" />
