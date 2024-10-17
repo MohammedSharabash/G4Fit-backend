@@ -58,5 +58,8 @@ namespace G4Fit.Models.Enums
         OrderCostDidnotMeatMinimumPromoCodeRequiredCost,
         UserIsBlocked,
         InvalidStartDate,
+        EmailAlreadyExists,
+        InvalidIDNumber,
+        IDNumberAlreadyExists,
     }
 }

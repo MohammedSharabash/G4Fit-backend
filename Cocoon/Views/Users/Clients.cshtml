@@ -17,6 +17,7 @@
                     <tr>
                         <th>الحاله</th>
                         <th style="width:15%">الاسم</th>
+                        <th>رقم الهويه</th>
                         <th>رقم الهاتف</th>
                         <th>المدينه</th>
                         <th>العنوان</th>
@@ -40,6 +41,9 @@
                             </td>
                             <td>
                                 @item.Name
+                            </td>
+                            <td>
+                                @item.IDNumber
                             </td>
                             <td>
                                 <a href="tel:@item.PhoneNumber">@item.PhoneNumber</a>

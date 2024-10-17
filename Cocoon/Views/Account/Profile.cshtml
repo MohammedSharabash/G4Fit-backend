@@ -1,0 +1,121 @@
+﻿@using Cocoon.Resources
+@model G4Fit.Models.ViewModels.ProfileVM
+@{
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+    var Countries = ViewBag.Countries as List<G4Fit.Models.Domains.City>;
+}
+<section class="m-5 pt-3">
+    <div class="card text-center d-block shadow-lg">
+        <div class="card-header font-weight-bold text-white" style="background:#343a40;">
+            @(culture == "ar" ? "الملف الشخصي فى G4Fit" : "Profile in G4Fit")
+        </div>
+        <div class="card-body m-auto">
+            <section class="Connect">
+                <div class="container">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="Login">
+                                @using (Html.BeginForm("Profile", "Account", FormMethod.Post, new { enctype = "multipart/form-data", @class = "text-center m-auto" }))
+                                {
+                                    @Html.HiddenFor(s => s.ImageUrl)
+                                    @Html.ValidationMessage("Error", "", new { @class = "text-danger", style = "margin-bottom:10px;display:block" })
+
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(s => s.Name, new { @class = "form-control text-center", placeholder = Website.NamePlaceholder })<i class="fa fa-user-circle fa-fw"></i>
+                                        @Html.ValidationMessageFor(s => s.Name, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(s => s.Email, new { @class = "form-control text-center", placeholder = Website.Email })
+                                        @Html.ValidationMessageFor(s => s.Email, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-7">
+                                                @Html.TextBoxFor(s => s.PhoneNumber, new { @class = "form-control text-center", placeholder = Website.PhoneNumberPlaceholder, type = "number" })<i style="left:29px" class="fa fa-phone fa-fw"></i>
+                                            </div>
+                                            <div class="col-5">
+                                                <select name="CountryId" id="CountryId" required class="form-control" style="direction:@(culture == "ar" ? "" : "ltr")">
+                                                    @foreach (var country in Countries)
+                                                    {
+                                                        <option value="@country.Id">@(culture == "ar" ? country.NameAr : country.NameEn) @*(@(culture != "ar" ? "+" : "")@country.Country.PhoneCode@(culture == "ar" ? "+" : ""))*@</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(s => s.PhoneNumber, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(s => s.Address, new { @class = "form-control text-center", placeholder = Website.AddressPlaceholder })
+                                        @Html.ValidationMessageFor(s => s.Address, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <!-- قسم تحميل الصورة الشخصية -->
+                                    <div class="form-group text-center">
+                                        <label for="Image" class="d-block">@Website.PersonalImage (@Website.Optional)</label>
+                                        <img id="profileImagePreview" src="~/Content/Images/Users/@Model.ImageUrl" alt="Profile Image" class="rounded-circle mb-3" width="150" height="150" style="object-fit: cover; border: 2px solid #343a40;">
+                                        @Html.TextBoxFor(s => s.Image, new { @class = "form-control text-center form-control-file", type = "file", accept = "image/*", onchange = "previewImage(event)" })
+                                        @Html.ValidationMessageFor(s => s.Image, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button class="btn text-white" style="background-color:#343a40;" type="submit">@Website.Save</button>
+                                    </div>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: 'تم بنجاح',
+                text: '@ViewBag.Message',
+                icon: 'success',
+                timer: 2000, // 2 seconds
+                showConfirmButton: false
+            });
+        });
+    </script>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.MessageError))
+{
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                title: 'تحذير',
+                text: '@ViewBag.MessageError',
+                icon: 'warning',
+                timer: 5000, // 5 seconds
+                showConfirmButton: true
+            });
+        });
+    </script>
+}
+
+@section Scripts {
+    <script>
+        // عرض معاينة الصورة الشخصية قبل التحميل
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('profileImagePreview');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+}
+

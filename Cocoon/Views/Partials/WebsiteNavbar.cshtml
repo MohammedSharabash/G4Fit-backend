@@ -16,7 +16,15 @@
     <input type="hidden" name="culture" id="en-us" value="en-us" />
     <input type="hidden" name="ReturnUrl" id="ReturnUrl" value="@Request.Url" />
 }
-
+<style>
+    /* أيقونة الإخفاء */
+    .close-icon {
+        top: 10px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #ff0000;
+    }
+</style>
 <nav class="main_nav fixed-top">
     <div class="container">
         <div class="Contain d-flex">
@@ -65,33 +73,33 @@
                             {
                                 <sup class="rounded-circle">@Model.NotificationsCount</sup>
                             }
-                                <ul class="notifications text-right">
-                                    @if (Model.Notifications == null || Model.Notifications.Count() <= 0)
+                            <ul class="notifications text-right">
+                                @if (Model.Notifications == null || Model.Notifications.Count() <= 0)
+                                {
+                                    <li style="color:white;" class="text-center">@(culture == "ar" ? "لا توجد اشعارات متاحة" : "You don't have notifications")</li>
+                                }
+                                else
+                                {
+                                    foreach (var notification in Model.Notifications)
                                     {
-                                        <li style="color:white;" class="text-center">@(culture == "ar" ? "لا توجد اشعارات متاحة" : "You don't have notifications")</li>
+                                        <li style="color:white;" class="hvr-pulse-grow"><img class="rounded-circle ml-3" src="~/Content/web/img/logo-removebg.png" width="30" height="30"><span>@notification.Title</span><br /><small>@notification.Body</small></li>
+                                        <hr>
                                     }
-                                    else
-                                    {
-                                        foreach (var notification in Model.Notifications)
-                                        {
-                                            <li  style="color:white;"class="hvr-pulse-grow"><img class="rounded-circle ml-3" src="~/Content/web/img/logo-removebg.png" width="30" height="30"><span>@notification.Title</span><br /><small>@notification.Body</small></li>
-                                            <hr>
-                                        }
-                                    }
+                                }
 
-                                    <li class="text-center"><a href="@Url.Action("All", "Notifications")">@Website.ViewNotifications</a></li>
-                                </ul>
+                                <li class="text-center"><a href="@Url.Action("All", "Notifications")">@Website.ViewNotifications</a></li>
+                            </ul>
                         </li>
                     }
-                        <li class="shopping-cart-container">
-                            <a href="@Url.Action("Cart", "Orders")">
-                                <i class="fas fa-shopping-cart fa-lg hvr-pulse-grow"></i>
-                                @if (Model.ShoppingCartCount > 0)
-                                {
-                                    <sup class="rounded-circle">@Model.ShoppingCartCount</sup>
-                                }
-                            </a>
-                            @*@if (User.Identity.IsAuthenticated == true)
+                    <li class="shopping-cart-container">
+                        <a href="@Url.Action("Cart", "Orders")">
+                            <i class="fas fa-shopping-cart fa-lg hvr-pulse-grow"></i>
+                            @if (Model.ShoppingCartCount > 0)
+                            {
+                                <sup class="rounded-circle">@Model.ShoppingCartCount</sup>
+                            }
+                        </a>
+                        @*@if (User.Identity.IsAuthenticated == true)
                             {
                             <a href="@Url.Action("Cart", "Orders")">
                                 <i class="fas fa-shopping-cart fa-lg hvr-pulse-grow"></i>
@@ -105,7 +113,7 @@
                             {
                                 <a href="@Url.Action("Login", "Account")"><i class="fas fa-shopping-cart fa-lg hvr-pulse-grow"></i><sup class="rounded-circle">@Model.ShoppingCartCount</sup></a>
                             }*@
-                        </li>
+                    </li>
                     @if (User.Identity.IsAuthenticated == true)
                     {
                         if (!string.IsNullOrEmpty(Model.UserImage))
@@ -124,26 +132,33 @@
     </div>
 </nav>
 
-<div class="side_bar links_bar text-center">
+<div class="side_bar links_bar text-center" id="sidebar">
     <ul class="list-unstyled">
         @foreach (var cat in Model.Categories)
         {
             <li><a href="@Url.Action("View", "Categories", new { CatId = cat.Id })" class="text-white">@(culture=="ar"? cat.NameAr: cat.NameEn)</a></li>
         }
+        <li><i class="fas fa-arrow-circle-up nav_toggelerhide close-icon" id="closeSidebar"></i></li>
     </ul>
 </div>
+
 @if (User.Identity.IsAuthenticated == true)
 {
     <div class="side_bar user_bar text-center">
         @if (!string.IsNullOrEmpty(Model.UserImage))
         {
-            <img class="rounded-circle" src="~/Content/Images/Users/@Model.UserImage" width="100" height="100">
+            <a href="@Url.Action("Profile", "Account")">
+                <img class="rounded-circle" src="~/Content/Images/Users/@Model.UserImage" width="100" height="100">
+                <h3 class="h4">@Model.Username</h3>
+            </a>
         }
         else
         {
-            <img class="rounded-circle" src="~/Content/web/img/logo/1.png" width="100" height="100">
+            <a href="@Url.Action("Profile", "Account")">
+                <img class="rounded-circle" src="~/Content/web/img/logo/1.png" width="100" height="100">
+                <h3 class="h4">@Model.Username</h3>
+            </a>
         }
-        <h3 class="h4">@Model.Username</h3>
         @if (!string.IsNullOrEmpty(Model.UserPhoneNumber))
         {
             <p>@Model.UserPhoneNumber</p>
@@ -155,5 +170,22 @@
             <li><i class="@(culture == "ar" ? "fas fa-question-circle" : "")"></i> <a href="@Url.Action("Index", "FAQs")">@Website.FAQs</a> <i class="@(culture != "ar" ? "fas fa-question-circle" : "")"></i></li>
             <li><i class="@(culture == "ar" ? "fas fa-sign-out-alt" : "")"></i> <a href="javascript:document.getElementById('logoutForm').submit()">@Website.Logout</a> <i class="@(culture != "ar" ? "fas fa-sign-out-alt" : "")"></i></li>
         </ul>
+        @*<i class="fas fa-chevron-up User close-icon"></i>*@
+        <i class="fas fa-arrow-circle-up User close-icon"></i>
+
     </div>
 }
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(function () {
+        "use strict";
+
+        var sidebar = $("#sidebar"); // تأكد من أن هذا هو ID الخاص بالشريط الجانبي
+        var closeToggler = $("#closeSidebar"); // الأيقونة لإخفاء الشريط الجانبي
+
+        // إخفاء الشريط الجانبي عند الضغط على أيقونة الإغلاق
+        closeToggler.on('click', function () {
+            sidebar.hide(); // يمكنك استخدام slideUp() لجعلها أكثر سلاسة
+        });
+    });
+</script>

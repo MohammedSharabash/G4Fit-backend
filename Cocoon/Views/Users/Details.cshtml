@@ -25,6 +25,7 @@
                                 }
                                 <br />
                                 <h3 class="mt-10">@Model.Name</h3>
+                                <h3 class="mt-10">@Model.IDNumber</h3>
                                 <h3 class="mt-10">
                                     @if (Model.IsDeleted == true)
                                     {
@@ -50,13 +51,15 @@
                                 </div>
                                 <div class="col-12 pr-20">
                                     <p><b class="fs-17">رقم الهاتف:</b> <a dir="ltr" href="tel:@Model.PhoneNumber">@Model.PhoneNumber</a>
+                                    <p><b class="fs-17">العنوان :</b> @Model.Address
+                                    <p><b class="fs-17">رقم ألهويه:</b> @Model.IDNumber
                                     <p><b class="fs-17">المحفظه:</b> @Model.Wallet ريال سعودي</p>
                                     @if (Model.PhoneNumberConfirmed == false)
                                     {
                                         <p class="text-danger">رمز التفعيل [@Model.VerificationCode] ولم يتم تأكيد الرقم بعد</p>
                                     }
-                                    </p>
-                                    @*<p><b class="fs-17">البريد الالكترونى:</b> <a href="mailto:@Model.Email">@Model.Email</a></p>*@
+                                    <p><b class="fs-17">البريد الالكترونى:</b> <a href="mailto:@Model.Email">@Model.Email</a></p>
+                                    <p><b class="fs-17">QR:</b> <a href="@Model.QR"><img src="@Model.QR" height="100px" /></a></p>
                                 </div>
                             </div>
                         </div>

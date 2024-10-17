@@ -258,7 +258,7 @@ h2 span {
         }
 
 .side_bar {
-    background-color: #000;
+    background-color: #738d73;
     color: #FFF;
     width: 200px;
     height: 100%;
@@ -312,10 +312,10 @@ h2 span {
         width: 100%
     }
 
-    .main_carousel {
+    /*.main_carousel {
         border-bottom-left-radius: 50% 10% !important;
         border-bottom-right-radius: 50% 10% !important
-    }
+    }*/
 
     .About {
         border-top-left-radius: 50% 5% !important;
@@ -349,8 +349,9 @@ h2 span {
     color: #FFF;
     overflow: hidden;
     position: relative;
-    border-bottom-left-radius: 50% 15%;
-    border-bottom-right-radius: 50% 15%
+    /* border-bottom-left-radius: 50% 15%;
+   border-bottom-right-radius: 50% 15%
+    */
 }
 
     .main_carousel .carousel-control-next, .main_carousel .carousel-control-prev {

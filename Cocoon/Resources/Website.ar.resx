@@ -330,4 +330,16 @@
   <data name="StartDate" xml:space="preserve">
     <value>تاريخ بدء الاشتراك</value>
   </data>
+  <data name="AddressPlaceholder" xml:space="preserve">
+    <value>العنوان بالتفصيل</value>
+  </data>
+  <data name="IDNumberPlaceholder" xml:space="preserve">
+    <value>رقم الهويه</value>
+  </data>
+  <data name="AddressFieldIsRequired" xml:space="preserve">
+    <value>العنوان بالتفصيل مطلوب</value>
+  </data>
+  <data name="IDNumberFieldIsRequired" xml:space="preserve">
+    <value>رقم الهويه مطلوب</value>
+  </data>
 </root>

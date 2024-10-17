@@ -22,6 +22,8 @@ namespace G4Fit.Models.Domains
         public int VerificationCode { get; set; }
         public string ForgotPasswordGUID { get; set; }
         public string Address { get; set; }
+        public string IDNumber { get; set; }
+        public string QR { get; set; }
         public DateTime CreatedOn { get; set; }
         public LoginType LoginType { get; set; }
         public long? CountryId { get; set; }

@@ -20,6 +20,7 @@ using Microsoft.Owin.Security;
 using System.Configuration;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
+using G4Fit.Helper;
 
 namespace G4Fit.Controllers.API
 {
@@ -78,7 +79,11 @@ namespace G4Fit.Controllers.API
                     var Country = db.Countries.Find(model.CountryId);
                     if (user != null)
                     {
+                        user.Name = model.Name;
                         user.PhoneNumber = model.PhoneNumber;
+                        user.Address = model.Address;
+                        user.Email = model.Email;
+                        //user.IDNumber = model.IDNumber;
                         user.PhoneNumberCountryCode = Country.PhoneCode;
                         user.CountryId = Country.Id;
                         if (!string.IsNullOrEmpty(model.ImageBase64))
@@ -140,18 +145,21 @@ namespace G4Fit.Controllers.API
             {
                 try
                 {
-                    string Email = null;
-                    do
+                    string Email = registerDTO.Email;
+                    if (registerDTO.Email == null)
                     {
-                        Email = RandomGenerator.GenerateString(7) + "@" + RandomGenerator.GenerateString(4) + ".com";
+                        do
+                        {
+                            Email = RandomGenerator.GenerateString(7) + "@" + RandomGenerator.GenerateString(4) + ".com";
+                        }
+                        while (UserValidation.IsEmailExists(Email) == true);
                     }
-                    while (UserValidation.IsEmailExists(Email) == true);
 
                     int Vcode = RandomGenerator.GenerateNumber(1000, 9999);
                     Vcode = 1111;
                     var City = db.Cities.Find(registerDTO.CountryId);
                     var Country = db.Countries.Find(City.CountryId);
-                    var user = new ApplicationUser() { LoginType = LoginType.G4FitRegisteration, VerificationCode = Vcode, UserName = Email, Email = Email, Name = registerDTO.Name, PhoneNumber = registerDTO.PhoneNumber, PhoneNumberCountryCode = Country.PhoneCode, CityId = registerDTO.CountryId, CountryId = City.CountryId };
+                    var user = new ApplicationUser() { LoginType = LoginType.G4FitRegisteration, VerificationCode = Vcode, UserName = Email, Email = Email, Address = registerDTO.Address, IDNumber = registerDTO.IDNumber, Name = registerDTO.Name, PhoneNumber = registerDTO.PhoneNumber, PhoneNumberCountryCode = Country.PhoneCode, CityId = registerDTO.CountryId, CountryId = City.CountryId };
 
                     string ImageName = null;
                     if (!string.IsNullOrEmpty(registerDTO.ImageBase64))
@@ -161,6 +169,8 @@ namespace G4Fit.Controllers.API
                         user.ImageUrl = ImageName;
                     }
 
+                    var qr = QRCodes.GenerateQR(user.IDNumber);
+                    user.QR = qr;
                     IdentityResult result = await UserManager.CreateAsync(user, registerDTO.Password);
                     if (!result.Succeeded)
                     {

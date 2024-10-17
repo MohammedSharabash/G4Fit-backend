@@ -68,27 +68,31 @@
                         {
                             foreach (var order in Model.OrderByDescending(s => s.CreatedOn))
                             {
-                                foreach (var Service in order.Items.Where(s => s.IsDeleted == false))
-                                {
-                                    string ServiceImage = null;
-                                    if (Service.Service.Images != null && Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
+                                <a href="/Orders/Invoice?OrderId=@order.Id">
+
+                                    @foreach (var Service in order.Items.Where(s => s.IsDeleted == false))
                                     {
-                                        ServiceImage = Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
-                                    }
-                                    <div class="swiper-slide hvr-shrink">
-                                        <img class="rounded-circle" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100px" height="100">
-                                        <h3 class="h4">@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)</h3>
-                                        <h5>#@order.Code</h5>
-                                        <div class="Date d-flex">
-                                            <div class="From">
-                                                <p>@(culture == "ar" ? "تاريخ الطلب" : "Order Date")</p><span>@order.CreatedOn.ToString("dd MMMM yyyy")</span>
-                                            </div><i class="fas fa-handshake fa-2x"></i>
-                                            @*<div class="To">
-                                                    <p>تاريخ الوصول</p><span>20/5/2020</span>
-                                                </div>*@
+                                        string ServiceImage = null;
+                                        if (Service.Service.Images != null && Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
+                                        {
+                                            ServiceImage = Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
+                                        }
+                                        <div class="swiper-slide hvr-shrink">
+                                            <img class="rounded-circle" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100px" height="100">
+                                            <h3 class="h4">@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)</h3>
+                                            <h5>#@order.Code</h5>
+                                            <div class="Date d-flex">
+                                                <div class="From">
+                                                    <p>@(culture == "ar" ? "تاريخ الطلب" : "Order Date")</p><span>@order.CreatedOn.ToString("dd MMMM yyyy")</span>
+                                                </div><i class="fas fa-handshake fa-2x"></i>
+                                                @*<div class="To">
+                                                        <p>تاريخ الوصول</p><span>20/5/2020</span>
+                                                    </div>*@
+                                            </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
+
+                                </a>
                             }
                         }
                     </div>

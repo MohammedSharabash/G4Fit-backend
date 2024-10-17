@@ -20,6 +20,15 @@ namespace G4Fit.Models.DTOs
         public string PhoneNumber { get; set; }
 
         [Required]
+        public string IDNumber { get; set; }
+
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
+        public string Address { get; set; }
+
+        [Required]
         [StringLength(6, MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; set; }

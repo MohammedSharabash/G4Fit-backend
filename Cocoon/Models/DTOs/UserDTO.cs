@@ -9,13 +9,18 @@ namespace G4Fit.Models.DTOs
     {
         public string UserId { get; set; }
         public string Email { get; set; }
+        public string IDNumber { get; set; }
+        public string Address { get; set; }
+        public string Qr { get; set; }
         public string Token { get; set; }
         public string RefreshToken { get; set; }
         public int NotificationsNumber { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Image { get; set; }
+        public string ImageName { get; set; }
         public int BasketItemsCount { get; set; }
+        public long? CountryId { get; set; }
         public LoginType LoginType { get; set; }
         public static UserDTO ToUserDTO(ApplicationUser requiredUser)
         {
@@ -27,7 +32,12 @@ namespace G4Fit.Models.DTOs
                 Image = string.IsNullOrEmpty(requiredUser.ImageUrl) ? null : "/Content/Images/Users/" + requiredUser.ImageUrl,
                 BasketItemsCount = 0,
                 LoginType = requiredUser.LoginType,
+                ImageName = requiredUser.ImageUrl,
                 Email = requiredUser.Email,
+                Qr = requiredUser.QR,
+                Address = requiredUser.Address,
+                CountryId = requiredUser.CountryId,
+                IDNumber = requiredUser.IDNumber,
                 UserId = requiredUser.Id
             };
 

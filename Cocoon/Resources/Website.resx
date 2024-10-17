@@ -330,4 +330,16 @@
   <data name="StartDate" xml:space="preserve">
     <value>Subscription Start Date</value>
   </data>
+  <data name="AddressPlaceholder" xml:space="preserve">
+    <value>Address In Details</value>
+  </data>
+  <data name="IDNumberPlaceholder" xml:space="preserve">
+    <value>IDNumber</value>
+  </data>
+  <data name="AddressFieldIsRequired" xml:space="preserve">
+    <value>Address Field Is Required</value>
+  </data>
+  <data name="IDNumberFieldIsRequired" xml:space="preserve">
+    <value>IDNumberField Is Required</value>
+  </data>
 </root>

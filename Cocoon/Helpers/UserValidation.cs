@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Http.ModelBinding;
+using static QRCoder.PayloadGenerator;
 
 namespace G4Fit.Helpers
 {
@@ -35,6 +36,13 @@ namespace G4Fit.Helpers
             else
                 return db.Users.Any(x => x.PhoneNumber == Phone && x.Id != CurrentUserId);
         }
+        public static bool IsIDNumberExists(string IDNumber, string CurrentUserId = null)
+        {
+            if (string.IsNullOrEmpty(CurrentUserId))
+                return db.Users.Any(x => x.IDNumber == IDNumber);
+            else
+                return db.Users.Any(x => x.IDNumber == IDNumber && x.Id != CurrentUserId);
+        }
 
         public static Errors ValidateLoginApi(LoginDTO loginDTO, ModelStateDictionary Model)
         {
@@ -62,10 +70,10 @@ namespace G4Fit.Helpers
             }
 
             var IsValidPassword = loginDTO.Password.All(char.IsDigit);
-			if (!IsValidPassword)
-			{
+            if (!IsValidPassword)
+            {
                 return Errors.PasswordFieldMustBeStringWithMinimumLengthOf6Chars;
-			}
+            }
 
             if (ModelErrors == null || ModelErrors.Count <= 0)
             {
@@ -89,10 +97,26 @@ namespace G4Fit.Helpers
             if (!string.IsNullOrEmpty(registerDTO.PhoneNumber))
             {
                 var IsValidPhoneNumber = registerDTO.PhoneNumber.All(char.IsDigit);
-                if (IsValidPhoneNumber == false || registerDTO.PhoneNumber.Contains("+"))
-                {
+                //if (IsValidPhoneNumber == false || registerDTO.PhoneNumber.Contains("+"))
+                //{
+                //    return Errors.InvalidPhoneNumber;
+                //}
+                // التأكد أن رقم الجوال السعودي يبدأ بـ 05 ويتكون من 10 أرقام
+                string pattern = @"^05[0-9]{8}$";
+                if (!Regex.IsMatch(registerDTO.PhoneNumber, pattern))
                     return Errors.InvalidPhoneNumber;
-                }
+            }
+            if (!string.IsNullOrEmpty(registerDTO.IDNumber))
+            {
+                var IsValidIDNumber = registerDTO.IDNumber.All(char.IsDigit);
+                //if (IsValidIDNumber == false || registerDTO.IDNumber.Length != 14)
+                //{
+                //    return Errors.InvalidIDNumber;
+                //}
+                // التأكد أن رقم الهوية السعودية يتكون من 10 أرقام
+                string pattern = @"^\d{10}$";
+                if (!Regex.IsMatch(registerDTO.IDNumber, pattern))
+                    return Errors.InvalidIDNumber;
             }
 
 
@@ -135,6 +159,10 @@ namespace G4Fit.Helpers
 
             if (IsPhoneExists(registerDTO.PhoneNumber))
                 return Errors.PhoneNumberAlreadyExists;
+            if (IsIDNumberExists(registerDTO.IDNumber))
+                return Errors.IDNumberAlreadyExists;
+            if (IsEmailExists(registerDTO.Email))
+                return Errors.EmailAlreadyExists;
 
             if (!string.IsNullOrEmpty(registerDTO.ImageBase64))
             {
@@ -168,10 +196,13 @@ namespace G4Fit.Helpers
             else
             {
                 var IsValidPhoneNumber = updateProfileDTO.PhoneNumber.All(char.IsDigit);
-                if (IsValidPhoneNumber == false || updateProfileDTO.PhoneNumber.Contains("+"))
-                {
+                //if (IsValidPhoneNumber == false || updateProfileDTO.PhoneNumber.Contains("+"))
+                //{
+                //    return Errors.InvalidPhoneNumber;
+                //}
+                string pattern = @"^05[0-9]{8}$";
+                if (!Regex.IsMatch(updateProfileDTO.PhoneNumber, pattern))
                     return Errors.InvalidPhoneNumber;
-                }
             }
 
             if (string.IsNullOrEmpty(updateProfileDTO.Name))
@@ -199,6 +230,8 @@ namespace G4Fit.Helpers
             {
                 return Errors.PhoneNumberAlreadyExists;
             }
+            if (IsEmailExists(updateProfileDTO.Email, currentUserId))
+                return Errors.EmailAlreadyExists;
 
             var Country = db.Countries.FirstOrDefault(s => s.IsDeleted == false);
             if (Country == null)

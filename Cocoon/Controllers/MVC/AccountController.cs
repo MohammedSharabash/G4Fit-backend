@@ -1,20 +1,24 @@
 ﻿using G4Fit.Helpers;
 using G4Fit.Models.DTOs;
+using G4Fit.Models.Enums;
 using G4Fit.Models.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Http.Results;
 using System.Web.Mvc;
 
 namespace G4Fit.Controllers.MVC
@@ -131,8 +135,11 @@ namespace G4Fit.Controllers.MVC
                     PhoneNumber = model.PhoneNumber,
                     ConfirmPassword = model.ConfirmPassword,
                     Name = model.Name,
+                    Address = model.Address,
+                    Email = model.Email,
+                    IDNumber = model.IDNumber,
                     Password = model.Password,
-                    CountryId = model.CountryId
+                    CountryId = model.CountryId,
                 };
                 if (Image != null)
                 {
@@ -259,6 +266,164 @@ namespace G4Fit.Controllers.MVC
             {
                 return RedirectToAction("Index", "Home");
             }
+        }
+
+        [Authorize]
+        public async Task<ActionResult> Profile()
+        {
+            CurrentUserId = User.Identity.GetUserId();
+            if (!string.IsNullOrEmpty(CurrentUserId))
+            {
+                var user = db.Users.Find(CurrentUserId);
+
+                if (user == null)
+                {
+                    return Json(new { Success = false, IsNotLogin = true, Message = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First ." }, JsonRequestBehavior.AllowGet);
+                }
+
+                ProfileVM vm = new ProfileVM()
+                {
+                    Name = user.Name,
+                    PhoneNumber = user.PhoneNumber,
+                    Address = user.Address,
+                    Email = user.Email,
+                    ImageUrl = user.ImageUrl,
+                    CountryId = user.CountryId,
+                };
+                ViewBag.Countries = db.Cities.Where(s => s.IsDeleted == false).ToList();
+                return View(vm);
+            }
+            else
+            {
+                return Json(new { Success = false, IsNotLogin = true, Message = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First ." }, JsonRequestBehavior.AllowGet);
+            }
+
+
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult> Profile(ProfileVM model, HttpPostedFileBase Image)
+        {
+            ViewBag.Countries = db.Cities.Where(s => s.IsDeleted == false).ToList();
+            if (Image != null)
+            {
+                bool IsImage = CheckFiles.IsImage(Image);
+                if (IsImage == false)
+                {
+                    if (culture == "ar")
+                        ModelState.AddModelError("Image", "الصوره المرفقه غير صحيحة");
+                    else
+                        ModelState.AddModelError("Image", "Invalid photo uploaded");
+                }
+            }
+            if (ModelState.IsValid)
+            {
+                CurrentUserId = User.Identity.GetUserId();
+                if (!string.IsNullOrEmpty(CurrentUserId))
+                {
+                    var user = db.Users.Find(CurrentUserId);
+
+                    if (user == null)
+                    {
+                        var MessageError = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First .";
+                        ViewBag.MessageError = MessageError;
+                        return View(model);
+                    }
+                    else if (UserManager.IsInRole(user.Id, "Admin"))
+                    {
+                        var MessageError = culture == "ar" ? "عذراً مدير, هذا الحساب لا يمكنه تنفيذ العمليه, هذه العملية مخصصه للعملاء فقط" : "Sorry Admin, This process is intended for customers only .";
+                        ViewBag.MessageError = MessageError;
+                        return View(model);
+                    }
+
+                    UpdateProfileDTO dTO = new UpdateProfileDTO()
+                    {
+                        PhoneNumber = model.PhoneNumber,
+                        Name = model.Name,
+                        Address = model.Address,
+                        Email = model.Email,
+                        //IDNumber = model.IDNumber,
+                        CountryId = model.CountryId,
+                    };
+                    if (Image != null)
+                    {
+                        dTO.ImageBase64 = MediaControl.ConvertImageToBase64(Image);
+                    }
+                    string base_url = Request.Url.GetLeftPart(UriPartial.Authority) + "/api/data/account/UpdateProfile";
+                    var Token = Request.Cookies["G4Fit-data-token"];
+                    string TokenValue = null;
+                    string Anonymous = null;
+                    HttpCookie anonymousCooky = Request.Cookies["Anonymous"];
+                    if (anonymousCooky != null)
+                    {
+                        Anonymous = anonymousCooky.Value;
+                    }
+                    else
+                    {
+                        Anonymous = Session.SessionID;
+                        anonymousCooky = new HttpCookie("Anonymous");
+                        anonymousCooky.Value = Anonymous;
+                        anonymousCooky.Expires = DateTime.Now.AddYears(20);
+                        Response.Cookies.Add(anonymousCooky);
+                    }
+
+                    if (Token != null && User.Identity.IsAuthenticated == true)
+                    {
+                        TokenValue = Token.Value;
+                    }
+                    using (HttpClient httpClient = new HttpClient())
+                    {
+                        try
+                        {
+                            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenValue);
+                            httpClient.DefaultRequestHeaders.Add("AnonymousKey", Session.SessionID);
+                            var bodyJS = JsonConvert.SerializeObject(dTO);
+                            var body = new StringContent(bodyJS, Encoding.UTF8, "application/json");
+                            var response = await httpClient.PutAsync(base_url, body);
+                            var data = await response.Content.ReadAsStringAsync();
+                            var result = JsonConvert.DeserializeObject<ResultResponseDTO>(data);
+                            if (response.StatusCode == HttpStatusCode.OK)
+                            {
+                                var dataJs = JsonConvert.SerializeObject(result.Data);
+                                var userDTO = JsonConvert.DeserializeObject<UserDTO>(dataJs);
+                                var Message = culture == "ar" ? "تم تحديث البيانات بنجاح" : "Your Profile was updated successfully .";
+                                ViewBag.Message = Message;
+                                model.Name = userDTO.Name;
+                                model.Email = userDTO.Email;
+                                model.Address = userDTO.Address;
+                                model.PhoneNumber = userDTO.PhoneNumber;
+                                model.CountryId = userDTO.CountryId;
+                                model.ImageUrl = userDTO.ImageName;
+                                return View(model);
+
+                            }
+                            else
+                            {
+                                var ErrorMessage = APIResponseValidation.Validate(result.ErrorCode, culture);
+                                ViewBag.MessageError = ErrorMessage;
+                                return View(model);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            var MessageError = culture == "ar" ? "عذراً ، حدث خطأ ما" : "Something went wrong";
+                            ViewBag.MessageError = MessageError;
+                            return View(model);
+
+                        }
+                    }
+
+                }
+                else
+                {
+                    var MessageError = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First .";
+                    ViewBag.MessageError = MessageError;
+                    return View(model);
+                }
+            }
+            return View(model);
         }
 
         [AllowAnonymous]

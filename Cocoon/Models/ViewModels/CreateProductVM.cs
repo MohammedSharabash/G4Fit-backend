@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace G4Fit.Models.ViewModels
 {
@@ -13,7 +14,9 @@ namespace G4Fit.Models.ViewModels
         public string NameAr { get; set; }
         [Required(ErrorMessage = "الاسم باللغه الانجليزية مطلوب")]
         public string NameEn { get; set; }
+        [AllowHtml]
         public string DescriptionAr { get; set; }
+        [AllowHtml]
         public string DescriptionEn { get; set; }
         [Required(ErrorMessage = "سعر الخدمه مطلوب")]
         [DataType(DataType.Currency, ErrorMessage = "سعر الخدمه غير صحيح")]

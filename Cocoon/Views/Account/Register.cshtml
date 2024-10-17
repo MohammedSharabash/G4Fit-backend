@@ -24,6 +24,14 @@
                                         @Html.ValidationMessageFor(s => s.Name, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
+                                        @Html.TextBoxFor(s => s.Email, new { @class = "form-control text-center", placeholder = Website.Email })
+                                        @Html.ValidationMessageFor(s => s.Email, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                         @Html.TextBoxFor(s => s.IDNumber, new { @class = "form-control text-center", placeholder = Website.IDNumberPlaceholder })<i class="fa fa-id-card fa-fw"></i>
+                                        @Html.ValidationMessageFor(s => s.IDNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
                                         <div class="row">
                                             <div class="col-7">
                                                 @Html.TextBoxFor(s => s.PhoneNumber, new { @class = "form-control text-center", placeholder = Website.PhoneNumberPlaceholder, type = "number" })<i style="left:29px" class="fa fa-phone fa-fw"></i>
@@ -38,6 +46,10 @@
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(s => s.PhoneNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(s => s.Address, new { @class = "form-control text-center", placeholder = Website.AddressPlaceholder })
+                                        @Html.ValidationMessageFor(s => s.Address, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
                                         @Html.TextBoxFor(s => s.Password, new { @class = "form-control text-center", placeholder = Website.PasswordPlaceholder, type = "password" })<i class="fa fa-user-lock fa-fw"></i>

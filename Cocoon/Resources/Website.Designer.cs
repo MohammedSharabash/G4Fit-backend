@@ -79,6 +79,24 @@ namespace Cocoon.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Address Field Is Required.
+        /// </summary>
+        public static string AddressFieldIsRequired {
+            get {
+                return ResourceManager.GetString("AddressFieldIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Address In Details.
+        /// </summary>
+        public static string AddressPlaceholder {
+            get {
+                return ResourceManager.GetString("AddressPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to cart.
         /// </summary>
         public static string AddToCart {
@@ -228,6 +246,24 @@ namespace Cocoon.Resources {
         public static string Home {
             get {
                 return ResourceManager.GetString("Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IDNumberField Is Required.
+        /// </summary>
+        public static string IDNumberFieldIsRequired {
+            get {
+                return ResourceManager.GetString("IDNumberFieldIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IDNumber.
+        /// </summary>
+        public static string IDNumberPlaceholder {
+            get {
+                return ResourceManager.GetString("IDNumberPlaceholder", resourceCulture);
             }
         }
         

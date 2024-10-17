@@ -177,6 +177,7 @@ namespace G4Fit.Helpers
         Users,
         Slider,
         Country,
+        QR,
         Other,
     }
 }

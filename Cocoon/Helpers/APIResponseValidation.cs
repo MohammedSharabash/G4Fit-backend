@@ -18,6 +18,8 @@ namespace G4Fit.Helpers
                     return culture == "ar" ? "بيانات تسجيل الحساب مطلوبة" : "Registeration data is required";
                 case Errors.InvalidPhoneNumber:
                     return culture == "ar" ? "رقم الهاتف غير صحيح" : "Invalid phone number";
+                case Errors.InvalidIDNumber:
+                    return culture == "ar" ? "رقم الهويه غير صحيح" : "Invalid ID number";
                 case Errors.NameFieldIsRequired:
                     return culture == "ar" ? "الاسم مطلوب" : "Name field is required";
                 case Errors.PhoneNumberFieldIsRequired:
@@ -30,6 +32,10 @@ namespace G4Fit.Helpers
                     return culture == "ar" ? "كلمه السر غير متطابقة" : "Password does not match";
                 case Errors.PhoneNumberAlreadyExists:
                     return culture == "ar" ? "رقم الهاتف مسجل لدينا من قبل" : "Phone number has been registered before";
+                case Errors.IDNumberAlreadyExists:
+                    return culture == "ar" ? "رقم الهويه مسجل لدينا من قبل" : "ID number has been registered before";
+                case Errors.EmailAlreadyExists:
+                    return culture == "ar" ? "البريد الالكتروني مسجل لدينا من قبل" : " Eamil has been registered before";
                 case Errors.SomethingIsWrong:
                 case Errors.FailedToCreateTheAccount:
                 case Errors.TokenProblemOccured:
