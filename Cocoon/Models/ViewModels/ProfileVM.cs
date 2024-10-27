@@ -25,5 +25,7 @@ namespace G4Fit.Models.ViewModels
 
         public long? CountryId { get; set; }
         public string ImageUrl { get; set; }
+        public double? weight { get; set; }
+        public double? length { get; set; }
     }
 }

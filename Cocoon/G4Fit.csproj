@@ -400,6 +400,14 @@
     <Compile Include="Migrations\202410131401437_edituser.Designer.cs">
       <DependentUpon>202410131401437_edituser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202410271617406_PurposeOfSubscription.cs" />
+    <Compile Include="Migrations\202410271617406_PurposeOfSubscription.Designer.cs">
+      <DependentUpon>202410271617406_PurposeOfSubscription.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202410271650141_PurposeOfSubscription2.cs" />
+    <Compile Include="Migrations\202410271650141_PurposeOfSubscription2.Designer.cs">
+      <DependentUpon>202410271650141_PurposeOfSubscription2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Data\ApplicationDbContext.cs" />
     <Compile Include="Models\Domains\ApplicationUser.cs" />
@@ -464,6 +472,7 @@
     <Compile Include="Models\DTOs\UserDTO.cs" />
     <Compile Include="Models\DTOs\UserProfileDTO.cs" />
     <Compile Include="Models\Enums\Errors.cs" />
+    <Compile Include="Models\Enums\PurposeOfSubscription.cs" />
     <Compile Include="Models\Enums\LoginType.cs" />
     <Compile Include="Models\Enums\MediaType.cs" />
     <Compile Include="Models\Enums\NotificationType.cs" />
@@ -1884,6 +1893,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202410131401437_edituser.resx">
       <DependentUpon>202410131401437_edituser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202410271617406_PurposeOfSubscription.resx">
+      <DependentUpon>202410271617406_PurposeOfSubscription.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202410271650141_PurposeOfSubscription2.resx">
+      <DependentUpon>202410271650141_PurposeOfSubscription2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Website.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

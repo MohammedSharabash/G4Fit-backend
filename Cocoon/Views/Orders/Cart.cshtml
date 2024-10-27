@@ -94,7 +94,7 @@
                                 <tbody />
 
                                 <tr>
-                                    @if (user.Address != null)
+                                    @if (user.Address != null && (!Model.Items.Any(x => x.Service.IsTimeBoundService) || Model.PurposeOfSubscription != null))
                                     {
                                         <td style="background-color:white;" colspan="2" align="right">
                                             <a class="btn btn-success btn-block" href="@Url.Action("Checkout", "Orders")">
@@ -107,7 +107,7 @@
                                         <td style="background-color:white;" colspan="2" align="right">
                                             @*<a class="btn btn-success btn-block" href="#updateAdress">*@
                                             <a class="btn btn-success btn-block" href="javascript:void(0)" onclick="showUpdateAddress()">
-                                                @(culture == "ar" ? "يرجي تحديث العنوان حتي يتم اتمام عمليه الشراء " : "Please Update Address before Make Checkout")
+                                                @(culture == "ar" ? "يرجي تحديث العنوان والغرض من الاشتراك حتي يتم اتمام عمليه الشراء " : "Please Update Address and purpose of subscription before Make Checkout")
                                             </a>
                                         </td>
                                     }
@@ -141,7 +141,7 @@
                 </div>
             </div>
         </div>
-        if (user.Address == null)
+        if (user.Address == null || Model.Items.Any(x => x.Service.IsTimeBoundService))
         {
             <div class="container mt-5" id="updateAdress" style="display: none;">
                 <div class="row justify-content-center">
@@ -167,6 +167,36 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="weight" class="control-label " style="font-weight: bold; display: flex;">@(culture == "ar" ? "الوزن:" : "Weight:")</label>
+                                                <input type="text" name="weight" class="form-control" value="@user.weight" placeholder="@(culture == "ar" ? "أدخل الوزن" : "Enter Weight")" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="length" class="control-label " style="font-weight: bold; display: flex;">@(culture == "ar" ? "الطول :" : " length:")</label>
+                                                <input type="text" name="length" class="form-control" value="@user.length" placeholder="@(culture == "ar" ? "الطول " : "Enter length")" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="PurposeOfSubscription" class="control-label required" style="font-weight: bold; display: flex;">
+                                                    @(culture == "ar" ? "الغرض من الاشتراك :" : "Purpose Of Subscription:")
+                                                </label>
+                                                <select name="PurposeOfSubscription" class="form-control" required>
+                                                    <option value="Muscle_Building">@(culture == "ar" ? "كتله عضليه" : "Muscle Building")</option>
+                                                    <option value="Weight_Loss">@(culture == "ar" ? "خسارة وزن" : "Weight Loss")</option>
+                                                    <option value="Weight_Gain">@(culture == "ar" ? "زياده وزن" : "Weight Gain")</option>
+                                                    <option value="General_Health">@(culture == "ar" ? "صحه عامه" : "General Health")</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="text-center mt-4">
                                         <button type="submit" class="btn btn-success" style="font-size: 18px; padding: 10px 20px;">
                                             @(culture == "ar" ? "تحديث البيانات" : "Update Information")
@@ -320,11 +350,15 @@
     }
     <script>
         function showUpdateAddress() {
-            //document.getElementById('updateAdress').style.display = 'block';
             var updateAddressDiv = document.getElementById('updateAdress');
+            if (!updateAddressDiv) {
+                console.error("Element with ID 'updateAdress' not found.");
+                return; // Exit if the element is not found
+            }
             updateAddressDiv.style.display = 'block';
             updateAddressDiv.scrollIntoView({ behavior: 'smooth' });
         }
+
     </script>
 
 }

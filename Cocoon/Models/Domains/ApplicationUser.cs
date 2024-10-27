@@ -29,6 +29,8 @@ namespace G4Fit.Models.Domains
         public long? CountryId { get; set; }
         public long? CityId { get; set; }
         public decimal Wallet { get; set; }
+        public double? weight { get; set; }
+        public double? length { get; set; }
         public bool IsDeleted { get; set; }
         public virtual Country Country { get; set; }
         public virtual City City { get; set; }

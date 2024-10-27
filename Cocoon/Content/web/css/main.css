@@ -524,25 +524,26 @@ h2 span {
         justify-content: flex-end
     }
 
-        .Connect .Login form, .Connect .Signup form {
+        /* .Connect .Login form, .Connect .Signup form {
             width: 400px;
             max-width: 500px
+        }*/
+
+        .Connect .Login form .form-group, .Connect .Signup form .form-group {
+            position: relative
         }
 
-            .Connect .Login form .form-group, .Connect .Signup form .form-group {
-                position: relative
+            .Connect .Login form .form-group input, .Connect .Signup form .form-group input {
+                direction: ltr;
+                /*padding-left: 30px;
+                padding-right: 30px*/
             }
 
-                .Connect .Login form .form-group input, .Connect .Signup form .form-group input {
-                    direction: ltr;
-                    padding-left: 30px
-                }
-
-                .Connect .Login form .form-group svg, .Connect .Signup form .form-group svg {
-                    position: absolute;
-                    left: 7px;
-                    top: 10px
-                }
+            .Connect .Login form .form-group svg, .Connect .Signup form .form-group svg {
+                position: absolute;
+                left: 7px;
+                top: 10px
+            }
 
     .Connect .Signup {
         justify-content: flex-start

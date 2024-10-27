@@ -304,6 +304,15 @@ namespace Cocoon.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to length.
+        /// </summary>
+        public static string length {
+            get {
+                return ResourceManager.GetString("length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string Login {
@@ -538,6 +547,15 @@ namespace Cocoon.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Purpose Of Subscription.
+        /// </summary>
+        public static string PurposeOfSubscription {
+            get {
+                return ResourceManager.GetString("PurposeOfSubscription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Quantity.
         /// </summary>
         public static string Quantity {
@@ -723,6 +741,15 @@ namespace Cocoon.Resources {
         public static string Vision {
             get {
                 return ResourceManager.GetString("Vision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to weight.
+        /// </summary>
+        public static string weight {
+            get {
+                return ResourceManager.GetString("weight", resourceCulture);
             }
         }
         

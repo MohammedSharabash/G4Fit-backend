@@ -164,6 +164,7 @@
             <p>@Model.UserPhoneNumber</p>
         }
         <ul class="list-unstyled text-@(culture == "ar" ? "right" : "left")">
+            <li><i class="@(culture == "ar" ? "fa fa-user" : "")"></i> <a href="@Url.Action("Profile", "Account")">@(culture == "ar" ? "الملف الشخصي" : "My Profile") <i class="@(culture != "ar" ? "fa fa-user" : "")"></i></a></li>
             <li><i class="@(culture == "ar" ? "fa fa-shopping-basket" : "")"></i> <a href="@Url.Action("Index", "Orders")">@(culture == "ar" ? "طلباتى" : "My Orders") <i class="@(culture != "ar" ? "fa fa-shopping-basket" : "")"></i></a></li>
             <li><i class="@(culture == "ar" ? "fas fa-wallet" : "")"></i> <a href="@Url.Action("Index","Wallets")">@(culture == "ar" ? "محفظتى" : "My Wallet")</a> <i class="@(culture != "ar" ? "fas fa-wallet" : "")"></i></li>
             <li><i class="@(culture == "ar" ? "fas fa-bell" : "")"></i> <a href="@Url.Action("All", "Notifications")">@Website.Notifications</a> <i class="@(culture != "ar" ? "fas fa-bell" : "")"></i></li>

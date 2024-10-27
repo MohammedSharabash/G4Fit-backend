@@ -12,6 +12,7 @@ namespace G4Fit.Models.Domains
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
         public OrderStatus OrderStatus { get; set; }
+        public PurposeOfSubscription? PurposeOfSubscription { get; set; }
         public string Code { get; set; }
         public string Address { get; set; }
         public long? CityId { get; set; }

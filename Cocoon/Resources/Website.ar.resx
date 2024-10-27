@@ -342,4 +342,13 @@
   <data name="IDNumberFieldIsRequired" xml:space="preserve">
     <value>رقم الهويه مطلوب</value>
   </data>
+  <data name="PurposeOfSubscription" xml:space="preserve">
+    <value>الغرض من الاشتراك</value>
+  </data>
+  <data name="length" xml:space="preserve">
+    <value>الطول</value>
+  </data>
+  <data name="weight" xml:space="preserve">
+    <value>الوزن</value>
+  </data>
 </root>

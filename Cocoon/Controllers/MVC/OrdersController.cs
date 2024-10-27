@@ -273,7 +273,7 @@ namespace G4Fit.Controllers.MVC
 
                     if (user == null)
                     {
-                        return Json(new { Success = false, IsNotLogin=true, Message = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First ." }, JsonRequestBehavior.AllowGet);
+                        return Json(new { Success = false, IsNotLogin = true, Message = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First ." }, JsonRequestBehavior.AllowGet);
                     }
                     else if (UserManager.IsInRole(user.Id, "Admin"))
                     {
@@ -554,7 +554,7 @@ namespace G4Fit.Controllers.MVC
             return View(UserOrder);
         }
         [HttpPost]
-        public ActionResult UpdateUserData(string Address, string PhoneNumber)
+        public ActionResult UpdateUserData(string Address, string PhoneNumber, PurposeOfSubscription PurposeOfSubscription, double? weight, double? length)
         {
             string Anonymous = null;
             HttpCookie anonymousCooky = Request.Cookies["Anonymous"];
@@ -570,9 +570,17 @@ namespace G4Fit.Controllers.MVC
                 anonymousCooky.Expires = DateTime.Now.AddYears(20);
                 Response.Cookies.Add(anonymousCooky);
             }
+            var UserOrder = db.Orders.FirstOrDefault(x => ((x.UserId == CurrentUserId && x.UserId != null) || x.UnknownUserKeyIdentifier == Anonymous) && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
+            if (UserOrder == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            UserOrder.PurposeOfSubscription = PurposeOfSubscription;
             var User = db.Users.FirstOrDefault(x => (x.Id == CurrentUserId) && !x.IsDeleted);
             User.Address = Address;
             User.PhoneNumber = PhoneNumber;
+            User.weight = weight;
+            User.length = length;
             db.SaveChanges();
 
             return RedirectToAction("Cart");

@@ -19,49 +19,81 @@
                                 {
                                     @Html.HiddenFor(s => s.ImageUrl)
                                     @Html.ValidationMessage("Error", "", new { @class = "text-danger", style = "margin-bottom:10px;display:block" })
-
-                                    <div class="form-group">
-                                        @Html.TextBoxFor(s => s.Name, new { @class = "form-control text-center", placeholder = Website.NamePlaceholder })<i class="fa fa-user-circle fa-fw"></i>
-                                        @Html.ValidationMessageFor(s => s.Name, "", new { @class = "text-danger" })
-                                    </div>
-
-                                    <div class="form-group">
-                                        @Html.TextBoxFor(s => s.Email, new { @class = "form-control text-center", placeholder = Website.Email })
-                                        @Html.ValidationMessageFor(s => s.Email, "", new { @class = "text-danger" })
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-7">
-                                                @Html.TextBoxFor(s => s.PhoneNumber, new { @class = "form-control text-center", placeholder = Website.PhoneNumberPlaceholder, type = "number" })<i style="left:29px" class="fa fa-phone fa-fw"></i>
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(s => s.Name, new { @class = "form-control text-center", placeholder = Website.NamePlaceholder })<i class="fa fa-user-circle fa-fw"></i>
+                                                @Html.ValidationMessageFor(s => s.Name, "", new { @class = "text-danger" })
                                             </div>
-                                            <div class="col-5">
-                                                <select name="CountryId" id="CountryId" required class="form-control" style="direction:@(culture == "ar" ? "" : "ltr")">
-                                                    @foreach (var country in Countries)
-                                                    {
-                                                        <option value="@country.Id">@(culture == "ar" ? country.NameAr : country.NameEn) @*(@(culture != "ar" ? "+" : "")@country.Country.PhoneCode@(culture == "ar" ? "+" : ""))*@</option>
-                                                    }
-                                                </select>
+
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(s => s.Email, new { @class = "form-control text-center", placeholder = Website.Email })
+                                                @Html.ValidationMessageFor(s => s.Email, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-7">
+                                                        @Html.TextBoxFor(s => s.PhoneNumber, new { @class = "form-control text-center", placeholder = Website.PhoneNumberPlaceholder, type = "number" })<i style="left:29px" class="fa fa-phone fa-fw"></i>
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <select name="CountryId" id="CountryId" required class="form-control" style="direction:@(culture == "ar" ? "" : "ltr")">
+                                                            @foreach (var country in Countries)
+                                                            {
+                                                                <option value="@country.Id">@(culture == "ar" ? country.NameAr : country.NameEn) @*(@(culture != "ar" ? "+" : "")@country.Country.PhoneCode@(culture == "ar" ? "+" : ""))*@</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                @Html.ValidationMessageFor(s => s.PhoneNumber, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(s => s.Address, new { @class = "form-control text-center", placeholder = Website.AddressPlaceholder })
+                                                @Html.ValidationMessageFor(s => s.Address, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <!-- قسم تحميل الصورة الشخصية -->
+                                            <div class="form-group text-center">
+                                                <label for="Image" class="d-block">@Website.PersonalImage (@Website.Optional)</label>
+                                                <img id="profileImagePreview" src="~/Content/Images/Users/@Model.ImageUrl" alt="Profile Image" class="rounded-circle mb-3" width="150" height="150" style="object-fit: cover; border: 2px solid #343a40;">
+                                                @Html.TextBoxFor(s => s.Image, new { @class = "form-control text-center form-control-file", type = "file", accept = "image/*", onchange = "previewImage(event)" })
+                                                @Html.ValidationMessageFor(s => s.Image, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
-                                        @Html.ValidationMessageFor(s => s.PhoneNumber, "", new { @class = "text-danger" })
-                                    </div>
+                                        <hr />
+                                        <div class="col-lg-4">
 
+                                            <div class="card text-center d-block shadow-lg mb-5">
+                                                <div class="card-header font-weight-bold text-white" style="background:#343a40;">
+                                                    @(culture == "ar" ? "الملف الصحي " : "Health Profile")
+                                                </div>
+                                                <div class="card-body m-auto">
+                                                    <section class="Connect">
+                                                        <div class="container">
+                                                            <div class="tab-content" id="nav-tabContent">
+                                                                <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-home-tab">
+                                                                    <div class="form-group">
+                                                                        <label for="length" class="control-label " style="font-weight: bold; display: flex;">@(culture == "ar" ? "الطول :" : " length:")</label>
+                                                                        @Html.TextBoxFor(s => s.length, new { @class = "form-control text-center", placeholder = Website.length, type = "number", min = "0" })
+                                                                        @Html.ValidationMessageFor(s => s.length, "", new { @class = "text-danger" })
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="weight" class="control-label " style="font-weight: bold; display: flex;">@(culture == "ar" ? "الوزن:" : "Weight:")</label>
+                                                                        @Html.TextBoxFor(s => s.weight, new { @class = "form-control text-center", placeholder = Website.weight, type = "number", min = "0" })
+                                                                        @Html.ValidationMessageFor(s => s.weight, "", new { @class = "text-danger" })
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </section>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="form-group">
-                                        @Html.TextBoxFor(s => s.Address, new { @class = "form-control text-center", placeholder = Website.AddressPlaceholder })
-                                        @Html.ValidationMessageFor(s => s.Address, "", new { @class = "text-danger" })
-                                    </div>
-
-                                    <!-- قسم تحميل الصورة الشخصية -->
-                                    <div class="form-group text-center">
-                                        <label for="Image" class="d-block">@Website.PersonalImage (@Website.Optional)</label>
-                                        <img id="profileImagePreview" src="~/Content/Images/Users/@Model.ImageUrl" alt="Profile Image" class="rounded-circle mb-3" width="150" height="150" style="object-fit: cover; border: 2px solid #343a40;">
-                                        @Html.TextBoxFor(s => s.Image, new { @class = "form-control text-center form-control-file", type = "file", accept = "image/*", onchange = "previewImage(event)" })
-                                        @Html.ValidationMessageFor(s => s.Image, "", new { @class = "text-danger" })
-                                    </div>
-
-                                    <div class="form-group">
-                                        <button class="btn text-white" style="background-color:#343a40;" type="submit">@Website.Save</button>
+                                        <button class="btn text-white" style="background-color: #343a40; width: -webkit-fill-available; " type="submit">@Website.Save</button>
                                     </div>
                                 }
                             </div>

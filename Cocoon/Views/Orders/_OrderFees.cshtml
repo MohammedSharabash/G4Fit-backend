@@ -1,4 +1,5 @@
 ﻿@model G4Fit.Models.Domains.Order
+@using G4Fit.Models.Enums
 @using Cocoon.Resources
 @{
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
@@ -41,7 +42,24 @@
         <td>@Website.Address</td>
         <td>@(culture == "ar" ? $" {ViewBag.Address}" : $"{ViewBag.Address}")</td>
     </tr>
-}   <tr>
+}
+@if (Model.PurposeOfSubscription != null)
+{
+    <tr>
+        <td>@Website.PurposeOfSubscription</td>
+        <td>
+            @if (Model.PurposeOfSubscription == PurposeOfSubscription.Muscle_Building)
+            {@(culture == "ar" ? $"كتله عضليه" : $"Muscle Building")}
+            else if (Model.PurposeOfSubscription == PurposeOfSubscription.Weight_Gain)
+            { @(culture == "ar" ? $"زياده وزن" : $"Weight Gain")}
+            else if (Model.PurposeOfSubscription == PurposeOfSubscription.General_Health)
+            { @(culture == "ar" ? $"صحه عامه" : $"General Health")}
+            else if (Model.PurposeOfSubscription == PurposeOfSubscription.Weight_Loss)
+            { @(culture == "ar" ? $"خسارة وزن" : $"Weight Loss")}
+        </td>
+    </tr>
+}
+<tr>
 </tr>
 
 <tr>

@@ -342,4 +342,13 @@
   <data name="IDNumberFieldIsRequired" xml:space="preserve">
     <value>IDNumberField Is Required</value>
   </data>
+  <data name="PurposeOfSubscription" xml:space="preserve">
+    <value>Purpose Of Subscription</value>
+  </data>
+  <data name="length" xml:space="preserve">
+    <value>length</value>
+  </data>
+  <data name="weight" xml:space="preserve">
+    <value>weight</value>
+  </data>
 </root>
