@@ -26,10 +26,10 @@ namespace G4Fit.Controllers.MVC
             }
             if (CatId.HasValue == true)
             {
-                SubCategories = SubCategories.Where(w => w.CategoryId == CatId).ToList();
+                SubCategories = SubCategories.Where(w => /*w.CategoryId == CatId*/ true).ToList();
             }
             ViewBag.SubCategories = SubCategories;
-            ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
+            //ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
             return View();
         }
 
@@ -58,7 +58,7 @@ namespace G4Fit.Controllers.MVC
                 return RedirectToAction("Index");
             }
             ViewBag.SubCategories = db.SubCategories.Where(x => !x.IsDeleted).ToList();
-            ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
+            //ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
             return View(subCategory);
         }
 
@@ -69,7 +69,7 @@ namespace G4Fit.Controllers.MVC
             SubCategory subCategory = db.SubCategories.Find(id);
             if (subCategory == null)
                 return RedirectToAction("Index");
-            ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
+            //ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
             return View(subCategory);
         }
 
@@ -100,7 +100,7 @@ namespace G4Fit.Controllers.MVC
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
+            //ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
             return View(subCategory);
         }
 
@@ -125,7 +125,23 @@ namespace G4Fit.Controllers.MVC
             }
             return RedirectToAction("Index");
         }
-        
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult View(long? CatId)
+        {
+            if (CatId.HasValue == false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var Category = db.SubCategories.FirstOrDefault(s => s.IsDeleted == false && s.Id == CatId.Value);
+            if (Category == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View(Category);
+        }
+
         [HttpPost]
         public JsonResult SetSortingNumber(long CatId, int Number)
         {

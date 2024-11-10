@@ -8,7 +8,8 @@ namespace G4Fit.Models.ViewModels
 {
     public class HomeVM
     {
-        public List<Category> Categories { get; set; } = new List<Category>();
+        //public List<Category> Categories { get; set; } = new List<Category>();
+        public List<SubCategory> Categories { get; set; } = new List<SubCategory>();
         public List<Slider> Sliders { get; set; } = new List<Slider>();
         public List<Service> LatestServices { get; set; } = new List<Service>();
         public List<Service> MostSoldServices { get; set; } = new List<Service>();

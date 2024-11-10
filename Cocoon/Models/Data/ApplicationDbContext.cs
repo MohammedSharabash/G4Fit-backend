@@ -11,7 +11,7 @@ namespace G4Fit.Models.Data
             : base("G4FitConnection", throwIfV1Schema: false)
         {
         }
-        
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();

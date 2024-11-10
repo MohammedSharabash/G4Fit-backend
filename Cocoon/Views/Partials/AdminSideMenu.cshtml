@@ -35,8 +35,8 @@
                 </a>
 
                 <ul class="treeview-menu @(Request.Url.AbsolutePath.ToLower().Contains("categories") || Request.Url.AbsolutePath.ToLower().Contains("promotionalsections") ? "menuopen" : "")">
-                    <li><a href="@Url.Action("Index", "Categories")"><i class="fa fa-circle-o"></i> الاقسام الرئيسية</a></li>
-                    <li><a href="@Url.Action("Index", "SubCategories")"><i class="fa fa-circle-o"></i> الاقسام الفرعية</a></li>
+                 @*   <li><a href="@Url.Action("Index", "Categories")"><i class="fa fa-circle-o"></i> الاقسام الرئيسية</a></li>*@
+                    <li><a href="@Url.Action("Index", "SubCategories")"><i class="fa fa-circle-o"></i> الاقسام @*الفرعية*@</a></li>
                     @*<li><a href="@Url.Action("Index", "PromotionalSections")"><i class="fa fa-circle-o"></i> الاقسام الاخرى</a></li>*@
                 </ul>
             </li>

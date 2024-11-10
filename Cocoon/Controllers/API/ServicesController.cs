@@ -174,7 +174,7 @@ namespace G4Fit.Controllers.API
             {
             }
 
-            var Services = db.ServiceFavourites.Include("Service").Where(s => s.Service.IsDeleted == false && s.Service.IsHidden == false && s.Service.SubCategory.IsDeleted == false && s.Service.SubCategory.Category.IsDeleted == false && s.IsDeleted == false && (s.UserId == CurrentUserId || s.UnknownUserKeyIdentifier == AnonymousKey)).ToList();
+            var Services = db.ServiceFavourites.Include("Service").Where(s => s.Service.IsDeleted == false && s.Service.IsHidden == false && s.Service.SubCategory.IsDeleted == false/* && s.Service.SubCategory.Category.IsDeleted == false*/ && s.IsDeleted == false && (s.UserId == CurrentUserId || s.UnknownUserKeyIdentifier == AnonymousKey)).ToList();
             List<ServiceDTO> ServiceDTOs = new List<ServiceDTO>();
             foreach (var Service in Services.OrderByDescending(s => s.CreatedOn))
             {
@@ -215,7 +215,7 @@ namespace G4Fit.Controllers.API
               }*/
 
             string CurrentUserId = User.Identity.GetUserId();
-            var category = db.SubCategories.FirstOrDefault(s => s.IsDeleted == false && s.Id == CatId && s.Category.IsDeleted == false);
+            var category = db.SubCategories.FirstOrDefault(s => s.IsDeleted == false && s.Id == CatId /*&& s.Category.IsDeleted == false*/);
             if (category == null)
             {
                 baseResponse.ErrorCode = Errors.CategoryNotFound;

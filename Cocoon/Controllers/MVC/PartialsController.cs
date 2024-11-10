@@ -18,7 +18,8 @@ namespace G4Fit.Controllers.MVC
             {
                 NotificationsCount = db.Notifications.Count(s => s.IsDeleted == false && s.IsSeen == false && s.UserId == CurrentUserId),
                 ShoppingCartCount = UserOrder != null && UserOrder.Items != null ? UserOrder.Items.Count(s => s.IsDeleted == false) : 0,
-                Categories = db.Categories.Where(s => s.IsDeleted == false).ToList(),
+                //Categories = db.Categories.Where(s => s.IsDeleted == false).ToList(),
+                Categories = db.SubCategories.Where(s => s.IsDeleted == false).ToList(),
                 Notifications = db.Notifications.Where(s => s.IsDeleted == false && s.IsSeen == false && s.UserId == CurrentUserId).OrderByDescending(s => s.CreatedOn).Take(7).ToList()
             };
             if (User.Identity.IsAuthenticated == true)

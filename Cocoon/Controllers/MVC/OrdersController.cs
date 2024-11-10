@@ -535,8 +535,8 @@ namespace G4Fit.Controllers.MVC
             {
                 user = db.Users.Find(UserOrder.UserId);
                 var ListOfServicesIDs = UserOrder.Items.Where(w => w.IsDeleted == false).Select(w => w.ServiceId).ToList();
-                ViewBag.SuggestedServices = db.Services.Where(s => s.IsDeleted == false && s.IsHidden == false && (s.Inventory > 0 || s.IsTimeBoundService) && s.SubCategory.IsDeleted == false && s.SubCategory.Category.IsDeleted == false && ListOfServicesIDs.Contains(s.Id) == false).OrderByDescending(q => q.CreatedOn).Take(4).ToList();
-                ViewBag.SimilarServices = db.Services.Where(s => s.IsDeleted == false && s.IsHidden == false && (s.Inventory > 0 || s.IsTimeBoundService) && s.SubCategory.IsDeleted == false && s.SubCategory.Category.IsDeleted == false && ListOfServicesIDs.Contains(s.Id) == false).OrderByDescending(q => q.SellCounter).Take(8).ToList();
+                ViewBag.SuggestedServices = db.Services.Where(s => s.IsDeleted == false && s.IsHidden == false && (s.Inventory > 0 || s.IsTimeBoundService) && s.SubCategory.IsDeleted == false && /*s.SubCategory.Category.IsDeleted == false &&*/ ListOfServicesIDs.Contains(s.Id) == false).OrderByDescending(q => q.CreatedOn).Take(4).ToList();
+                ViewBag.SimilarServices = db.Services.Where(s => s.IsDeleted == false && s.IsHidden == false && (s.Inventory > 0 || s.IsTimeBoundService) && s.SubCategory.IsDeleted == false && /*s.SubCategory.Category.IsDeleted == false &&*/ ListOfServicesIDs.Contains(s.Id) == false).OrderByDescending(q => q.SellCounter).Take(8).ToList();
             }
 
             var city = db.Cities.FirstOrDefault(s => s.IsDeleted == false && s.Id == user.CityId);

@@ -39,7 +39,7 @@ namespace G4Fit.Controllers.MVC
             {
                 return RedirectToAction("Index", "Home");
             }
-            ViewBag.Categories = db.SubCategories.Where(d => d.IsDeleted == false && d.Category.IsDeleted == false).ToList();
+            ViewBag.Categories = db.SubCategories.Where(d => d.IsDeleted == false /*&& d.Category.IsDeleted == false*/).ToList();
             return View();
         }
 
@@ -151,7 +151,7 @@ namespace G4Fit.Controllers.MVC
 
             var ServiceVM = EditServiceVM.ToEditServiceVM(Service);
             ViewBag.Service = Service;
-            ViewBag.Categories = db.SubCategories.Where(d => d.IsDeleted == false && d.Category.IsDeleted == false).ToList();
+            ViewBag.Categories = db.SubCategories.Where(d => d.IsDeleted == false /*&& d.Category.IsDeleted == false*/).ToList();
             return View(ServiceVM);
         }
 
@@ -279,7 +279,7 @@ namespace G4Fit.Controllers.MVC
                 Errors.Add("الخدمه المطلوب غير صحيح");
             }
 
-            var Category = db.SubCategories.FirstOrDefault(d => d.Category.IsDeleted == false && d.IsDeleted == false && d.Id == model.CategoryId);
+            var Category = db.SubCategories.FirstOrDefault(d => /*d.Category.IsDeleted == false &&*/ d.IsDeleted == false && d.Id == model.CategoryId);
             if (Category == null)
             {
                 Errors.Add("القسم الرئيسى المطلوب غير متاح");
@@ -318,7 +318,7 @@ namespace G4Fit.Controllers.MVC
                 }
             }
 
-            var Category = db.SubCategories.FirstOrDefault(d => d.Category.IsDeleted == false && d.IsDeleted == false && d.Id == model.CategoryId);
+            var Category = db.SubCategories.FirstOrDefault(d => /*d.Category.IsDeleted == false &&*/ d.IsDeleted == false && d.Id == model.CategoryId);
             if (Category == null)
             {
                 Errors.Add("القسم المطلوب غير متاح");

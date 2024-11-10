@@ -154,7 +154,7 @@ h2 span {
 
 .main_nav {
     /*background-image: url('../img/logo/bg3.jpeg');*/
-    /*background-color: #000;*/
+    background-color: #292929;
     color: #FFF;
     padding: 10px 0;
     z-index: 999
@@ -169,12 +169,12 @@ h2 span {
             display: inline-block;
             padding: 0 5px;
             cursor: pointer;
-            color: black
+            color: #fff
         }
 
             .main_nav .Contain div ul li a {
-                /*color: #FFF;*/
-                color: black;
+                color: #FFF;
+                /*color: black;*/
                 font-weight: bold;
                 text-decoration: none
             }

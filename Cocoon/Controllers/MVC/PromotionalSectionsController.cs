@@ -118,7 +118,7 @@ namespace G4Fit.Controllers.MVC
             var PromotionalSection = db.PromotionalSections.Find(CatId);
             if (PromotionalSection != null)
             {
-                ViewBag.Services = db.Services.Where(w => w.IsDeleted == false && w.IsHidden == false && w.SubCategory.IsDeleted == false && w.SubCategory.Category.IsDeleted == false && w.PromotionalSections.Any(s => s.IsDeleted == false && s.ServiceId == w.Id) == false).ToList();
+                ViewBag.Services = db.Services.Where(w => w.IsDeleted == false && w.IsHidden == false && w.SubCategory.IsDeleted == false && /*w.SubCategory.Category.IsDeleted == false &&*/ w.PromotionalSections.Any(s => s.IsDeleted == false && s.ServiceId == w.Id) == false).ToList();
                 return View(PromotionalSection);
             }
             return RedirectToAction("Index");

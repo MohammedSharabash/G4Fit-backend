@@ -657,8 +657,9 @@ namespace G4Fit.Controllers.API
 
             if (UserOrder.Items != null && UserOrder.Items.Count(s => s.IsDeleted == false) > 0)
             {
-                long CategoryId = UserOrder.Items.FirstOrDefault(w => w.IsDeleted == false).Service.SubCategory.CategoryId;
-                var SimilarServices = db.Services.Where(s => s.IsDeleted == false && s.IsHidden == false && (s.Inventory > 0 || s.IsTimeBoundService) && s.SubCategory.CategoryId == CategoryId).OrderByDescending(s => s.SellCounter).Take(6).ToList();
+                //long CategoryId = UserOrder.Items.FirstOrDefault(w => w.IsDeleted == false).Service.SubCategory.CategoryId;
+                long CategoryId = UserOrder.Items.FirstOrDefault(w => w.IsDeleted == false).Service.SubCategoryId;
+                var SimilarServices = db.Services.Where(s => s.IsDeleted == false && s.IsHidden == false && (s.Inventory > 0 || s.IsTimeBoundService) && s.SubCategoryId == CategoryId).OrderByDescending(s => s.SellCounter).Take(6).ToList();
                 foreach (var Service in SimilarServices)
                 {
                     ServiceDTO ServiceDTO = new ServiceDTO()
@@ -707,7 +708,7 @@ namespace G4Fit.Controllers.API
                 {
                     foreach (var item in UserOrder.Items.Where(d => d.IsDeleted == false))
                     {
-                        if (item.Service.IsDeleted == true || item.Service.IsHidden == true || item.Service.SubCategory.IsDeleted == true || item.Service.SubCategory.Category.IsDeleted == true)
+                        if (item.Service.IsDeleted == true || item.Service.IsHidden == true || item.Service.SubCategory.IsDeleted == true /*|| item.Service.SubCategory.Category.IsDeleted == true*/)
                         {
                             baseResponse.ErrorCode = Errors.ServiceNotFound;
                             baseResponse.Data = new { NameAr = item.Service.NameAr, NameEn = item.Service.NameEn, item.ServiceId };
@@ -1098,7 +1099,7 @@ namespace G4Fit.Controllers.API
         {
             foreach (var item in order.Items.Where(d => d.IsDeleted == false))
             {
-                if (item.Service.IsDeleted == true || item.Service.IsHidden == true || item.Service.SubCategory.IsDeleted == true || item.Service.SubCategory.Category.IsDeleted == true)
+                if (item.Service.IsDeleted == true || item.Service.IsHidden == true || item.Service.SubCategory.IsDeleted == true /*|| item.Service.SubCategory.Category.IsDeleted == true*/)
                     return Errors.ServiceNotFound;
 
                 if (item.SizeId.HasValue == true)
@@ -1132,7 +1133,7 @@ namespace G4Fit.Controllers.API
                     return Errors.UserNotAuthorized;
             }
 
-            var Service = db.Services.FirstOrDefault(d => d.Id == model.ServiceId && d.IsDeleted == false && d.Inventory > 0 && d.IsHidden == false && d.SubCategory.IsDeleted == false && d.SubCategory.Category.IsDeleted == false);
+            var Service = db.Services.FirstOrDefault(d => d.Id == model.ServiceId && d.IsDeleted == false && d.Inventory > 0 && d.IsHidden == false && d.SubCategory.IsDeleted == false/* && d.SubCategory.Category.IsDeleted == false*/);
             if (Service == null)
                 return Errors.ServiceNotFound;
 
@@ -1165,7 +1166,7 @@ namespace G4Fit.Controllers.API
                     return Errors.UserNotAuthorized;
             }
 
-            var Service = db.Services.FirstOrDefault(d => d.Id == model.ServiceId && d.IsDeleted == false && d.ServiceDays > 0 && d.IsHidden == false && d.SubCategory.IsDeleted == false && d.SubCategory.Category.IsDeleted == false);
+            var Service = db.Services.FirstOrDefault(d => d.Id == model.ServiceId && d.IsDeleted == false && d.ServiceDays > 0 && d.IsHidden == false && d.SubCategory.IsDeleted == false /*&& d.SubCategory.Category.IsDeleted == false*/);
             if (Service == null)
                 return Errors.ServiceNotFound;
 

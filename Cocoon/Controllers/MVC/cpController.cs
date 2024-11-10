@@ -40,7 +40,8 @@ namespace G4Fit.Controllers.MVC
             ViewBag.UsersCount = db.Users.Count();
             ViewBag.ItemsCount = db.Services.Count();
             ViewBag.NewUsersCount = db.Users.Count(i => i.CreatedOn >= startOfMonth && i.CreatedOn <= endOfMonth);
-            ViewBag.CategoriesCount = db.Categories.Count(i => !i.IsDeleted);
+            //ViewBag.CategoriesCount = db.Categories.Count(i => !i.IsDeleted);
+            ViewBag.CategoriesCount = db.SubCategories.Count(i => !i.IsDeleted);
             ViewBag.SubCategoriesCount = db.SubCategories.Count(i => !i.IsDeleted);
 
             return View();

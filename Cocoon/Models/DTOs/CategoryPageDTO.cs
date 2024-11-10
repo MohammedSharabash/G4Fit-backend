@@ -10,6 +10,6 @@ namespace G4Fit.Models.DTOs
         public long CategoryId { get; set; }
         public string Name { get; set; }
         public string Image { get; set; }
-        public List<SubCategoryDTO> SubCategories { get; set; } = new List<SubCategoryDTO>();
+        //public List<SubCategoryDTO> SubCategories { get; set; } = new List<SubCategoryDTO>();
     }
 }

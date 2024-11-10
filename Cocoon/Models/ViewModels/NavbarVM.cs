@@ -13,7 +13,8 @@ namespace G4Fit.Models.ViewModels
         public int ShoppingCartCount { get; set; }
         public string Username { get; set; }
         public string UserPhoneNumber { get; set; }
-        public List<Category> Categories { get; set; } = new List<Category>();
+        //public List<Category> Categories { get; set; } = new List<Category>();
+        public List<SubCategory> Categories { get; set; } = new List<SubCategory>();
         public List<Notification> Notifications { get; set; } = new List<Notification>();
     }
 }

@@ -819,7 +819,7 @@ namespace G4Fit.Controllers.API
 
         private void AssignAnonymousKeyToFavouriteServices(string Key, ApplicationUser user)
         {
-            var Services = db.ServiceFavourites.Where(s => s.IsDeleted == false && s.Service.IsDeleted == false && s.Service.SubCategory.IsDeleted == false && s.Service.SubCategory.Category.IsDeleted == false && s.Service.IsHidden == false && s.UserId == null && s.UnknownUserKeyIdentifier == Key).ToList();
+            var Services = db.ServiceFavourites.Where(s => s.IsDeleted == false && s.Service.IsDeleted == false && s.Service.SubCategory.IsDeleted == false && /*s.Service.SubCategory.Category.IsDeleted == false &&*/ s.Service.IsHidden == false && s.UserId == null && s.UnknownUserKeyIdentifier == Key).ToList();
             if (Services != null)
             {
                 foreach (var Service in Services)

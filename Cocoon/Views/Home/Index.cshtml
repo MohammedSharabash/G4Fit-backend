@@ -191,11 +191,11 @@
                                         CurrentRow += 1;
                                         if (CurrentRow % 7 != 0)
                                         {
-                                            <div class="col-4" onclick="window.location.href='/Categories/View?CatId=@cat.Id'">
+                                            <div class="col-4" onclick="window.location.href='/SubCategories/View?CatId=@cat.Id'">
                                                 <div class="Cat">
                                                     <img src="@(cat.ImageUrl != null ? "/Content/Images/Categories/" + cat.ImageUrl : "/Content/assets/imgs/doesnotexist.png")">
                                                     <div class="info" style="display:flex">
-                                                        <h3 class="h5"><a href="@Url.Action("View", "Categories", new { CatId = cat.Id })">@(culture == "ar" ? cat.NameAr : cat.NameEn)</a></h3>
+                                                        <h3 class="h5"><a href="@Url.Action("View", "SubCategories", new { CatId = cat.Id })">@(culture == "ar" ? cat.NameAr : cat.NameEn)</a></h3>
                                                     </div>
                                                 </div>
                                             </div>}
@@ -223,11 +223,11 @@
                     <div class="row">
                         @foreach (var cat in Model.Categories)
                         {
-                            <div class="col-sm-12 col-md-6 col-lg-3" onclick="window.location.href='/Categories/View?CatId=@cat.Id'">
+                            <div class="col-sm-12 col-md-6 col-lg-3" onclick="window.location.href='/SubCategories/View?CatId=@cat.Id'">
                                 <div class="Cat">
                                     <img src="@(cat.ImageUrl != null ? "/Content/Images/Categories/" + cat.ImageUrl : "/Content/assets/imgs/doesnotexist.png")">
                                     <div class="info" style="display:flex">
-                                        <h3 class="h5"><a href="@Url.Action("View", "Categories", new { CatId = cat.Id })">@(culture == "ar" ? cat.NameAr : cat.NameEn)</a></h3>
+                                        <h3 class="h5"><a href="@Url.Action("View", "SubCategories", new { CatId = cat.Id })">@(culture == "ar" ? cat.NameAr : cat.NameEn)</a></h3>
                                     </div>
                                 </div>
                             </div>
@@ -405,13 +405,12 @@
 <!-- Start Sports Section-->
 @if (Model.Categories != null && Model.Categories.Count() > 0)
 {
-    foreach (var category in Model.Categories)
+    foreach (var category in Model.Categories.Where(s => s.IsDeleted == false && s.Services.Count(w => w.IsDeleted == false && w.Inventory > 0 && w.IsHidden == false) > 0))
     {
         List<G4Fit.Models.Domains.Service> Services = new List<G4Fit.Models.Domains.Service>();
-        foreach (var subCategory in category.SubCategories.Where(s => s.IsDeleted == false && s.Services.Count(w => w.IsDeleted == false && w.Inventory > 0 && w.IsHidden == false) > 0))
-        {
-            Services.AddRange(subCategory.Services.Where(s => s.IsDeleted == false && (s.Inventory > 0 || s.IsTimeBoundService) && s.IsHidden == false).Take(4));
-        }
+
+        Services.AddRange(category.Services.Where(s => s.IsDeleted == false && (s.Inventory > 0 || s.IsTimeBoundService) && s.IsHidden == false).Take(4));
+
         if (Services.Any() == true)
         {
             <section class="Sports" id="Sport">

@@ -408,6 +408,10 @@
     <Compile Include="Migrations\202410271650141_PurposeOfSubscription2.Designer.cs">
       <DependentUpon>202410271650141_PurposeOfSubscription2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202411102003479_Categories.cs" />
+    <Compile Include="Migrations\202411102003479_Categories.Designer.cs">
+      <DependentUpon>202411102003479_Categories.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Data\ApplicationDbContext.cs" />
     <Compile Include="Models\Domains\ApplicationUser.cs" />
@@ -1860,6 +1864,7 @@
     <Content Include="Views\Orders\Failed.cshtml" />
     <Content Include="Views\Services\CreateServices.cshtml" />
     <Content Include="Views\Account\Profile.cshtml" />
+    <Content Include="Views\SubCategories\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1899,6 +1904,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202410271650141_PurposeOfSubscription2.resx">
       <DependentUpon>202410271650141_PurposeOfSubscription2.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202411102003479_Categories.resx">
+      <DependentUpon>202411102003479_Categories.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Website.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

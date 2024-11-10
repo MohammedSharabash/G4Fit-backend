@@ -36,7 +36,8 @@ namespace G4Fit.Controllers.API
         [Route("main")]
         public IHttpActionResult GetMainCategories(string lang = "en")
         {
-            var Categories = db.Categories.Where(s => s.IsDeleted == false).OrderBy(s => s.SortingNumber).ToList();
+            //var Categories = db.Categories.Where(s => s.IsDeleted == false).OrderBy(s => s.SortingNumber).ToList();
+            var Categories = db.SubCategories.Where(s => s.IsDeleted == false).OrderBy(s => s.SortingNumber).ToList();
             List<CategoryDTO> categoryDTOs = new List<CategoryDTO>();
             foreach (var category in Categories)
             {
@@ -56,7 +57,8 @@ namespace G4Fit.Controllers.API
         [Route("mainwithslider")]
         public IHttpActionResult GetMainCategoriesWithSlider(string lang = "en")
         {
-            var Categories = db.Categories.Where(s => s.IsDeleted == false).OrderBy(s => s.SortingNumber).ToList();
+            //var Categories = db.Categories.Where(s => s.IsDeleted == false).OrderBy(s => s.SortingNumber).ToList();
+            var Categories = db.SubCategories.Where(s => s.IsDeleted == false).OrderBy(s => s.SortingNumber).ToList();
             List<CategoryDTO> categoryDTOs = new List<CategoryDTO>();
             foreach (var category in Categories)
             {
@@ -88,7 +90,8 @@ namespace G4Fit.Controllers.API
         [Route("mainPage")]
         public IHttpActionResult GetAllMainCategoriesPage(string lang = "en")
         {
-            var Categories = db.Categories.Where(x => !x.IsDeleted).ToList();
+            //var Categories = db.Categories.Where(x => !x.IsDeleted).ToList();
+            var Categories = db.SubCategories.Where(x => !x.IsDeleted).ToList();
             List<CategoryPageDTO> categoryDTOs = new List<CategoryPageDTO>();
 
             foreach (var category in Categories)
@@ -100,19 +103,19 @@ namespace G4Fit.Controllers.API
                     Image = !string.IsNullOrEmpty(category.ImageUrl) ? "/Content/Images/Categories/" + category.ImageUrl : null
                 };
 
-                if (category.SubCategories != null && category.SubCategories.Count(d => d.IsDeleted == false) > 0)
-                {
-                    foreach (var subcategory in category.SubCategories.Where(d => d.IsDeleted == false))
-                    {
-                        categoryDTO.SubCategories.Add(new SubCategoryDTO()
-                        {
-                            CategoryId = category.Id,
-                            Image = !string.IsNullOrEmpty(subcategory.ImageUrl) ? MediaControl.GetPath(FilePath.Category) + subcategory.ImageUrl : null,
-                            Name = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? subcategory.NameAr : subcategory.NameEn,
-                            SubCategoryId = subcategory.Id
-                        });
-                    }
-                }
+                //if (category.SubCategories != null && category.SubCategories.Count(d => d.IsDeleted == false) > 0)
+                //{
+                //    foreach (var subcategory in category.SubCategories.Where(d => d.IsDeleted == false))
+                //    {
+                //        categoryDTO.SubCategories.Add(new SubCategoryDTO()
+                //        {
+                //            CategoryId = category.Id,
+                //            Image = !string.IsNullOrEmpty(subcategory.ImageUrl) ? MediaControl.GetPath(FilePath.Category) + subcategory.ImageUrl : null,
+                //            Name = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? subcategory.NameAr : subcategory.NameEn,
+                //            SubCategoryId = subcategory.Id
+                //        });
+                //    }
+                //}
 
                 categoryDTOs.Add(categoryDTO);
             }
@@ -121,35 +124,35 @@ namespace G4Fit.Controllers.API
             return Ok(baseResponse);
         }
 
-        [HttpGet]
-        [Route("subCats")]
-        public IHttpActionResult GetSubCategoriesByMainCategory(long CatId, string lang = "en")
-        {
-            var MainCategory = db.Categories.FirstOrDefault(w => w.IsDeleted == false && w.Id == CatId);
-            if (MainCategory == null)
-            {
-                baseResponse.ErrorCode = Errors.CategoryNotFound;
-                return Content(HttpStatusCode.NotFound, baseResponse);
-            }
+        //[HttpGet]
+        //[Route("subCats")]
+        //public IHttpActionResult GetSubCategoriesByMainCategory(long CatId, string lang = "en")
+        //{
+        //    var MainCategory = db.Categories.FirstOrDefault(w => w.IsDeleted == false && w.Id == CatId);
+        //    if (MainCategory == null)
+        //    {
+        //        baseResponse.ErrorCode = Errors.CategoryNotFound;
+        //        return Content(HttpStatusCode.NotFound, baseResponse);
+        //    }
 
-            var SubCategories = db.SubCategories.Where(s => s.Category.IsDeleted == false && s.IsDeleted == false && s.CategoryId == CatId).OrderBy(s => s.SortingNumber).ToList();
-            List<CategoryDTO> categoryDTOs = new List<CategoryDTO>();
-            foreach (var category in SubCategories)
-            {
-                CategoryDTO categoryDTO = new CategoryDTO()
-                {
-                    Id = category.Id,
-                    Name = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? category.NameAr : category.NameEn,
-                    ImageUrl = category.ImageUrl != null ? MediaControl.GetPath(FilePath.Category) + category.ImageUrl : null
-                };
-                categoryDTOs.Add(categoryDTO);
-            }
-            baseResponse.Data = new
-            {
-                MainCategory = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? MainCategory.NameAr : MainCategory.NameEn,
-                SubCategories = categoryDTOs
-            };
-            return Ok(baseResponse);
-        }
+        //    var SubCategories = db.SubCategories.Where(s => s.Category.IsDeleted == false && s.IsDeleted == false && s.CategoryId == CatId).OrderBy(s => s.SortingNumber).ToList();
+        //    List<CategoryDTO> categoryDTOs = new List<CategoryDTO>();
+        //    foreach (var category in SubCategories)
+        //    {
+        //        CategoryDTO categoryDTO = new CategoryDTO()
+        //        {
+        //            Id = category.Id,
+        //            Name = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? category.NameAr : category.NameEn,
+        //            ImageUrl = category.ImageUrl != null ? MediaControl.GetPath(FilePath.Category) + category.ImageUrl : null
+        //        };
+        //        categoryDTOs.Add(categoryDTO);
+        //    }
+        //    baseResponse.Data = new
+        //    {
+        //        MainCategory = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? MainCategory.NameAr : MainCategory.NameEn,
+        //        SubCategories = categoryDTOs
+        //    };
+        //    return Ok(baseResponse);
+        //}
     }
 }

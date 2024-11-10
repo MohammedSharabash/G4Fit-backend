@@ -31,7 +31,8 @@
             <div class="Logo text-right hvr-grow">
                 <!--i(class="fab fa-optin-monster fa-3x")-->
                 <a href="@Url.Action("Index", "Home")">
-                    <img src="~/Content/web/img/logo-removebg.png" width="90" height="60">
+                    @*<img src="~/Content/web/img/logo-removebg.png" width="90" height="60">*@
+                    <img src="~/Content/web/img/logo/g4fitLogo.jpg" width="90" height="60" />
                 </a>
             </div>
             <div class="inner_links text-center wow bounceIn">
@@ -136,7 +137,7 @@
     <ul class="list-unstyled">
         @foreach (var cat in Model.Categories)
         {
-            <li><a href="@Url.Action("View", "Categories", new { CatId = cat.Id })" class="text-white">@(culture=="ar"? cat.NameAr: cat.NameEn)</a></li>
+            <li><a href="@Url.Action("View", "SubCategories", new { CatId = cat.Id })" class="text-white">@(culture=="ar"? cat.NameAr: cat.NameEn)</a></li>
         }
         <li><i class="fas fa-arrow-circle-up nav_toggelerhide close-icon" id="closeSidebar"></i></li>
     </ul>

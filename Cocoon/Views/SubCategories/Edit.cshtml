@@ -1,7 +1,7 @@
 ﻿@model G4Fit.Models.Domains.SubCategory
 @{
     ViewBag.Title = "تعديل " + Model.NameAr;
-    var Categories = ViewBag.Categories as List<G4Fit.Models.Domains.Category>;
+    //var Categories = ViewBag.Categories as List<G4Fit.Models.Domains.Category>;
     Layout = "~/Views/Dashboard/Layout.cshtml";
 }
 <div class="panel panel-primary">
@@ -30,6 +30,7 @@
                             @Html.HiddenFor(d => d.ModifiedOn)
                             @Html.HiddenFor(d => d.RestoredOn)
                             @Html.HiddenFor(d => d.SortingNumber)
+                            @Html.HiddenFor(d => d.CategoryId)
 
                             <div class="row" style="margin:10px;">
                                 <div class="col-lg-6">
@@ -71,7 +72,7 @@
                                 </div>
                             }
                                 <div class="row" style="margin:10px">
-                                    <div class="col-lg-6">
+                                    @*<div class="col-lg-6">
                                         <div class="form-group">
                                             <label for="CategoryId" class="col-sm-5 control-label required">القسم الرئيسى:</label>
                                             <div class="col-sm-7">
@@ -83,7 +84,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>*@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label for="Image" class="col-sm-5 control-label">تعديل صوره القسم:</label>
