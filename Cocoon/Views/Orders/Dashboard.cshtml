@@ -56,9 +56,13 @@
                                 {
                                     <span>الدفع كاش</span><br />
                                 }
-                                else
+                                else if (order.PaymentMethod == G4Fit.Models.Enums.PaymentMethod.Online)
                                 {
-                                    <span>الدفع اون لاين</span><br />
+                                    <span>الدفع اون لاين - يور واي</span><br />
+                                }
+                                else if (order.PaymentMethod == G4Fit.Models.Enums.PaymentMethod.Tabby)
+                                {
+                                    <span>الدفع اون لاين - تابي</span><br />
                                 }
                                 @if (order.IsPaid == true)
                                 {
@@ -88,6 +92,10 @@
                                         <a class="btn btn-@(order.IsPaid == true ? "danger" : "success")" style="margin-bottom:10px" href="@Url.Action("TogglePaid", new { OrderId = order.Id })">@(order.IsPaid == false ? "تعيين تم الدفع" : "تعيين لم يتم الدفع")</a>
                                     }
                                     @if (order.PaymentMethod == G4Fit.Models.Enums.PaymentMethod.Online)
+                                    {
+                                        <a class="btn btn-primary" style="margin-bottom:10px" href="@Url.Action("TransactionHistory", new { OrderId = order.Id })">سجل عمليات الدفع</a>
+                                    }
+                                    @if (order.PaymentMethod == G4Fit.Models.Enums.PaymentMethod.Tabby)
                                     {
                                         <a class="btn btn-primary" style="margin-bottom:10px" href="@Url.Action("TransactionHistory", new { OrderId = order.Id })">سجل عمليات الدفع</a>
                                     }

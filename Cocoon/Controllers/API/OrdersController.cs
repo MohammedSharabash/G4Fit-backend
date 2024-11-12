@@ -6,6 +6,7 @@ using G4Fit.Models.Enums;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,12 @@ using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using static G4Fit.Controllers.MVC.OrdersController;
 
 namespace G4Fit.Controllers.API
 {
@@ -43,7 +47,8 @@ namespace G4Fit.Controllers.API
             string AnonymousKey = string.Empty;
             try
             {
-                AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
+                if (Headers.AllKeys.Contains("AnonymousKey") && Headers.GetValues("AnonymousKey").Any())
+                    AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
             }
             catch (Exception)
             {
@@ -68,7 +73,7 @@ namespace G4Fit.Controllers.API
                 return Content(HttpStatusCode.BadRequest, baseResponse);
             }
 
-            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false && string.IsNullOrEmpty(AnonymousKey))
+            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false /*&& string.IsNullOrEmpty(AnonymousKey)*/)
             {
                 baseResponse.ErrorCode = Errors.UserIdentityIsRequired;
                 return Content(HttpStatusCode.BadRequest, baseResponse);
@@ -83,7 +88,7 @@ namespace G4Fit.Controllers.API
             }
             else
             {
-                UserOrder = db.Orders.FirstOrDefault(x => x.UnknownUserKeyIdentifier == AnonymousKey && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
+                UserOrder = db.Orders.FirstOrDefault(x => /*x.UnknownUserKeyIdentifier == AnonymousKey &&*/ x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
             }
             user = UserManager.FindById(CurrentUserId);
 
@@ -198,7 +203,8 @@ namespace G4Fit.Controllers.API
             string AnonymousKey = string.Empty;
             try
             {
-                AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
+                if (Headers.AllKeys.Contains("AnonymousKey") && Headers.GetValues("AnonymousKey").Any())
+                    AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
             }
             catch (Exception)
             {
@@ -223,7 +229,7 @@ namespace G4Fit.Controllers.API
                 return Content(HttpStatusCode.BadRequest, baseResponse);
             }
 
-            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false && string.IsNullOrEmpty(AnonymousKey))
+            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false /*&& string.IsNullOrEmpty(AnonymousKey)*/)
             {
                 baseResponse.ErrorCode = Errors.UserIdentityIsRequired;
                 return Content(HttpStatusCode.BadRequest, baseResponse);
@@ -238,7 +244,7 @@ namespace G4Fit.Controllers.API
             }
             else
             {
-                UserOrder = db.Orders.FirstOrDefault(x => x.UnknownUserKeyIdentifier == AnonymousKey && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
+                UserOrder = db.Orders.FirstOrDefault(x => /*x.UnknownUserKeyIdentifier == AnonymousKey &&*/ x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
             }
             user = UserManager.FindById(CurrentUserId);
 
@@ -335,7 +341,8 @@ namespace G4Fit.Controllers.API
             string AnonymousKey = string.Empty;
             try
             {
-                AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
+                if (Headers.AllKeys.Contains("AnonymousKey") && Headers.GetValues("AnonymousKey").Any())
+                    AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
             }
             catch (Exception)
             {
@@ -353,7 +360,7 @@ namespace G4Fit.Controllers.API
                 }
             }
 
-            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false && string.IsNullOrEmpty(AnonymousKey))
+            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false/* && string.IsNullOrEmpty(AnonymousKey)*/)
             {
                 return Ok(baseResponse);
             }
@@ -365,7 +372,7 @@ namespace G4Fit.Controllers.API
             }
             else
             {
-                UserOrder = db.Orders.FirstOrDefault(x => x.UnknownUserKeyIdentifier == AnonymousKey && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
+                UserOrder = db.Orders.FirstOrDefault(x =>/* x.UnknownUserKeyIdentifier == AnonymousKey &&*/ x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
             }
 
             if (UserOrder == null)
@@ -430,18 +437,19 @@ namespace G4Fit.Controllers.API
             string AnonymousKey = string.Empty;
             try
             {
-                AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
+                if (Headers.AllKeys.Contains("AnonymousKey") && Headers.GetValues("AnonymousKey").Any())
+                    AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
             }
             catch (Exception)
             {
             }
 
-            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false && string.IsNullOrEmpty(AnonymousKey))
+            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false /*&& string.IsNullOrEmpty(AnonymousKey)*/)
             {
                 baseResponse.ErrorCode = Errors.OrderNotFound;
             }
 
-            var BasketItem = db.OrderItems.FirstOrDefault(x => x.Id == BasketItemId && !x.IsDeleted && !x.Order.IsDeleted && (x.Order.UserId == CurrentUserId || x.Order.UnknownUserKeyIdentifier == AnonymousKey));
+            var BasketItem = db.OrderItems.FirstOrDefault(x => x.Id == BasketItemId && !x.IsDeleted && !x.Order.IsDeleted && (x.Order.UserId == CurrentUserId /*|| x.Order.UnknownUserKeyIdentifier == AnonymousKey*/));
             if (BasketItem == null)
             {
                 baseResponse.ErrorCode = Errors.BasketItemNotFound;
@@ -477,18 +485,19 @@ namespace G4Fit.Controllers.API
             string AnonymousKey = string.Empty;
             try
             {
-                AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
+                if (Headers.AllKeys.Contains("AnonymousKey") && Headers.GetValues("AnonymousKey").Any())
+                    AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
             }
             catch (Exception)
             {
             }
 
-            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false && string.IsNullOrEmpty(AnonymousKey))
+            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false /*&& string.IsNullOrEmpty(AnonymousKey)*/)
             {
                 baseResponse.ErrorCode = Errors.OrderNotFound;
             }
 
-            var BasketItem = db.OrderItems.FirstOrDefault(x => x.Id == BasketItemId && !x.IsDeleted && !x.Order.IsDeleted && (x.Order.UserId == CurrentUserId || x.Order.UnknownUserKeyIdentifier == AnonymousKey));
+            var BasketItem = db.OrderItems.FirstOrDefault(x => x.Id == BasketItemId && !x.IsDeleted && !x.Order.IsDeleted && (x.Order.UserId == CurrentUserId /*|| x.Order.UnknownUserKeyIdentifier == AnonymousKey*/));
             if (BasketItem == null)
             {
                 baseResponse.ErrorCode = Errors.BasketItemNotFound;
@@ -532,18 +541,19 @@ namespace G4Fit.Controllers.API
             string AnonymousKey = string.Empty;
             try
             {
-                AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
+                if (Headers.AllKeys.Contains("AnonymousKey") && Headers.GetValues("AnonymousKey").Any())
+                    AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
             }
             catch (Exception)
             {
             }
 
-            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false && string.IsNullOrEmpty(AnonymousKey))
+            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false /*&& string.IsNullOrEmpty(AnonymousKey)*/)
             {
                 baseResponse.ErrorCode = Errors.OrderNotFound;
             }
 
-            var BasketItem = db.OrderItems.FirstOrDefault(x => x.Id == BasketItemId && !x.IsDeleted && !x.Order.IsDeleted && (x.Order.UserId == CurrentUserId || x.Order.UnknownUserKeyIdentifier == AnonymousKey));
+            var BasketItem = db.OrderItems.FirstOrDefault(x => x.Id == BasketItemId && !x.IsDeleted && !x.Order.IsDeleted && (x.Order.UserId == CurrentUserId /*|| x.Order.UnknownUserKeyIdentifier == AnonymousKey*/));
             if (BasketItem == null)
             {
                 baseResponse.ErrorCode = Errors.BasketItemNotFound;
@@ -577,13 +587,14 @@ namespace G4Fit.Controllers.API
             string AnonymousKey = string.Empty;
             try
             {
-                AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
+                if (Headers.AllKeys.Contains("AnonymousKey") && Headers.GetValues("AnonymousKey").Any())
+                    AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
             }
             catch (Exception)
             {
             }
 
-            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false && string.IsNullOrEmpty(AnonymousKey))
+            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false /*&& string.IsNullOrEmpty(AnonymousKey)*/)
             {
                 baseResponse.ErrorCode = Errors.OrderNotFound;
                 return Content(HttpStatusCode.NotFound, baseResponse);
@@ -612,7 +623,7 @@ namespace G4Fit.Controllers.API
                 return Content(HttpStatusCode.BadRequest, baseResponse);
             }
 
-            var UserOrder = db.Orders.FirstOrDefault(x => ((x.UserId == CurrentUserId && x.UserId != null) || x.UnknownUserKeyIdentifier == AnonymousKey) && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
+            var UserOrder = db.Orders.FirstOrDefault(x => ((x.UserId == CurrentUserId && x.UserId != null) /*|| x.UnknownUserKeyIdentifier == AnonymousKey*/) && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
 
             if (UserOrder == null)
             {
@@ -657,7 +668,7 @@ namespace G4Fit.Controllers.API
 
             if (UserOrder.Items != null && UserOrder.Items.Count(s => s.IsDeleted == false) > 0)
             {
-                //long CategoryId = UserOrder.Items.FirstOrDefault(w => w.IsDeleted == false).Service.SubCategory.CategoryId;
+                //long CategoryId = UserOrder.Items.FirstOrDefault(w => w.IsDeleted == false).Service.SubCategory.SubCategoryId;
                 long CategoryId = UserOrder.Items.FirstOrDefault(w => w.IsDeleted == false).Service.SubCategoryId;
                 var SimilarServices = db.Services.Where(s => s.IsDeleted == false && s.IsHidden == false && (s.Inventory > 0 || s.IsTimeBoundService) && s.SubCategoryId == CategoryId).OrderByDescending(s => s.SellCounter).Take(6).ToList();
                 foreach (var Service in SimilarServices)
@@ -725,7 +736,40 @@ namespace G4Fit.Controllers.API
                 try
                 {
                     UserOrder.PaymentMethod = model.PaymentMethod;
-                    if (model.PaymentMethod == PaymentMethod.Cash)
+                    if (model.PaymentMethod == PaymentMethod.UrWay)
+                    {
+                        return GetPaymentGatewayUrl();
+                    }
+                    else if (model.PaymentMethod == PaymentMethod.Tabby)
+                    {
+
+                        var jsonResponse = await GetTabbyCheckoutUrl(UserOrder);
+                        var responseObject = JObject.Parse(jsonResponse);
+
+                        // Extract the URL from the response
+                        var installments = (JArray)responseObject["configuration"]["available_products"]["installments"];
+                        var url = (string)installments[0]["web_url"]; // Assuming there's only one installment
+                        if (url != null)
+                        {
+                            //save Payment Id 
+                            var reference_id = (string)responseObject["id"];
+                            UserOrder.Tabby_reference_id = reference_id;
+
+                            //save reference_id
+                            var paymentId = (string)responseObject["payment"]["id"];
+                            UserOrder.Tabby_PaymentId = paymentId;
+                            db.SaveChanges();
+                            baseResponse.Data = url;
+                            return Ok(baseResponse);
+                        }
+                        else
+                        {
+                            baseResponse.ErrorCode = Errors.SomethingIsWrong;
+                            return Content(HttpStatusCode.BadRequest, baseResponse);
+                        }
+                    }
+
+                    else if (model.PaymentMethod == PaymentMethod.Cash)
                     {
                         UserOrder.CreatedOn = DateTime.Now.ToUniversalTime();
                         UserOrder.OrderStatus = OrderStatus.Placed;
@@ -741,29 +785,29 @@ namespace G4Fit.Controllers.API
                         {
                             PromoCodeActions.ExecutePromo(UserOrder, UserOrder.Promo);
                         }
-                    }
 
-                    CRUD<Order>.Update(UserOrder);
-                    db.SaveChanges();
-                    if (UserOrder.WalletDiscount > 0)
-                    {
-
-                        //خصم المبلغ من رصيد المحفظة
-                        var user = db.Users.Find(UserOrder.UserId);
-                        user.Wallet -= UserOrder.WalletDiscount;
-                        UserWallet userWallet = new UserWallet()
-                        {
-                            TransactionAmount = UserOrder.WalletDiscount,
-                            TransactionType = TransactionType.CheckingoutOrder,
-                            UserId = user.Id,
-                            OrderCode = UserOrder.Code,
-                            OrderId = UserOrder.Id
-                        };
-
-                        db.UserWallets.Add(userWallet);
-
+                        CRUD<Order>.Update(UserOrder);
                         db.SaveChanges();
-                        //
+                        if (UserOrder.WalletDiscount > 0)
+                        {
+
+                            //خصم المبلغ من رصيد المحفظة
+                            var user = db.Users.Find(UserOrder.UserId);
+                            user.Wallet -= UserOrder.WalletDiscount;
+                            UserWallet userWallet = new UserWallet()
+                            {
+                                TransactionAmount = UserOrder.WalletDiscount,
+                                TransactionType = TransactionType.CheckingoutOrder,
+                                UserId = user.Id,
+                                OrderCode = UserOrder.Code,
+                                OrderId = UserOrder.Id
+                            };
+
+                            db.UserWallets.Add(userWallet);
+
+                            db.SaveChanges();
+                            //
+                        }
                     }
                     Transaction.Commit();
                     await Notifications.SendToAllSpecificAndroidUserDevices(UserOrder.UserId, "تم استقبال طلبكم", "تم ارسال طلبكم بنجاح الى التطبيق", NotificationType.CurrentOrders, UserOrder.Id, true);
@@ -778,6 +822,166 @@ namespace G4Fit.Controllers.API
                 }
             }
 
+        }
+        private async Task<string> GetTabbyCheckoutUrl(Order order)
+        {
+            try
+            {
+                using (var client = new HttpClient()) // Create an instance of HttpClient
+                {
+                    var domain = Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+                    var publicKey = "pk_test_0b12d816-6187-4ce2-b5bb-a4bd1e29dfb6"; // Replace with your public key
+                    var secret_key = "sk_test_e65f1167-311a-496c-94de-acb067614827"; // Replace with your Secret key
+                    var merchant_code = "g4fitonline";
+                    var user = order.User;
+                    //var tax = (order.SubTotal * order.StoreOrdersTaxs) / 100;
+                    var Address = user.Address;
+                    //var Address = db.UserAddresses.FirstOrDefault(s => s.Id == order.UserAddressId);
+                    List<TabbyOrderItem> orderItems = new List<TabbyOrderItem>();
+
+                    foreach (var item in order.Items)
+                    {
+                        var Service = db.Services.FirstOrDefault(w => w.Id == item.ServiceId);
+                        var image = db.ServiceImages.FirstOrDefault(w => w.ServiceId == item.ServiceId);
+                        var category = db.SubCategories.FirstOrDefault(w => w.Id == Service.SubCategoryId);
+                        var size = db.ServiceSizes.FirstOrDefault(w => w.Id == item.SizeId);
+
+                        // Create an anonymous object for each item
+                        var orderItem = new TabbyOrderItem
+                        {
+                            title = Service.NameEn,
+                            description = Service.DescriptionEn,
+                            quantity = item.Quantity,
+                            unit_price = item.Price.ToString(),
+                            discount_amount = "0.00",
+                            reference_id = item.ServiceId.ToString(),
+                            image_url = domain + MediaControl.GetPath(FilePath.Service) + image.ImageUrl,
+                            Service_url = "",
+                            category = category.NameEn,
+                            size = size != null ? size.Size : null,
+                        };
+
+                        // Add the item to the list
+                        orderItems.Add(orderItem);
+                    }
+                    var discount = order.PackageDiscount + order.PromoDiscount + order.WalletDiscount;
+                    // Define your request data
+                    var requestData = new
+                    {
+                        payment = new
+                        {
+                            amount = order.Total,
+                            currency = "SAR",
+                            description = "description",
+                            buyer = new
+                            {
+                                phone = user.PhoneNumber,
+                                email = user.Email,
+                                name = user.Name,
+                                //dob = "2019-08-24"
+                            },
+                            buyer_history = new
+                            {
+                                //registered_since = "2019-08-24T14:15:22Z",
+                                registered_since = user.CreatedOn.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                                loyalty_level = 0,
+                                wishlist_count = 0,
+                                is_social_networks_connected = true,
+                                is_phone_number_verified = true,
+                                is_email_verified = true
+                            },
+                            order = new
+                            {
+                                tax_amount = 0,
+                                shipping_amount = order.DeliveryFees,
+                                discount_amount = discount,
+                                reference_id = order.Id.ToString(),
+                                items = orderItems.ToArray() // Convert the list to an array
+                            },
+                            shipping_address = new
+                            {
+                                //city = Address.Name,
+                                city = user.City.NameEn,
+                                address = Address,
+                                zip = "-"
+                            },
+                            order_history = new[] // Add order history
+                            {
+                    new
+                    {
+                        purchased_at = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                        amount = order.Total,
+                        status = "new",
+                    }
+                },
+                            meta = new
+                            {
+                                order_id = order.Id.ToString(),
+                                customer = user.Id.ToString()
+                            }
+
+                        },
+                        lang = "ar",
+                        merchant_code = merchant_code, // Replace with your merchant code
+                        merchant_urls = new
+                        {
+                            success = domain + "/Orders/TabbyconfrimPayment?id=" + order.Id + "&api=true",
+                            cancel = domain + "/Orders/Failed",
+                            failure = domain + "/Orders/Failed"
+                        }
+                    };
+
+
+                    // Set the Authorization header
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", publicKey);
+
+                    // Convert request data to JSON
+                    var jsonRequestData = JsonConvert.SerializeObject(requestData);
+                    var content = new StringContent(jsonRequestData, Encoding.UTF8, "application/json");
+
+                    // Make the API call
+                    var response = await client.PostAsync("https://api.tabby.ai/api/v2/checkout", content);
+
+
+                    // Check if the response is successful
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Read the response content
+                        var jsonResponse = await response.Content.ReadAsStringAsync();
+                        var responseObject = JObject.Parse(jsonResponse);
+
+                        // Extract the URL from the response
+                        if (responseObject["configuration"] != null &&
+                            responseObject["configuration"]["available_products"] != null &&
+                            responseObject["configuration"]["available_products"]["installments"] != null)
+                        {
+                            var installments = (JArray)responseObject["configuration"]["available_products"]["installments"];
+                            var webUrl = (string)installments[0]["web_url"]; // Assuming there's only one installment
+
+                            return jsonResponse; // If you need the entire JSON response for further processing or logging
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error: Installments data not found in the response.");
+                            return null;
+                        }
+                    }
+                    else
+                    {
+                        // Handle unsuccessful response
+                        Console.WriteLine("Error: " + response.ReasonPhrase);
+                        return null;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                Console.WriteLine("Error: " + ex.Message);
+                return null;
+            }
         }
 
         [HttpGet]
@@ -941,7 +1145,7 @@ namespace G4Fit.Controllers.API
                 return Content(HttpStatusCode.BadRequest, baseResponse);
             }
 
-            PaymentActions.SaveResponseInDatabase(model.PaymentId, model.TranId, null, model.Result, null, null, null, null, null, model.Amount, null, TransactionType.CheckingoutOrder, CurrentUserId, UserOrder.Id);
+            //PaymentActions.SaveResponseInDatabase(model.PaymentId, model.TranId, null, model.Result, null, null, null, null, null, model.Amount, null, TransactionType.CheckingoutOrder, CurrentUserId, UserOrder.Id);
             bool IsPaymentSuccess = PaymentActions.VerifyResponse(model.TranId, model.Result, model.TrackId, model.ResponseCode, null, model.Amount);
             if (IsPaymentSuccess == true)
             {
@@ -985,13 +1189,14 @@ namespace G4Fit.Controllers.API
             string AnonymousKey = string.Empty;
             try
             {
-                AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
+                if (Headers.AllKeys.Contains("AnonymousKey") && Headers.GetValues("AnonymousKey").Any())
+                    AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
             }
             catch (Exception)
             {
             }
 
-            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false && string.IsNullOrEmpty(AnonymousKey))
+            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false)
             {
                 baseResponse.ErrorCode = Errors.OrderNotFound;
                 return Content(HttpStatusCode.NotFound, baseResponse);
@@ -1008,7 +1213,7 @@ namespace G4Fit.Controllers.API
                 }
             }
 
-            var UserOrder = db.Orders.FirstOrDefault(x => ((x.UserId == CurrentUserId && x.UserId != null) || x.UnknownUserKeyIdentifier == AnonymousKey) && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
+            var UserOrder = db.Orders.FirstOrDefault(x => ((x.UserId == CurrentUserId && x.UserId != null) /*|| x.UnknownUserKeyIdentifier == AnonymousKey*/) && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
             if (UserOrder == null)
             {
                 baseResponse.ErrorCode = Errors.UserBasketIsEmpty;
@@ -1048,13 +1253,14 @@ namespace G4Fit.Controllers.API
             string AnonymousKey = string.Empty;
             try
             {
-                AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
+                if (Headers.AllKeys.Contains("AnonymousKey") && Headers.GetValues("AnonymousKey").Any())
+                    AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
             }
             catch (Exception)
             {
             }
 
-            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false && string.IsNullOrEmpty(AnonymousKey))
+            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false)
             {
                 baseResponse.ErrorCode = Errors.OrderNotFound;
                 return Content(HttpStatusCode.NotFound, baseResponse);
@@ -1071,7 +1277,7 @@ namespace G4Fit.Controllers.API
                 }
             }
 
-            var UserOrder = db.Orders.FirstOrDefault(x => ((x.UserId == CurrentUserId && x.UserId != null) || x.UnknownUserKeyIdentifier == AnonymousKey) && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
+            var UserOrder = db.Orders.FirstOrDefault(x => ((x.UserId == CurrentUserId && x.UserId != null) /*|| x.UnknownUserKeyIdentifier == AnonymousKey*/) && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
             if (UserOrder == null)
             {
                 baseResponse.ErrorCode = Errors.UserBasketIsEmpty;
@@ -1208,7 +1414,7 @@ namespace G4Fit.Controllers.API
                 string Secret = ConfigurationManager.AppSettings["Secret"];
                 string Sequence = UserOrder.Code + "|" + TerminalId + "|" + TerminalPassword + "|" + Secret + "|" + (UserOrder.Total.ToString()) + "|" + "SAR";
                 string Hash = PaymentActions.SHA256_HASH(Sequence);
-                string ReturnUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority) + $"/Orders/ResultApi?UserId={UserOrder.UserId}";
+                string ReturnUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority) + $"/Orders/ResultApi?Id={UserOrder.Id}";
                 JObject Json = PaymentActions.GenerateJson(UserCountry, UserOrder.User.Name, "", "", UserCity, "", "", UserOrder.User.PhoneNumber, UserOrder.User.Email, UserOrder.Total.ToString(), "SAR", "1", Hash, UserOrder.Code, ReturnUrl);
                 string FinalUrl = PaymentActions.GeneratePaymentUrl(Json);
                 baseResponse.Data = FinalUrl;

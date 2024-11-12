@@ -111,7 +111,7 @@
                                     سعر الطلب
                                 </td>
                                 <td dir="auto">
-                                    اجمالى الخدمات: @Model.Items.Where(s => s.IsDeleted == false && s.Service.SupplierId == SupplierId).Sum(s=>s.SubTotal) ريال سعودي
+                                    اجمالى الخدمات: @Model.Items.Where(s => s.IsDeleted == false && s.Service.SupplierId == SupplierId).Sum(s => s.SubTotal) ريال سعودي
                                 </td>
                             </tr>
                             <tr>
@@ -125,7 +125,10 @@
                                             <span>الدفع كاش</span>
                                             break;
                                         case G4Fit.Models.Enums.PaymentMethod.Online:
-                                            <span>الدفع اون لاين</span>
+                                            <span>الدفع اون لاين - يور واي</span>
+                                            break;
+                                        case G4Fit.Models.Enums.PaymentMethod.Tabby:
+                                            <span>الدفع اون لاين - تابي</span>
                                             break;
                                     }
                                 </td>

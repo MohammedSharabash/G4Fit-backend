@@ -18,25 +18,47 @@ namespace G4Fit.Helpers
     public static class PaymentActions
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
-        public static string SHA256_HASH(string value)
-        {
-            StringBuilder Sb = new StringBuilder();
-            try
-            {
-                using (var hash = SHA256.Create())
-                {
-                    Encoding enc = Encoding.UTF8;
-                    Byte[] result = hash.ComputeHash(enc.GetBytes(value));
+        public static string TerminalId = "g4fit";
+        public static string TerminalPassword = "URWAY@123";
+        public static string Secret = "eaffe62bff4872f25c228d19fd600f9401c1c0c949e33f72718760497a9794d5";
+        public static string Url = "https://payments-dev.urway-tech.com/URWAYPGService/transaction/jsonProcess/JSONrequest";
 
-                    foreach (Byte b in result)
-                        Sb.Append(b.ToString("x2"));
-                }
-            }
-            catch (Exception ex)
+        //public static string SHA256_HASH(string value)
+        //{
+        //    StringBuilder Sb = new StringBuilder();
+        //    try
+        //    {
+        //        using (var hash = SHA256.Create())
+        //        {
+        //            Encoding enc = Encoding.UTF8;
+        //            Byte[] result = hash.ComputeHash(enc.GetBytes(value));
+
+        //            foreach (Byte b in result)
+        //                Sb.Append(b.ToString("x2"));
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        WriteErrorToFile(ex.Message);
+        //    }
+        //    return Sb.ToString();
+        //}
+        public static string SHA256_HASH(string input)
+        {
+            using (SHA256 sha256 = SHA256.Create())
             {
-                WriteErrorToFile(ex.Message);
+                byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+                // Build hex string
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    builder.Append(hashBytes[i].ToString("x2"));
+                }
+
+                // Convert to lowercase
+                return builder.ToString().ToLower();
             }
-            return Sb.ToString();
         }
         //    public static void test(string text)
         //    {
@@ -65,11 +87,8 @@ namespace G4Fit.Helpers
         //}
         public static JObject GenerateJson(string Country, string FirstName, string LastName, string Address, string City, string State, string Zip, string PhoneNumber, string Email, string Amount, string Currency, string Action, string Hash, string TrackId, string ReturnUrl)
         {
-            string TerminalId = ConfigurationManager.AppSettings["TerminalId"];
-            string TerminalPassword = ConfigurationManager.AppSettings["TerminalPassword"];
-            string Secret = ConfigurationManager.AppSettings["Secret"];
 
-            string MerchantIp = "2.90.128.128";//Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString(); // server ipv6
+            string MerchantIp = /*"2.90.128.128";*/Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString(); // server ipv6
             JObject Json = new JObject();
             try
             {
@@ -103,9 +122,10 @@ namespace G4Fit.Helpers
 
         public static string GeneratePaymentUrl(JObject Json)
         {
+            //return  Startup.StaticConfig.GetSection("PaymentConfigration:TerminalId").Value ;
             try
             {
-                var BaseAddress = ConfigurationManager.AppSettings["Url"];
+                var BaseAddress = Url;
                 var http = (HttpWebRequest)WebRequest.Create(new Uri(BaseAddress));
                 http.Accept = "application/json";
                 http.ContentType = "application/json";
@@ -201,11 +221,11 @@ namespace G4Fit.Helpers
 
         public static bool VerifyResponse(string TranId, string Result, string TrackId, string ResponseCode, string responseHash, string amount)
         {
-            string TerminalId = ConfigurationManager.AppSettings["TerminalId"];
-            string TerminalPassword = ConfigurationManager.AppSettings["TerminalPassword"];
-            string Secret = ConfigurationManager.AppSettings["Secret"];
-            var BaseAddress = ConfigurationManager.AppSettings["Url"];
-            string MerchantIp = "2.90.128.128";//Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
+            //string TerminalId = options.Value.TerminalId;
+            //string TerminalPassword = options.Value.TerminalPassword;
+            //string Secret = options.Value.Secret;
+            var BaseAddress = Url;
+            string MerchantIp = /*"2.90.128.128";*/Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString();
             string strpipeSeperatedString = TranId + "|" + Secret + "|" + ResponseCode + "|" + amount;
             string strHash = SHA256_HASH(strpipeSeperatedString);
             string secHash = TrackId + "|" + TerminalId + "|" + TerminalPassword + "|" + Secret + "|" + amount + "|" + "SAR";

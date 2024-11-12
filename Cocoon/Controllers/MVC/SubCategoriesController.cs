@@ -26,7 +26,7 @@ namespace G4Fit.Controllers.MVC
             }
             if (CatId.HasValue == true)
             {
-                SubCategories = SubCategories.Where(w => /*w.CategoryId == CatId*/ true).ToList();
+                SubCategories = SubCategories.Where(w => /*w.SubCategoryId == CatId*/ true).ToList();
             }
             ViewBag.SubCategories = SubCategories;
             //ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();

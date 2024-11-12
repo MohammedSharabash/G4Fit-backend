@@ -1,0 +1,117 @@
+
+PGLog 11/11/2024 11:45:46 م
+Start sending GetResponse()
+
+
+2024-11-11 23:45:47
+finish sending GetResponse()
+
+
+2024-11-11 23:45:47
+GetResponseStream is done
+
+
+2024-11-11 23:45:47
+sr is done
+
+
+2024-11-11 23:45:47
+content is done
+
+
+2024-11-11 23:45:47
+dvresponse is done {
+  "tranid": "",
+  "result": "UnSuccessful",
+  "reason": "System Error, Please contact System Admin",
+  "authCode": "",
+  "trackid": "",
+  "terminalid": "",
+  "udf1": "",
+  "cardBrand": "",
+  "udf2": "",
+  "responseCode": "601",
+  "rrn": ""
+}
+
+
+2024-11-11 23:45:47
+يتعذر إجراء ربط في وقت التشغيل على مرجع فارغ
+
+2024-11-11 23:46:37
+Start sending GetResponse()
+
+
+2024-11-11 23:46:38
+finish sending GetResponse()
+
+
+2024-11-11 23:46:42
+GetResponseStream is done
+
+
+2024-11-11 23:46:48
+sr is done
+
+
+2024-11-11 23:47:42
+content is done
+
+
+2024-11-11 23:47:43
+dvresponse is done {
+  "tranid": "",
+  "result": "UnSuccessful",
+  "reason": "System Error, Please contact System Admin",
+  "authCode": "",
+  "trackid": "",
+  "terminalid": "",
+  "udf1": "",
+  "cardBrand": "",
+  "udf2": "",
+  "responseCode": "601",
+  "rrn": ""
+}
+
+
+2024-11-11 23:47:58
+يتعذر إجراء ربط في وقت التشغيل على مرجع فارغ
+
+2024-11-11 23:49:59
+Start sending GetResponse()
+
+
+2024-11-11 23:50:28
+finish sending GetResponse()
+
+
+2024-11-11 23:50:40
+GetResponseStream is done
+
+
+2024-11-11 23:50:46
+sr is done
+
+
+2024-11-11 23:50:59
+content is done
+
+
+2024-11-11 23:51:05
+dvresponse is done {
+  "tranid": "",
+  "result": "UnSuccessful",
+  "reason": "System Error, Please contact System Admin",
+  "authCode": "",
+  "trackid": "",
+  "terminalid": "",
+  "udf1": "",
+  "cardBrand": "",
+  "udf2": "",
+  "responseCode": "601",
+  "rrn": ""
+}
+
+
+2024-11-11 23:51:21
+يتعذر إجراء ربط في وقت التشغيل على مرجع فارغ

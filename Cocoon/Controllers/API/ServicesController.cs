@@ -107,7 +107,8 @@ namespace G4Fit.Controllers.API
             string AnonymousKey = string.Empty;
             try
             {
-                AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
+                if (Headers.AllKeys.Contains("AnonymousKey") && Headers.GetValues("AnonymousKey").Any())
+                    AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
             }
             catch (Exception)
             {
@@ -123,7 +124,7 @@ namespace G4Fit.Controllers.API
                 }
             }
 
-            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false && string.IsNullOrEmpty(AnonymousKey))
+            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false /*&& string.IsNullOrEmpty(AnonymousKey)*/)
             {
                 baseResponse.ErrorCode = Errors.UserIdentityIsRequired;
                 return Content(HttpStatusCode.BadRequest, baseResponse);
@@ -168,7 +169,8 @@ namespace G4Fit.Controllers.API
             string AnonymousKey = string.Empty;
             try
             {
-                AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
+                if (Headers.AllKeys.Contains("AnonymousKey") && Headers.GetValues("AnonymousKey").Any())
+                    AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
             }
             catch (Exception)
             {

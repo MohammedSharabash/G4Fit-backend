@@ -122,7 +122,8 @@ namespace G4Fit.Controllers.API
             string AnonymousKey = string.Empty;
             try
             {
-                AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
+                if (Headers.AllKeys.Contains("AnonymousKey") && Headers.GetValues("AnonymousKey").Any())
+                    AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
             }
             catch (Exception)
             {
@@ -191,9 +192,11 @@ namespace G4Fit.Controllers.API
                         baseResponse.Data = userDTO;
                         db.SaveChanges();
                         Transaction.Commit();
-                        AssignAnonymousKeyToOrder(AnonymousKey, user);
-                        AssignAnonymousKeyToFavouriteServices(AnonymousKey, user);
-
+                        if (AnonymousKey != string.Empty)
+                        {
+                            AssignAnonymousKeyToOrder(AnonymousKey, user);
+                            AssignAnonymousKeyToFavouriteServices(AnonymousKey, user);
+                        }
                         string phoneNumber = user.PhoneNumber;
 
                         // التحقق مما إذا كان الرقم يبدأ بمقدمة أرقام الهواتف المصرية
@@ -234,7 +237,8 @@ namespace G4Fit.Controllers.API
             string AnonymousKey = string.Empty;
             try
             {
-                AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
+                if (Headers.AllKeys.Contains("AnonymousKey") && Headers.GetValues("AnonymousKey").Any())
+                    AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
             }
             catch (Exception)
             {
@@ -285,8 +289,11 @@ namespace G4Fit.Controllers.API
                     var TokenDTO = GenerateNewAccessToken(RequiredUser.Id, RequiredUser.Email);
                     if (TokenDTO != null)
                     {
-                        AssignAnonymousKeyToFavouriteServices(AnonymousKey, RequiredUser);
-                        AssignAnonymousKeyToOrder(AnonymousKey, RequiredUser);
+                        if (AnonymousKey != string.Empty)
+                        {
+                            AssignAnonymousKeyToFavouriteServices(AnonymousKey, RequiredUser);
+                            AssignAnonymousKeyToOrder(AnonymousKey, RequiredUser);
+                        }
                         userDTO.Token = TokenDTO;
                         baseResponse.Data = userDTO;
                         return Ok(baseResponse);

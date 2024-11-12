@@ -30,7 +30,7 @@
                             @Html.HiddenFor(d => d.ModifiedOn)
                             @Html.HiddenFor(d => d.RestoredOn)
                             @Html.HiddenFor(d => d.SortingNumber)
-                            @Html.HiddenFor(d => d.CategoryId)
+                            @Html.HiddenFor(d => d.SubCategoryId)
 
                             <div class="row" style="margin:10px;">
                                 <div class="col-lg-6">
@@ -79,7 +79,7 @@
                                                 <select name="CategoryId" id="CategoryId" class="select2 form-control">
                                                     @foreach (var category in Categories)
                                                     {
-                                                        <option @(Model.CategoryId == category.Id ? "selected" : "") value="@category.Id">@category.NameAr</option>
+                                                        <option @(Model.SubCategoryId == category.Id ? "selected" : "") value="@category.Id">@category.NameAr</option>
                                                     }
                                                 </select>
                                             </div>

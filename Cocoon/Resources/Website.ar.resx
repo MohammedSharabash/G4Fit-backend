@@ -253,7 +253,7 @@
     <value>الدفع كاش</value>
   </data>
   <data name="Online" xml:space="preserve">
-    <value>اونلاين</value>
+    <value> اونلاين - يور واي</value>
   </data>
   <data name="Notifications" xml:space="preserve">
     <value>الاشعارات</value>
@@ -350,5 +350,8 @@
   </data>
   <data name="weight" xml:space="preserve">
     <value>الوزن</value>
+  </data>
+  <data name="Tabby" xml:space="preserve">
+    <value>تابي</value>
   </data>
 </root>

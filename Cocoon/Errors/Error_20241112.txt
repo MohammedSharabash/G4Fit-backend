@@ -1,0 +1,922 @@
+
+PGLog 12/11/2024 12:40:36 ص
+Start sending GetResponse()
+
+
+2024-11-12 00:40:38
+finish sending GetResponse()
+
+
+2024-11-12 00:40:42
+content is done
+
+
+2024-11-12 00:40:47
+dvresponse is done {
+  "tranid": "",
+  "result": "UnSuccessful",
+  "reason": "System Error, Please contact System Admin",
+  "authCode": "",
+  "trackid": "",
+  "terminalid": "",
+  "udf1": "",
+  "cardBrand": "",
+  "udf2": "",
+  "responseCode": "601",
+  "rrn": ""
+}
+
+
+2024-11-12 00:44:32
+Start sending GetResponse()
+
+
+2024-11-12 00:44:33
+finish sending GetResponse()
+
+
+2024-11-12 00:44:33
+content is done
+
+
+2024-11-12 00:44:33
+dvresponse is done {
+  "tranid": "",
+  "result": "UnSuccessful",
+  "reason": "System Error, Please contact System Admin",
+  "authCode": "",
+  "trackid": "",
+  "terminalid": "",
+  "udf1": "",
+  "cardBrand": "",
+  "udf2": "",
+  "responseCode": "601",
+  "rrn": ""
+}
+
+
+2024-11-12 00:45:39
+Start sending GetResponse()
+
+
+2024-11-12 00:45:42
+finish sending GetResponse()
+
+
+2024-11-12 00:45:53
+content is done
+
+
+2024-11-12 00:47:22
+dvresponse is done {
+  "tranid": "",
+  "result": "UnSuccessful",
+  "reason": "System Error, Please contact System Admin",
+  "authCode": "",
+  "trackid": "",
+  "terminalid": "",
+  "udf1": "",
+  "cardBrand": "",
+  "udf2": "",
+  "responseCode": "601",
+  "rrn": ""
+}
+
+
+2024-11-12 00:57:24
+Start sending GetResponse()
+
+
+2024-11-12 00:57:25
+finish sending GetResponse()
+
+
+2024-11-12 00:57:25
+GetResponseStream is done
+
+
+2024-11-12 00:57:25
+sr is done
+
+
+2024-11-12 00:57:25
+content is done
+
+
+2024-11-12 00:57:25
+dvresponse is done {
+  "result": null,
+  "responseCode": null,
+  "authcode": null,
+  "tranid": null,
+  "trackid": null,
+  "terminalid": null,
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": "2431700632621502716",
+  "targetUrl": "https://payments-dev.urway-tech.com/URWAYPGService/direct.jsp",
+  "postData": null,
+  "intUrl": null,
+  "responseHash": null,
+  "amount": null,
+  "cardBrand": "",
+  "maskedPAN": null,
+  "linkBasedUrl": null,
+  "sadadNumber": null,
+  "billNumber": null,
+  "paymentType": null,
+  "metaData": null,
+  "cardToken": null
+}
+
+
+2024-11-12 00:57:25
+dvresponse[targetUrl].Value != null https://payments-dev.urway-tech.com/URWAYPGService/direct.jsp
+
+
+2024-11-12 00:57:25
+dvresponse[payid].Value != null 2431700632621502716
+
+
+2024-11-12 00:59:18
+Start sending GetResponse()
+
+
+2024-11-12 00:59:19
+finish sending GetResponse()
+
+
+2024-11-12 00:59:19
+GetResponseStream is done
+
+
+2024-11-12 00:59:19
+sr is done
+
+
+2024-11-12 00:59:19
+content is done
+
+
+2024-11-12 00:59:20
+dvresponse is done {
+  "result": null,
+  "responseCode": null,
+  "authcode": null,
+  "tranid": null,
+  "trackid": null,
+  "terminalid": null,
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": "2431700632622650131",
+  "targetUrl": "https://payments-dev.urway-tech.com/URWAYPGService/direct.jsp",
+  "postData": null,
+  "intUrl": null,
+  "responseHash": null,
+  "amount": null,
+  "cardBrand": "",
+  "maskedPAN": null,
+  "linkBasedUrl": null,
+  "sadadNumber": null,
+  "billNumber": null,
+  "paymentType": null,
+  "metaData": null,
+  "cardToken": null
+}
+
+
+2024-11-12 00:59:20
+dvresponse[targetUrl].Value != null https://payments-dev.urway-tech.com/URWAYPGService/direct.jsp
+
+
+2024-11-12 00:59:20
+dvresponse[payid].Value != null 2431700632622650131
+
+
+2024-11-12 01:02:26
+Start sending GetResponse()
+
+
+2024-11-12 01:02:27
+finish sending GetResponse()
+
+
+2024-11-12 01:02:27
+GetResponseStream is done
+
+
+2024-11-12 01:02:27
+sr is done
+
+
+2024-11-12 01:02:27
+content is done
+
+
+2024-11-12 01:02:27
+dvresponse is done {
+  "result": "Failure",
+  "responseCode": "606",
+  "authcode": null,
+  "tranid": "2431701632624524524",
+  "trackid": "58244",
+  "terminalid": "g4fit",
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": null,
+  "targetUrl": null,
+  "postData": null,
+  "intUrl": null,
+  "responseHash": "a4ad241c0cf74fc63f123486568d425e60f159575cefc109365b54e2e5513cb2",
+  "amount": "6725.00",
+  "cardBrand": null,
+  "maskedPAN": null,
+  "linkBasedUrl": null,
+  "sadadNumber": null,
+  "billNumber": null,
+  "paymentType": null,
+  "metaData": null,
+  "cardToken": null
+}
+
+
+2024-11-12 01:02:44
+Start sending GetResponse()
+
+
+2024-11-12 01:02:44
+finish sending GetResponse()
+
+
+2024-11-12 01:02:44
+GetResponseStream is done
+
+
+2024-11-12 01:02:44
+sr is done
+
+
+2024-11-12 01:02:44
+content is done
+
+
+2024-11-12 01:02:44
+dvresponse is done {
+  "result": "Failure",
+  "responseCode": "606",
+  "authcode": null,
+  "tranid": "2431701632624699411",
+  "trackid": "58244",
+  "terminalid": "g4fit",
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": null,
+  "targetUrl": null,
+  "postData": null,
+  "intUrl": null,
+  "responseHash": "baad35770411a08b69e57b1d6436285be6a2374538812aca864afbe2f052e870",
+  "amount": "6725.00",
+  "cardBrand": null,
+  "maskedPAN": null,
+  "linkBasedUrl": null,
+  "sadadNumber": null,
+  "billNumber": null,
+  "paymentType": null,
+  "metaData": null,
+  "cardToken": null
+}
+
+
+2024-11-12 01:09:16
+Start sending GetResponse()
+
+
+2024-11-12 01:09:18
+finish sending GetResponse()
+
+
+2024-11-12 01:09:21
+GetResponseStream is done
+
+
+2024-11-12 01:09:23
+sr is done
+
+
+2024-11-12 01:09:27
+content is done
+
+
+2024-11-12 01:09:29
+dvresponse is done {
+  "result": "Failure",
+  "responseCode": "606",
+  "authcode": null,
+  "tranid": "2431701632628629451",
+  "trackid": "58244",
+  "terminalid": "g4fit",
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": null,
+  "targetUrl": null,
+  "postData": null,
+  "intUrl": null,
+  "responseHash": "bd869dff444ad00519c2e29104d45d7846f21d4841857bf8efca83d847c0e96e",
+  "amount": "6725.00",
+  "cardBrand": null,
+  "maskedPAN": null,
+  "linkBasedUrl": null,
+  "sadadNumber": null,
+  "billNumber": null,
+  "paymentType": null,
+  "metaData": null,
+  "cardToken": null
+}
+
+
+2024-11-12 01:10:08
+Start sending GetResponse()
+
+
+2024-11-12 01:10:09
+finish sending GetResponse()
+
+
+2024-11-12 01:10:11
+GetResponseStream is done
+
+
+2024-11-12 01:10:12
+sr is done
+
+
+2024-11-12 01:10:12
+content is done
+
+
+2024-11-12 01:10:14
+dvresponse is done {
+  "result": "Failure",
+  "responseCode": "606",
+  "authcode": null,
+  "tranid": "2431701632629148167",
+  "trackid": "58244",
+  "terminalid": "g4fit",
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": null,
+  "targetUrl": null,
+  "postData": null,
+  "intUrl": null,
+  "responseHash": "e2b8da71cbab8459e25a1ef583bb484ace2df962f6dc0f3f3c4ecc3beb204835",
+  "amount": "6725.00",
+  "cardBrand": null,
+  "maskedPAN": null,
+  "linkBasedUrl": null,
+  "sadadNumber": null,
+  "billNumber": null,
+  "paymentType": null,
+  "metaData": null,
+  "cardToken": null
+}
+
+
+2024-11-12 01:41:24
+Start sending GetResponse()
+
+
+2024-11-12 01:41:25
+finish sending GetResponse()
+
+
+2024-11-12 01:41:25
+GetResponseStream is done
+
+
+2024-11-12 01:41:25
+sr is done
+
+
+2024-11-12 01:43:58
+content is done
+
+
+2024-11-12 01:44:00
+dvresponse is done {
+  "result": "Failure",
+  "responseCode": "606",
+  "authcode": null,
+  "tranid": "2431701632647906997",
+  "trackid": "58244",
+  "terminalid": "g4fit",
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": null,
+  "targetUrl": null,
+  "postData": null,
+  "intUrl": null,
+  "responseHash": "58c6a0595136a24310946a8155694860db34cf526c26ede728299c3eab0e24ad",
+  "amount": "6725.00",
+  "cardBrand": null,
+  "maskedPAN": null,
+  "linkBasedUrl": null,
+  "sadadNumber": null,
+  "billNumber": null,
+  "paymentType": null,
+  "metaData": null,
+  "cardToken": null
+}
+
+
+2024-11-12 02:09:40
+Start sending GetResponse()
+
+
+2024-11-12 02:09:41
+finish sending GetResponse()
+
+
+2024-11-12 02:09:41
+GetResponseStream is done
+
+
+2024-11-12 02:09:41
+sr is done
+
+
+2024-11-12 02:09:41
+content is done
+
+
+2024-11-12 02:09:41
+dvresponse is done {
+  "result": null,
+  "responseCode": null,
+  "authcode": null,
+  "tranid": null,
+  "trackid": null,
+  "terminalid": null,
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": "2431702632664868473",
+  "targetUrl": "https://payments-dev.urway-tech.com/URWAYPGService/direct.jsp",
+  "postData": null,
+  "intUrl": null,
+  "responseHash": null,
+  "amount": null,
+  "cardBrand": "",
+  "maskedPAN": null,
+  "linkBasedUrl": null,
+  "sadadNumber": null,
+  "billNumber": null,
+  "paymentType": null,
+  "metaData": null,
+  "cardToken": null
+}
+
+
+2024-11-12 02:09:47
+dvresponse[targetUrl].Value != null https://payments-dev.urway-tech.com/URWAYPGService/direct.jsp
+
+
+2024-11-12 02:09:51
+dvresponse[payid].Value != null 2431702632664868473
+
+
+2024-11-12 02:12:25
+Start sending GetResponse()
+
+
+2024-11-12 02:12:26
+finish sending GetResponse()
+
+
+2024-11-12 02:12:26
+GetResponseStream is done
+
+
+2024-11-12 02:12:26
+sr is done
+
+
+2024-11-12 02:12:26
+content is done
+
+
+2024-11-12 02:12:26
+dvresponse is done {
+  "result": "Failure",
+  "responseCode": "606",
+  "authcode": null,
+  "tranid": "2431702632666513239",
+  "trackid": "58244",
+  "terminalid": "g4fit",
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": null,
+  "targetUrl": null,
+  "postData": null,
+  "intUrl": null,
+  "responseHash": "8e1d953af6ec91f9e41220e52e43d124177d4759c999d024658f179ccc0557df",
+  "amount": "6725.00",
+  "cardBrand": null,
+  "maskedPAN": null,
+  "linkBasedUrl": null,
+  "sadadNumber": null,
+  "billNumber": null,
+  "paymentType": null,
+  "metaData": null,
+  "cardToken": null
+}
+
+
+2024-11-12 02:20:41
+Start sending GetResponse()
+
+
+2024-11-12 02:20:42
+finish sending GetResponse()
+
+
+2024-11-12 02:20:42
+GetResponseStream is done
+
+
+2024-11-12 02:20:42
+sr is done
+
+
+2024-11-12 02:20:42
+content is done
+
+
+2024-11-12 02:20:42
+dvresponse is done {
+  "result": "Failure",
+  "responseCode": "606",
+  "authcode": null,
+  "tranid": "2431702632671474114",
+  "trackid": "58244",
+  "terminalid": "g4fit",
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": null,
+  "targetUrl": null,
+  "postData": null,
+  "intUrl": null,
+  "responseHash": "f987b39725e59a47fc1cd50207850175cde0c7403757cb762216271ca3aadeca",
+  "amount": "6725.00",
+  "cardBrand": null,
+  "maskedPAN": null,
+  "linkBasedUrl": null,
+  "sadadNumber": null,
+  "billNumber": null,
+  "paymentType": null,
+  "metaData": null,
+  "cardToken": null
+}
+
+
+2024-11-12 02:42:59
+Start sending GetResponse()
+
+
+2024-11-12 02:43:00
+finish sending GetResponse()
+
+
+2024-11-12 02:43:00
+GetResponseStream is done
+
+
+2024-11-12 02:43:00
+sr is done
+
+
+2024-11-12 02:43:00
+content is done
+
+
+2024-11-12 02:43:00
+dvresponse is done {
+  "result": null,
+  "responseCode": null,
+  "authcode": null,
+  "tranid": null,
+  "trackid": null,
+  "terminalid": null,
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": "2431702632684857351",
+  "targetUrl": "https://payments-dev.urway-tech.com/URWAYPGService/direct.jsp",
+  "postData": null,
+  "intUrl": null,
+  "responseHash": null,
+  "amount": null,
+  "cardBrand": "",
+  "maskedPAN": null,
+  "linkBasedUrl": null,
+  "sadadNumber": null,
+  "billNumber": null,
+  "paymentType": null,
+  "metaData": null,
+  "cardToken": null
+}
+
+
+2024-11-12 02:43:06
+dvresponse[targetUrl].Value != null https://payments-dev.urway-tech.com/URWAYPGService/direct.jsp
+
+
+2024-11-12 02:43:09
+dvresponse[payid].Value != null 2431702632684857351
+
+
+2024-11-12 02:47:20
+Start sending GetResponse()
+
+
+2024-11-12 02:47:21
+finish sending GetResponse()
+
+
+2024-11-12 02:47:21
+GetResponseStream is done
+
+
+2024-11-12 02:47:21
+sr is done
+
+
+2024-11-12 02:47:21
+content is done
+
+
+2024-11-12 02:47:21
+dvresponse is done {
+  "result": "Failure",
+  "responseCode": "606",
+  "authcode": null,
+  "tranid": "2431702632687469810",
+  "trackid": "51454",
+  "terminalid": "g4fit",
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": null,
+  "targetUrl": null,
+  "postData": null,
+  "intUrl": null,
+  "responseHash": "a91eed8b855522870e4018bd82c5911205b97f8699e79647b17c1d30d04941e4",
+  "amount": "3795.00",
+  "cardBrand": null,
+  "maskedPAN": null,
+  "linkBasedUrl": null,
+  "sadadNumber": null,
+  "billNumber": null,
+  "paymentType": null,
+  "metaData": null,
+  "cardToken": null
+}
+
+
+2024-11-12 02:48:13
+Start sending GetResponse()
+
+
+2024-11-12 02:48:14
+finish sending GetResponse()
+
+
+2024-11-12 02:48:14
+GetResponseStream is done
+
+
+2024-11-12 02:48:14
+sr is done
+
+
+2024-11-12 02:48:14
+content is done
+
+
+2024-11-12 02:48:14
+dvresponse is done {
+  "result": "Failure",
+  "responseCode": "606",
+  "authcode": null,
+  "tranid": "2431702632687995132",
+  "trackid": "51454",
+  "terminalid": "g4fit",
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": null,
+  "targetUrl": null,
+  "postData": null,
+  "intUrl": null,
+  "responseHash": "cca141f1ad0e588af1aec05157a8afff2e9587b3e4f439903839ec66610d01be",
+  "amount": "3795.00",
+  "cardBrand": null,
+  "maskedPAN": null,
+  "linkBasedUrl": null,
+  "sadadNumber": null,
+  "billNumber": null,
+  "paymentType": null,
+  "metaData": null,
+  "cardToken": null
+}
+
+
+2024-11-12 02:49:14
+Start sending GetResponse()
+
+
+2024-11-12 02:49:15
+finish sending GetResponse()
+
+
+2024-11-12 02:49:15
+GetResponseStream is done
+
+
+2024-11-12 02:49:15
+sr is done
+
+
+2024-11-12 02:49:15
+content is done
+
+
+2024-11-12 02:49:15
+dvresponse is done {
+  "result": null,
+  "responseCode": null,
+  "authcode": null,
+  "tranid": null,
+  "trackid": null,
+  "terminalid": null,
+  "udf1": null,
+  "udf2": null,
+  "udf3": null,
+  "udf4": null,
+  "udf5": null,
+  "rrn": null,
+  "eci": null,
+  "subscriptionId": null,
+  "trandate": null,
+  "tranType": null,
+  "integrationModule": null,
+  "integrationData": null,
+  "payid": "2431702632688607354",
+  "targetUrl": "https://payments-dev.urway-tech.com/URWAYPGService/direct.jsp",
+  "postData": null,
+  "intUrl": null,
+  "responseHash": null,
+  "amount": null,
+  "cardBrand": "",
+  "maskedPAN": null,
+  "linkBasedUrl": null,
+  "sadadNumber": null,
+  "billNumber": null,
+  "paymentType": null,
+  "metaData": null,
+  "cardToken": null
+}
+
+
+2024-11-12 02:49:20
+dvresponse[targetUrl].Value != null https://payments-dev.urway-tech.com/URWAYPGService/direct.jsp
+
+
+2024-11-12 02:49:20
+dvresponse[payid].Value != null 2431702632688607354
+

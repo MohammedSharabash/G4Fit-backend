@@ -23,6 +23,8 @@ namespace G4Fit.Models.Domains
         public decimal WalletDiscount { get; set; }
         public decimal SubTotal { get; set; }
         public decimal Total { get; set; }
+        public string Tabby_PaymentId { get; set; } = "-1";
+        public string Tabby_reference_id { get; set; } = "-1";
         public virtual ICollection<OrderItem> Items { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public bool IsPaid { get; set; }

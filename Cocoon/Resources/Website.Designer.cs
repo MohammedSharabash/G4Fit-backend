@@ -403,7 +403,7 @@ namespace Cocoon.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Online.
+        ///   Looks up a localized string similar to Online - UrWay.
         /// </summary>
         public static string Online {
             get {
@@ -669,6 +669,15 @@ namespace Cocoon.Resources {
         public static string SupplierType {
             get {
                 return ResourceManager.GetString("SupplierType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tabby.
+        /// </summary>
+        public static string Tabby {
+            get {
+                return ResourceManager.GetString("Tabby", resourceCulture);
             }
         }
         

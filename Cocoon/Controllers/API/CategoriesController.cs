@@ -135,7 +135,7 @@ namespace G4Fit.Controllers.API
         //        return Content(HttpStatusCode.NotFound, baseResponse);
         //    }
 
-        //    var SubCategories = db.SubCategories.Where(s => s.Category.IsDeleted == false && s.IsDeleted == false && s.CategoryId == CatId).OrderBy(s => s.SortingNumber).ToList();
+        //    var SubCategories = db.SubCategories.Where(s => s.Category.IsDeleted == false && s.IsDeleted == false && s.SubCategoryId == CatId).OrderBy(s => s.SortingNumber).ToList();
         //    List<CategoryDTO> categoryDTOs = new List<CategoryDTO>();
         //    foreach (var category in SubCategories)
         //    {

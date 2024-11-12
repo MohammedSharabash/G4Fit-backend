@@ -6,12 +6,24 @@
     var Cities = ViewBag.Cities as List<G4Fit.Models.Domains.City>;
 }
 <section class="m-4 pt-1">
+    @*if (TempData["PaymentErrorOnline"] != null)
+            {
+            <p class="alert alert-danger text-center">
+                @(
+            culture == "ar"
+            ? "عفواً، برجاء المحاولة لاحقاً، الدفع عن طريق يور واي غير متاح حالياً"
+            : "Sorry, pay with Urway is not allowed now"
+        )
+            </p>
+            }
+            else*@
     @if (TempData["PaymentError"] != null)
     {
         <p class="alert alert-danger text-center">
             @(culture == "ar" ? " عفواً ، برجاء المحاوله لاحقاً او التواصل مع اداره الموقع" : "Sorry, please try again later or contact our customer service")
         </p>
     }
+
     <div class="card text-center">
         <div class="card-header font-weight-bold text-white" style="background:black;">
             @(culture == "ar" ? "اتمام عمليه الشراء" : "Checkout")
@@ -28,6 +40,8 @@
                                         <label for="PaymentMethod">@(culture == "ar" ? "وسيلة الدفع" : "Payment Method")</label>
                                         <select class="form-control text-center" required name="PaymentMethod" id="PaymentMethod">
                                             <option selected value="@G4Fit.Models.Enums.PaymentMethod.Cash">@(culture == "ar" ? "كاش" : "Cash")</option>
+                                            <option value="@G4Fit.Models.Enums.PaymentMethod.Online">@(culture == "ar" ? "اونلاين - يور واي" : "Online- UrWay")</option>
+                                            <option value="@G4Fit.Models.Enums.PaymentMethod.Tabby">@(culture == "ar" ? "تابي" : "Tabby")</option>
                                         </select>
                                         @*@Html.EnumDropDownListFor(s => s.PaymentMethod, new { @class = "form-control text-center" })*@
                                         @Html.ValidationMessageFor(s => s.PaymentMethod, "", new { @class = "text-danger" })

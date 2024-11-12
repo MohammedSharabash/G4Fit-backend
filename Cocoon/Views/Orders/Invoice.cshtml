@@ -1,4 +1,5 @@
 ﻿@model G4Fit.Models.Domains.Order
+@using System.Text.RegularExpressions
 @using Cocoon.Resources
 @{
     Layout = null;
@@ -62,7 +63,16 @@
                             <p>@(culture == "ar" ? item.Service.NameAr : item.Service.NameEn)</p>
                         </td>
                         <td class="description">
-                            <p>@(culture == "ar" ? (item.Service.DescriptionAr ?? item.Service.DescriptionEn) : item.Service.DescriptionEn)</p>
+
+                            <p>
+                                @(
+        culture == "ar"
+        ? @Html.Raw(Regex.Replace(item.Service.DescriptionAr ?? item.Service.DescriptionEn, @"<[^>]+?>", "").Replace("\r\n", "<br />").Replace("\n", "<br />"))
+        : @Html.Raw(Regex.Replace(item.Service.DescriptionEn, @"<[^>]+?>", "").Replace("\r\n", "<br />").Replace("\n", "<br />"))
+    )
+                            </p>
+
+
                         </td>
                         <td><div class="cost">@((item.Service.OfferPrice.HasValue ? item.Service.OfferPrice.Value : item.Service.OriginalPrice)) @(culture == "ar" ? "ريال سعودي" : "SAR")</div></td>
                         @if (!item.Service.IsTimeBoundService)

@@ -412,6 +412,10 @@
     <Compile Include="Migrations\202411102003479_Categories.Designer.cs">
       <DependentUpon>202411102003479_Categories.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202411111646511_tabby.cs" />
+    <Compile Include="Migrations\202411111646511_tabby.Designer.cs">
+      <DependentUpon>202411111646511_tabby.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Data\ApplicationDbContext.cs" />
     <Compile Include="Models\Domains\ApplicationUser.cs" />
@@ -1718,9 +1722,7 @@
     <Content Include="Content\Services.xlsx" />
     <Content Include="Content\ServicesDetails.xlsx" />
     <None Include="Properties\PublishProfiles\FolderProfile4.pubxml" />
-    <None Include="Properties\PublishProfiles\site9545-WebDeploy1.pubxml" />
-    <None Include="Properties\PublishProfiles\site9548-WebDeploy.pubxml" />
-    <None Include="Properties\PublishProfiles\site9548-WebDeploy1.pubxml" />
+    <None Include="Properties\PublishProfiles\site12245-WebDeploy.pubxml" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\jquery-3.5.1.min.js" />
@@ -1908,6 +1910,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202411102003479_Categories.resx">
       <DependentUpon>202411102003479_Categories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202411111646511_tabby.resx">
+      <DependentUpon>202411111646511_tabby.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Website.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

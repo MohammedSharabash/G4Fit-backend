@@ -253,7 +253,7 @@
     <value>Cash</value>
   </data>
   <data name="Online" xml:space="preserve">
-    <value>Online</value>
+    <value>Online - UrWay</value>
   </data>
   <data name="Notifications" xml:space="preserve">
     <value>Notifications</value>
@@ -350,5 +350,8 @@
   </data>
   <data name="weight" xml:space="preserve">
     <value>weight</value>
+  </data>
+  <data name="Tabby" xml:space="preserve">
+    <value>Tabby</value>
   </data>
 </root>
