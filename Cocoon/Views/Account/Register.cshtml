@@ -28,22 +28,15 @@
                                         @Html.ValidationMessageFor(s => s.Email, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
-                                         @Html.TextBoxFor(s => s.IDNumber, new { @class = "form-control text-center", placeholder = Website.IDNumberPlaceholder })<i class="fa fa-id-card fa-fw"></i>
+                                        @Html.TextBoxFor(s => s.IDNumber, new { @class = "form-control text-center", placeholder = Website.IDNumberPlaceholder })<i class="fa fa-id-card fa-fw"></i>
                                         @Html.ValidationMessageFor(s => s.IDNumber, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
-                                            <div class="col-7">
+                                            <div class="col-12">
                                                 @Html.TextBoxFor(s => s.PhoneNumber, new { @class = "form-control text-center", placeholder = Website.PhoneNumberPlaceholder, type = "number" })<i style="left:29px" class="fa fa-phone fa-fw"></i>
                                             </div>
-                                            <div class="col-5">
-                                                <select name="CountryId" id="CountryId" required class="form-control" style="direction:@(culture == "ar" ? "" : "ltr")">
-                                                    @foreach (var country in Countries)
-                                                    {
-                                                        <option value="@country.Id">@(culture == "ar" ? country.NameAr : country.NameEn) @*(@(culture != "ar" ? "+" : "")@country.Country.PhoneCode@(culture == "ar" ? "+" : ""))*@</option>
-                                                    }
-                                                </select>
-                                            </div>
+
                                         </div>
                                         @Html.ValidationMessageFor(s => s.PhoneNumber, "", new { @class = "text-danger" })
                                     </div>

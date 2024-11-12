@@ -184,7 +184,7 @@
     <value>كلمه السر مطلوبة</value>
   </data>
   <data name="PasswordPlaceholder" xml:space="preserve">
-    <value>كلمه السر (6 ارقام فقط)</value>
+    <value>كلمه السر </value>
   </data>
   <data name="PersonalImage" xml:space="preserve">
     <value>الصوره الشخصيه</value>

@@ -45,10 +45,7 @@
                                 {
                                     <span class="badge bg-red pt-5 pb-5">القسم الرئيسى محذوف</span>
                                     <br /><br />}
-                                @if (Service.SubCategory.Category.IsDeleted == true)
-                                {
-                                    <span class="badge bg-red pt-5 pb-5">القسم الرئيسى محذوف</span>
-                                    <br /><br />}
+                               
                                 @if (Service.Offers != null && Service.Offers.Count(d => d.IsDeleted == false && d.IsFinished == false) > 0)
                                 {
                                     <span class="badge bg-green pt-5 pb-5">يوجد عرض نشط</span>}
@@ -56,7 +53,6 @@
                             </td>
                             <td>
                                 @Service.SubCategory.NameAr <br />
-                                @Service.SubCategory.Category.NameAr
                             </td>
                             <td>
                                 @Service.OriginalPrice ريال سعودي

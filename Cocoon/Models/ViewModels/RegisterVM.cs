@@ -23,8 +23,8 @@ namespace G4Fit.Models.ViewModels
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required(ErrorMessageResourceName = "PasswordFieldIsRequired", ErrorMessageResourceType = typeof(Website))]
-        [StringLength(6, MinimumLength = 6, ErrorMessageResourceType = typeof(Website), ErrorMessageResourceName = "PasswordFieldIMinimumLength")]
+        //[Required(ErrorMessageResourceName = "PasswordFieldIsRequired", ErrorMessageResourceType = typeof(Website))]
+        //[StringLength(6, MinimumLength = 6, ErrorMessageResourceType = typeof(Website), ErrorMessageResourceName = "PasswordFieldIMinimumLength")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
@@ -33,6 +33,6 @@ namespace G4Fit.Models.ViewModels
         [Compare("Password", ErrorMessageResourceName = "PasswordDoesNotMatch", ErrorMessageResourceType = typeof(Website))]
         public string ConfirmPassword { get; set; }
 
-        public long CountryId { get; set; }
+        public long CountryId { get; set; } = 1;
     }
 }

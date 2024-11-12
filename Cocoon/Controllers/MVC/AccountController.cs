@@ -139,7 +139,7 @@ namespace G4Fit.Controllers.MVC
                     Email = model.Email,
                     IDNumber = model.IDNumber,
                     Password = model.Password,
-                    CountryId = model.CountryId,
+                    CountryId = 1,
                 };
                 if (Image != null)
                 {

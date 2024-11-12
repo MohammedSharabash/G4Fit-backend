@@ -48,12 +48,12 @@
                                         <label for="CategoryId" class="col-sm-5 control-label required">القسم: </label>
                                         <div class="col-sm-7">
                                             <select name="CategoryId" id="CategoryId" class="select2 form-control" required>
-                                                @foreach (var category in Categories.OrderBy(w => w.Category.NameAr).ThenBy(s => s.NameAr))
+                                                @foreach (var category in Categories.OrderBy(w => w.NameAr))
                                                 {
-                                                    <option value="@category.Id">@category.NameAr - @category.Category.NameAr</option>
+                                                    <option value="@category.Id">@category.NameAr</option>
                                                 }
                                             </select>
-                                            @Html.ValidationMessageFor(d => d.SubCategoryId, "", new { @class = "text-danger" })
+                                            @Html.ValidationMessageFor(d => d.CategoryId, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
                                 </div>

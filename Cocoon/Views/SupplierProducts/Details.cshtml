@@ -17,7 +17,7 @@
             <li><span class="text-blue">الوصف بالعربى: </span> @(Model.DescriptionAr != null ? Model.DescriptionAr : "لا يوجد")</li>
             <li><span class="text-blue">الوصف بالانجليزى: </span> @(Model.DescriptionEn != null ? Model.DescriptionEn : "لا يوجد")</li>
             <li><span class="text-blue">السعر: </span> @(Model.OriginalPrice) ريال سعودي</li>
-            <li><span class="text-blue">القسم: </span> @Model.SubCategory.Category.NameAr - @Model.SubCategory.NameAr</li>
+            <li><span class="text-blue">القسم: </span> @Model.SubCategory.NameAr</li>
             <li><span class="text-blue">حاله الظهور: </span> @(Model.IsHidden == true ? "غير مرئى فى التطبيق" : "مرئى فى التطبيق ")</li>
             <li>
                 <span class="text-blue">الالوان: </span>

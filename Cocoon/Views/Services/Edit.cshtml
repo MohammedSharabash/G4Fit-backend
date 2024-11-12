@@ -50,12 +50,12 @@
                                         <label for="Category" class="col-sm-5 control-label required">القسم الرئيسى: </label>
                                         <div class="col-sm-7">
                                             <select name="CategoryId" id="CategoryId" class="select2 form-control" required>
-                                                @foreach (var category in Categories.OrderBy(w => w.Category.NameAr).ThenBy(s => s.NameAr))
+                                                @foreach (var category in Categories.OrderBy(w => w.NameAr).ThenBy(s => s.NameAr))
                                                 {
-                                                    <option @(Model.SubCategoryId == category.Id ? "selected" : "") value="@category.Id">@category.NameAr - @category.Category.NameAr</option>
+                                                    <option @(Model.CategoryId == category.Id ? "selected" : "") value="@category.Id">@category.NameAr</option>
                                                 }
                                             </select>
-                                            @Html.ValidationMessageFor(d => d.SubCategoryId, "", new { @class = "text-danger" })
+                                            @Html.ValidationMessageFor(d => d.CategoryId, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
                                 </div>
@@ -169,7 +169,7 @@
                             </div>
 
 
-                            <div class="row" id="Features-container"  style="margin:10px;">
+                            <div class="row" id="Features-container" style="margin:10px;">
                                 <hr />
                                 <div class="col-lg-12 text-danger mb-15">
                                     <h4>&bull; مواصفات الخدمه</h4>
