@@ -16,6 +16,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -577,6 +578,57 @@ namespace G4Fit.Controllers.API
             return Ok(baseResponse);
         }
 
+        #region update Data
+        [HttpPut]
+        [Route("updatedata")]
+        public IHttpActionResult UpdateUserData(PurposeOfSubscription PurposeOfSubscription, double? weight, double? length)
+        {
+            CurrentUserId = User.Identity.GetUserId();
+            var Headers = HttpContext.Current.Request.Headers;
+
+
+            ApplicationUser user = null;
+            if (!string.IsNullOrEmpty(CurrentUserId))
+            {
+                user = UserManager.FindById(CurrentUserId);
+                if (user == null)
+                {
+                    baseResponse.ErrorCode = Errors.UserNotAuthorized;
+                    return Content(HttpStatusCode.BadRequest, baseResponse);
+                }
+            }
+
+            if (user != null && (user.CountryId.HasValue == false || user.PhoneNumber == null))
+            {
+                baseResponse.ErrorCode = Errors.UserDoesNotHaveCountry;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
+            }
+
+            if (user != null && user.PhoneNumberConfirmed == false)
+            {
+                baseResponse.ErrorCode = Errors.UserNotVerified;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
+            }
+
+            user.weight = weight != null ? weight : user.weight;
+            user.length = length != null ? length : user.length;
+            db.SaveChanges();
+
+            var UserOrder = db.Orders.FirstOrDefault(x => ((x.UserId == CurrentUserId && x.UserId != null) /*|| x.UnknownUserKeyIdentifier == AnonymousKey*/) && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
+
+            if (UserOrder == null)
+            {
+                baseResponse.ErrorCode = Errors.UserBasketIsEmpty;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
+            }
+            UserOrder.PurposeOfSubscription = PurposeOfSubscription;
+            db.SaveChanges();
+            return Ok(baseResponse);
+
+        }
+
+        #endregion
+
         [AllowAnonymous]
         [HttpGet]
         [Route("checkout")]
@@ -704,6 +756,7 @@ namespace G4Fit.Controllers.API
         [Route("checkout")]
         public async Task<IHttpActionResult> CheckOut(CheckOutOrderDTO model)
         {
+
             string CurrentUserId = User.Identity.GetUserId();
             var UserOrder = db.Orders.FirstOrDefault(x => x.UserId != null && x.UserId == CurrentUserId && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
             if (UserOrder == null)
@@ -735,7 +788,20 @@ namespace G4Fit.Controllers.API
             {
                 try
                 {
+                    //var City = db.Cities.FirstOrDefault(s => s.IsDeleted == false && s.Country.IsDeleted == false && s.Id == model.CityId);
+                    //if (City == null)
+                    //{
+                    //    baseResponse.ErrorCode = Errors.CityNotFound;
+                    //    return Content(HttpStatusCode.BadRequest, baseResponse);
+                    //}
                     UserOrder.PaymentMethod = model.PaymentMethod;
+                    UserOrder.CityId = 1;
+                    //UserOrder.DeliveryFees = City.DeliveryFees == 0 || City.DeliveryFees == null ? 0 : City.DeliveryFees;
+                    UserOrder.DeliveryFees = 0;
+                    UserOrder.IsPaid = false;
+                    UserOrder.Address = model.Address;
+                    UserOrder.CreatedOn = DateTime.Now.ToUniversalTime();
+                    db.SaveChanges();
                     if (model.PaymentMethod == PaymentMethod.UrWay)
                     {
                         return GetPaymentGatewayUrl();
@@ -1339,7 +1405,7 @@ namespace G4Fit.Controllers.API
                     return Errors.UserNotAuthorized;
             }
 
-            var Service = db.Services.FirstOrDefault(d => d.Id == model.ServiceId && d.IsDeleted == false && d.Inventory > 0 && d.IsHidden == false && d.SubCategory.IsDeleted == false/* && d.SubCategory.Category.IsDeleted == false*/);
+            var Service = db.Services.FirstOrDefault(d => d.Id == model.ServiceId && d.IsDeleted == false && (d.Inventory > 0 || d.IsTimeBoundService) && d.IsHidden == false && d.SubCategory.IsDeleted == false/* && d.SubCategory.Category.IsDeleted == false*/);
             if (Service == null)
                 return Errors.ServiceNotFound;
 

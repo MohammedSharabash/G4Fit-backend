@@ -9,7 +9,7 @@ namespace G4Fit.Models.ViewModels
     public class CheckoutVM
     {
         public PaymentMethod PaymentMethod { get; set; }
-        public long CityId { get; set; }
+        public long CityId { get; set; } = 1;
         public string Address { get; set; }
     }
 }

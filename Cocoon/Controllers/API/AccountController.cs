@@ -51,6 +51,10 @@ namespace G4Fit.Controllers.API
                 profileDTO.Image = !string.IsNullOrEmpty(user.ImageUrl) ? "/Content/Images/Users/" + user.ImageUrl : null;
                 profileDTO.Name = user.Name;
                 profileDTO.PhoneNumber = user.PhoneNumber;
+                profileDTO.Address = user.Address;
+                profileDTO.IDNumber = user.IDNumber;
+                profileDTO.weight = user.weight;
+                profileDTO.length = user.length;
                 profileDTO.PhoneNumberCode = user.PhoneNumberCountryCode;
                 profileDTO.CountryId = user.CountryId;
                 baseResponse.Data = profileDTO;
@@ -80,9 +84,9 @@ namespace G4Fit.Controllers.API
                     if (user != null)
                     {
                         user.Name = model.Name;
-                        user.PhoneNumber = model.PhoneNumber;
+                        user.PhoneNumber = model.PhoneNumber != null ? model.PhoneNumber : user.PhoneNumber;
                         user.Address = model.Address;
-                        user.Email = model.Email;
+                        user.Email = model.Email != null ? model.Email : user.Email;
                         //user.IDNumber = model.IDNumber;
                         user.PhoneNumberCountryCode = Country.PhoneCode;
                         user.CountryId = Country.Id;
@@ -744,7 +748,7 @@ namespace G4Fit.Controllers.API
                 try
                 {
                     ClaimsIdentity oAuthIdentity = new ClaimsIdentity(Startup.OAuthOptions.AuthenticationType);
-                    oAuthIdentity.AddClaim(new Claim(ClaimTypes.Name, Email));
+                    if (Email != null) oAuthIdentity.AddClaim(new Claim(ClaimTypes.Name, Email));
                     oAuthIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, Id));
                     oAuthIdentity.AddClaim(new Claim(ClaimTypes.Role, "User"));
 

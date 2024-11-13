@@ -28,11 +28,13 @@ namespace G4Fit.Controllers.MVC
     [Authorize]
     public class OrdersController : BaseController
     {
+        [Authorize(Roles = "Admin")]
         public ActionResult Dashboard()
         {
             return View(db.Orders.Where(s => s.IsDeleted == false && s.OrderStatus != OrderStatus.Initialized && s.UserId != null).OrderByDescending(s => s.CreatedOn));
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult ToggleDelivered(long? OrderId)
         {
             if (OrderId.HasValue == false)
@@ -52,6 +54,7 @@ namespace G4Fit.Controllers.MVC
             db.SaveChanges();
             return RedirectToAction("Dashboard");
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult ToggleCanceled(long? OrderId)
         {
             if (OrderId.HasValue == false)
@@ -113,6 +116,7 @@ namespace G4Fit.Controllers.MVC
             return RedirectToAction("Dashboard");
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult TogglePaid(long? OrderId)
         {
             if (OrderId.HasValue == false)
@@ -138,6 +142,7 @@ namespace G4Fit.Controllers.MVC
             return RedirectToAction("Dashboard");
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Details(long? OrderId)
         {
             if (OrderId.HasValue == false)
@@ -155,6 +160,7 @@ namespace G4Fit.Controllers.MVC
             return RedirectToAction("Dashboard");
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult TransactionHistory(long? OrderId)
         {
             if (OrderId.HasValue == false)
@@ -701,6 +707,7 @@ namespace G4Fit.Controllers.MVC
             }
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var UserOrders = db.Orders.Where(x => x.UserId == CurrentUserId && x.OrderStatus != OrderStatus.Initialized && !x.IsDeleted);
@@ -739,7 +746,7 @@ namespace G4Fit.Controllers.MVC
         [HttpPost]
         public async Task<ActionResult> Checkout(CheckoutVM model)
         {
-            var City = db.Cities.FirstOrDefault(s => s.IsDeleted == false && s.Country.IsDeleted == false && s.Id == model.CityId);
+            var City = db.Cities.FirstOrDefault(s => s.IsDeleted == false && s.Country.IsDeleted == false && s.Id == 1);
             if (City == null)
             {
                 ModelState.AddModelError("CityId", culture == "ar" ? "المنطقة المطلوبة غير متاحة" : "City is not available");
@@ -751,7 +758,7 @@ namespace G4Fit.Controllers.MVC
             if (UserOrder != null)
             {
                 UserOrder.PaymentMethod = model.PaymentMethod;
-                UserOrder.CityId = model.CityId;
+                UserOrder.CityId = 1;
                 UserOrder.DeliveryFees = City.DeliveryFees == 0 || City.DeliveryFees == null ? 0 : City.DeliveryFees;
                 UserOrder.IsPaid = false;
                 UserOrder.Address = model.Address;
@@ -849,45 +856,6 @@ namespace G4Fit.Controllers.MVC
                 return RedirectToAction("Cart");
             }
         }
-        #region Tabby Test Api 
-        //[AllowAnonymous]
-        //[HttpPost]
-        //[Route("test")]
-        //public async Task<IHttpActionResult> test(CheckOutStoreOrderDTO model)
-        //{
-        //    var id = db.StoreOrders.Max(w => w.Id);
-        //    var UserOrder = db.StoreOrders.Include(x => x.User).Include(w => w.Driver).Include(w => w.Driver.User).Include(w => w.Items)
-        //       .FirstOrDefault(w => w.Id == 114);
-
-        //    var jsonResponse = await GetTabbyCheckoutUrl(UserOrder);
-        //    var responseObject = JObject.Parse(jsonResponse);
-
-        //    // Extract the URL from the response
-        //    var installments = (JArray)responseObject["configuration"]["available_Services"]["installments"];
-        //    var url = (string)installments[0]["web_url"]; // Assuming there's only one installment
-        //    baseResponse.Data = url;
-        //    if (url != null)
-        //    {
-        //        //save Payment Id 
-        //        var reference_id = (string)responseObject["id"];
-        //        UserOrder.Tabby_reference_id = reference_id;
-
-        //        //save reference_id
-        //        var paymentId = (string)responseObject["payment"]["id"];
-        //        UserOrder.Tabby_PaymentId = paymentId;
-        //        db.SaveChanges();
-
-        //        baseResponse.Data = url;
-        //        return Ok(baseResponse);
-        //    }
-        //    else
-        //    {
-        //        baseResponse.ErrorCode = Errors.SomethingWentWrong;
-        //        return Content(HttpStatusCode.BadRequest, baseResponse);
-        //    }
-        //}
-        #endregion
-
         private async Task<string> GetTabbyCheckoutUrl(Order order)
         {
             try

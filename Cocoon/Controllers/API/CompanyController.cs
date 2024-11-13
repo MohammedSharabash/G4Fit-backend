@@ -47,5 +47,40 @@ namespace G4Fit.Controllers.API
             }
             return Ok(baseResponse);
         }
+
+        [HttpGet]
+        [Route("terms")]
+        public IHttpActionResult GetTerms()
+        {
+            var CompanyInfo = db.CompanyDatas.FirstOrDefault(d => !d.IsDeleted);
+            if (CompanyInfo != null)
+            {
+                var Data = new
+                {
+                    CompanyInfo.TermsConditionsAr,
+                    CompanyInfo.TermsConditionsEn,
+                };
+                baseResponse.Data = Data;
+                return Ok(baseResponse);
+            }
+            return Ok(baseResponse);
+        }
+        [HttpGet]
+        [Route("privacy")]
+        public IHttpActionResult GetPrivacy()
+        {
+            var CompanyInfo = db.CompanyDatas.FirstOrDefault(d => !d.IsDeleted);
+            if (CompanyInfo != null)
+            {
+                var Data = new
+                {
+                    CompanyInfo.PrivacyPolicyAr,
+                    CompanyInfo.PrivacyPolicyEn,
+                };
+                baseResponse.Data = Data;
+                return Ok(baseResponse);
+            }
+            return Ok(baseResponse);
+        }
     }
 }

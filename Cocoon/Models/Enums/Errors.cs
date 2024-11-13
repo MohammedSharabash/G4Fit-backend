@@ -61,5 +61,6 @@ namespace G4Fit.Models.Enums
         EmailAlreadyExists,
         InvalidIDNumber,
         IDNumberAlreadyExists,
+        CityNotFound,
     }
 }

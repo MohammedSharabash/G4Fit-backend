@@ -40,13 +40,13 @@
                                         <label for="PaymentMethod">@(culture == "ar" ? "وسيلة الدفع" : "Payment Method")</label>
                                         <select class="form-control text-center" required name="PaymentMethod" id="PaymentMethod">
                                             <option selected value="@G4Fit.Models.Enums.PaymentMethod.Cash">@(culture == "ar" ? "كاش" : "Cash")</option>
-                                            <option value="@G4Fit.Models.Enums.PaymentMethod.Online">@(culture == "ar" ? "اونلاين - يور واي" : "Online- UrWay")</option>
+                                            <option value="@G4Fit.Models.Enums.PaymentMethod.UrWay">@(culture == "ar" ? "اونلاين - يور واي" : "Online- UrWay")</option>
                                             <option value="@G4Fit.Models.Enums.PaymentMethod.Tabby">@(culture == "ar" ? "تابي" : "Tabby")</option>
                                         </select>
                                         @*@Html.EnumDropDownListFor(s => s.PaymentMethod, new { @class = "form-control text-center" })*@
                                         @Html.ValidationMessageFor(s => s.PaymentMethod, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="form-group">
+                                    @*<div class="form-group">
                                         <label for="CountryId">@(culture == "ar" ? "الدولة" : "Country")</label>
                                         <select class="form-control" id="CountryId">
                                             @foreach (var country in Countries)
@@ -67,7 +67,7 @@
                                         <label for="CityId">@(culture == "ar" ? "المدينة" : "City")</label>
                                         <select class="form-control" id="CityId" name="CityId"></select>
                                         @Html.ValidationMessageFor(s => s.CityId, "", new { @class = "text-danger" })
-                                    </div>
+                                    </div>*@
                                     <div class="form-group">
                                         <label for="CityId">@(culture == "ar" ? "العنوان بالتفصيل" : "Address In Details")</label>
                                         <input class="form-control" id="Address" name="Address" />
