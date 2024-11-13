@@ -20,6 +20,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Windows.Media.Media3D;
 using static G4Fit.Controllers.MVC.OrdersController;
 
 namespace G4Fit.Controllers.API
@@ -758,12 +759,46 @@ namespace G4Fit.Controllers.API
         {
 
             string CurrentUserId = User.Identity.GetUserId();
+
+            #region user data
+            var Headers = HttpContext.Current.Request.Headers;
+
+            ApplicationUser userData = null;
+            if (!string.IsNullOrEmpty(CurrentUserId))
+            {
+                userData = UserManager.FindById(CurrentUserId);
+                if (userData == null)
+                {
+                    baseResponse.ErrorCode = Errors.UserNotAuthorized;
+                    return Content(HttpStatusCode.BadRequest, baseResponse);
+                }
+            }
+
+            if (userData != null && (userData.CountryId.HasValue == false || userData.PhoneNumber == null))
+            {
+                baseResponse.ErrorCode = Errors.UserDoesNotHaveCountry;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
+            }
+
+            if (userData != null && userData.PhoneNumberConfirmed == false)
+            {
+                baseResponse.ErrorCode = Errors.UserNotVerified;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
+            }
+
+            userData.weight = model.weight != null ? model.weight : userData.weight;
+            userData.length = model.length != null ? model.length : userData.length;
+            db.SaveChanges();
+            #endregion
+
             var UserOrder = db.Orders.FirstOrDefault(x => x.UserId != null && x.UserId == CurrentUserId && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
             if (UserOrder == null)
             {
                 baseResponse.ErrorCode = Errors.UserBasketIsEmpty;
                 return Content(HttpStatusCode.BadRequest, baseResponse);
             }
+            UserOrder.PurposeOfSubscription = model.PurposeOfSubscription;
+            db.SaveChanges();
 
             var Validation = ValidateBasketItems(UserOrder);
             if (Validation != Errors.Success)

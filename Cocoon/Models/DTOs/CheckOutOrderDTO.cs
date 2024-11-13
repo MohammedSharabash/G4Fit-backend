@@ -11,5 +11,8 @@ namespace G4Fit.Models.DTOs
         public PaymentMethod PaymentMethod { get; set; }
         //public long CityId { get; set; }
         public string Address { get; set; }
+        public double? weight { get; set; }
+        public double? length { get; set; }
+        public PurposeOfSubscription? PurposeOfSubscription { get; set; }
     }
 }
