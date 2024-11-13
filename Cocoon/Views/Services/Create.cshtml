@@ -290,6 +290,7 @@
         var inventoryContainer = document.getElementById("inventory-container");
         var FeaturesContainer = document.getElementById("Features-container");
         var inventoryInput = document.getElementById("Inventory");
+        var ServiceDaysInput = document.getElementById("ServiceDays");
         var serviceDaysContainer = document.getElementById("service-days-container");
 
         // Function to toggle fields based on checkbox status
@@ -300,12 +301,14 @@
                 inventoryContainer.style.display = "none";
                 FeaturesContainer.style.display = "none";
                 inventoryInput.value = 1;
+                ServiceDaysInput.value = 1;
             } else {
                 // Hide ServiceDays, show Inventory and clear value
                 serviceDaysContainer.style.display = "none";
                 inventoryContainer.style.display = "block";
                 FeaturesContainer.style.display = "block";
                 inventoryInput.value = '1'; // Clear the value of Inventory
+                ServiceDaysInput.value = '1'; // Clear the value of ServiceDays
             }
         }
 
