@@ -1,4 +1,5 @@
 ﻿@model G4Fit.Models.Domains.Service
+@using System.Text.RegularExpressions
 @{
     Layout = "~/Views/Dashboard/Layout.cshtml";
     ViewBag.Title = Model.NameAr;
@@ -14,15 +15,35 @@
         <ul>
             <li><span class="text-blue">الاسم بالعربى: </span> @Model.NameAr</li>
             <li><span class="text-blue">الاسم بالانجليزى: </span> @Model.NameEn</li>
-            <li><span class="text-blue">الوصف بالعربى: </span> @(Model.DescriptionAr != null ? Model.DescriptionAr : "لا يوجد")</li>
-            <li><span class="text-blue">الوصف بالانجليزى: </span> @(Model.DescriptionEn != null ? Model.DescriptionEn : "لا يوجد")</li>
+            <li>
+                <span class="text-blue">الوصف بالعربى: </span>
+                @if (Model.DescriptionAr != null)
+                {
+                    @Html.Raw(Regex.Replace(Model.DescriptionAr, @"<[^>]+?>", "").Replace("\r\n", "<br />").Replace("\n", "<br />"))
+                }
+                else
+                {
+                    <text>لا يوجد</text>
+                }
+            </li>
+            <li>
+                <span class="text-blue">الوصف بالانجليزى: </span>
+                @if (Model.DescriptionEn != null)
+                {
+                    @Html.Raw(Regex.Replace(Model.DescriptionEn, @"<[^>]+?>", "").Replace("\r\n", "<br />").Replace("\n", "<br />"))
+                }
+                else
+                {
+                    <text>لا يوجد</text>
+                }
+            </li>
             <li><span class="text-blue">السعر: </span> @(Model.OriginalPrice) ريال سعودي</li>
             <li><span class="text-blue">القسم: </span> @Model.SubCategory.NameAr</li>
             <li><span class="text-blue">حاله الظهور: </span> @(Model.IsHidden == true ? "غير مرئى فى التطبيق" : "مرئى فى التطبيق ")</li>
             @if (!Model.IsTimeBoundService)
             {
 
-                <li>
+                @*<li>
                     <span class="text-blue">الالوان: </span>
                     @if (Model.Colors != null && Model.Colors.Count(s => s.IsDeleted == false) > 0)
                     {
@@ -53,7 +74,7 @@
                     {
                         <span>لا يوجد</span>
                     }
-                </li>
+                </li>*@
                 <li><span class="text-blue">الكميه المتاحه: </span> @Model.Inventory</li>
                 <li><span class="text-blue">عدد مرات البيع: </span> @Model.SellCounter مره</li>
             }

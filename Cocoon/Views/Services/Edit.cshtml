@@ -169,52 +169,52 @@
                             </div>
 
 
-                            <div class="row" id="Features-container" style="margin:10px;">
-                                <hr />
-                                <div class="col-lg-12 text-danger mb-15">
-                                    <h4>&bull; مواصفات الخدمه</h4>
-                                </div>
+                            @*<div class="row" id="Features-container" style="margin:10px;">
+                                    <hr />
+                                    <div class="col-lg-12 text-danger mb-15">
+                                        <h4>&bull; مواصفات الخدمه</h4>
+                                    </div>
 
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="Features_0__FeatureAr" class="col-sm-2 control-label">الوان الخدمه: </label>
-                                        <div class="col-sm-10">
-                                            @foreach (var color in Service.Colors.Where(s => s.IsDeleted == false))
-                                            {
-                                                <p style="color:@color.Color" id="Color_@color.Id">
-                                                    @color.Color
-                                                    <button type="button" class="fa fa-times btn-danger btn btn-sm" onclick="DeleteColor('@color.Id')"></button>
-                                                </p>
-                                            }
-                                            <div class="field_wrapper_color">
-                                                <div>
-                                                    <a href="javascript:void(0);" class="add_button_color btn btn-outline-primary my-3" title="Add field"><i class="fa fa-plus"></i> اضافه لون</a>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="Features_0__FeatureAr" class="col-sm-2 control-label">الوان الخدمه: </label>
+                                            <div class="col-sm-10">
+                                                @foreach (var color in Service.Colors.Where(s => s.IsDeleted == false))
+                                                {
+                                                    <p style="color:@color.Color" id="Color_@color.Id">
+                                                        @color.Color
+                                                        <button type="button" class="fa fa-times btn-danger btn btn-sm" onclick="DeleteColor('@color.Id')"></button>
+                                                    </p>
+                                                }
+                                                <div class="field_wrapper_color">
+                                                    <div>
+                                                        <a href="javascript:void(0);" class="add_button_color btn btn-outline-primary my-3" title="Add field"><i class="fa fa-plus"></i> اضافه لون</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="Features_0__FeatureAr" class="col-sm-2 control-label">احجام الخدمه: </label>
-                                        <div class="col-sm-10">
-                                            @foreach (var size in Service.Sizes.Where(s => s.IsDeleted == false))
-                                            {
-                                                <p id="Size_@size.Id">
-                                                    @size.Size
-                                                    <button type="button" class="fa fa-times btn-danger btn btn-sm" onclick="DeleteSize('@size.Id')"></button>
-                                                </p>
-                                            }
-                                            <div class="field_wrapper_size">
-                                                <div>
-                                                    <a href="javascript:void(0);" class="add_button_size btn btn-outline-primary my-3" title="Add field"><i class="fa fa-plus"></i> اضافه حجم</a>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="Features_0__FeatureAr" class="col-sm-2 control-label">احجام الخدمه: </label>
+                                            <div class="col-sm-10">
+                                                @foreach (var size in Service.Sizes.Where(s => s.IsDeleted == false))
+                                                {
+                                                    <p id="Size_@size.Id">
+                                                        @size.Size
+                                                        <button type="button" class="fa fa-times btn-danger btn btn-sm" onclick="DeleteSize('@size.Id')"></button>
+                                                    </p>
+                                                }
+                                                <div class="field_wrapper_size">
+                                                    <div>
+                                                        <a href="javascript:void(0);" class="add_button_size btn btn-outline-primary my-3" title="Add field"><i class="fa fa-plus"></i> اضافه حجم</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                </div>*@
                             if (Model.Images != null && Model.Images.Count() > 0)
                             {
                                 <hr />
