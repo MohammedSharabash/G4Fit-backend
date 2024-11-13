@@ -339,6 +339,7 @@
     <Compile Include="Controllers\MVC\SupplierOrdersController.cs" />
     <Compile Include="Controllers\MVC\SupplierProductsController.cs" />
     <Compile Include="Controllers\MVC\SuppliersController.cs" />
+    <Compile Include="Controllers\MVC\about.cs" />
     <Compile Include="Controllers\MVC\Terms.cs" />
     <Compile Include="Controllers\MVC\DeliveryRulesController.cs" />
     <Compile Include="Controllers\MVC\PackagesController.cs" />
@@ -415,6 +416,10 @@
     <Compile Include="Migrations\202411111646511_tabby.cs" />
     <Compile Include="Migrations\202411111646511_tabby.Designer.cs">
       <DependentUpon>202411111646511_tabby.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202411132105284_about.cs" />
+    <Compile Include="Migrations\202411132105284_about.Designer.cs">
+      <DependentUpon>202411132105284_about.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Data\ApplicationDbContext.cs" />
@@ -1867,6 +1872,8 @@
     <Content Include="Views\Services\CreateServices.cshtml" />
     <Content Include="Views\Account\Profile.cshtml" />
     <Content Include="Views\SubCategories\View.cshtml" />
+    <Content Include="Views\about\Dashboard.cshtml" />
+    <Content Include="Views\about\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1913,6 +1920,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202411111646511_tabby.resx">
       <DependentUpon>202411111646511_tabby.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202411132105284_about.resx">
+      <DependentUpon>202411132105284_about.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Website.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

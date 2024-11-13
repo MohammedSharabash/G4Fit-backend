@@ -35,7 +35,7 @@
                 </a>
 
                 <ul class="treeview-menu @(Request.Url.AbsolutePath.ToLower().Contains("categories") || Request.Url.AbsolutePath.ToLower().Contains("promotionalsections") ? "menuopen" : "")">
-                 @*   <li><a href="@Url.Action("Index", "Categories")"><i class="fa fa-circle-o"></i> الاقسام الرئيسية</a></li>*@
+                    @*   <li><a href="@Url.Action("Index", "Categories")"><i class="fa fa-circle-o"></i> الاقسام الرئيسية</a></li>*@
                     <li><a href="@Url.Action("Index", "SubCategories")"><i class="fa fa-circle-o"></i> الاقسام @*الفرعية*@</a></li>
                     @*<li><a href="@Url.Action("Index", "PromotionalSections")"><i class="fa fa-circle-o"></i> الاقسام الاخرى</a></li>*@
                 </ul>
@@ -92,7 +92,7 @@
 
             @{
                 var ListOfKeywords = new List<string>
-                                    {
+                                        {
                                 "sellingpolicy","sellwithus","company","datas","privacy","deliveryrules","terms","exchange","howto","customersupport","informations"
                             };
             }
@@ -104,6 +104,7 @@
                 </a>
                 <ul class="treeview-menu @(ListOfKeywords.Any(w => Request.Url.AbsolutePath.ToLower().Contains(w)) ? "menuopen" : "")">
                     <li><a href="@Url.Action("Index", "CompanyDatas")"><i class="fa fa-circle-o"></i> التعريف بالشركه </a></li>
+                    <li><a href="@Url.Action("Dashboard", "about")"><i class="fa fa-circle-o"></i> نبذه عن الشركه </a></li>
                     <li><a href="@Url.Action("Dashboard", "Privacy")"><i class="fa fa-circle-o"></i> سياسة الخصوصية </a></li>
                     @*<li><a href="@Url.Action("Dashboard", "DeliveryRules")"><i class="fa fa-circle-o"></i> شروط التوصيل </a></li>*@
                     <li><a href="@Url.Action("Dashboard", "Terms")"><i class="fa fa-circle-o"></i> الشروط والاحكام </a></li>
@@ -112,7 +113,7 @@
                     <li><a href="@Url.Action("Dashboard", "HowTo")"><i class="fa fa-circle-o"></i> كيفية الطلب</a></li>
                     <li><a href="@Url.Action("Dashboard", "Informations")"><i class="fa fa-circle-o"></i> التعليمات</a></li>
                     @*<li><a href="@Url.Action("SellingPolicy", "Suppliers")"><i class="fa fa-circle-o"></i> شروط وأحكام البائع</a></li>
-                    <li><a href="@Url.Action("SellWithUs", "Suppliers")"><i class="fa fa-circle-o"></i> البيع معنا</a></li>*@
+                        <li><a href="@Url.Action("SellWithUs", "Suppliers")"><i class="fa fa-circle-o"></i> البيع معنا</a></li>*@
                 </ul>
                 @*<ul class="treeview-menu @(@Request.Url.AbsolutePath.ToLower().Contains("message") ? "menuopen" : "")">
                         <li><a href="@Url.Action("Index", "CompanyMessages")"><i class="fa fa-circle-o"></i> رسائل الزوار</a></li>

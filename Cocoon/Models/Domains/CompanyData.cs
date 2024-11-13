@@ -41,6 +41,10 @@ namespace G4Fit.Models.Domains
         public string TermsConditionsAr { get; set; }
         [AllowHtml]
         public string TermsConditionsEn { get; set; }
+       [AllowHtml]
+        public string aboutConditionsAr { get; set; }
+        [AllowHtml]
+        public string aboutConditionsEn { get; set; }
         [AllowHtml]
         public string DeliveringConditionsAr { get; set; }
         [AllowHtml]
