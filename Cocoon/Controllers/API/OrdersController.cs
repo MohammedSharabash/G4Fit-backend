@@ -197,7 +197,7 @@ namespace G4Fit.Controllers.API
 
         [HttpPost]
         [AllowAnonymous]
-        [Route("addTimeBoundServicetobasket")]
+        [Route("AddTimeBoundServiceToCart")]
         public IHttpActionResult AddTimeBoundServiceItemToBasket(AddTimeBoundServiceItemToBasketDTO model)
         {
             var Headers = HttpContext.Current.Request.Headers;

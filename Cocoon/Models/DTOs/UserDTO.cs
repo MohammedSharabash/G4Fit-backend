@@ -13,6 +13,8 @@ namespace G4Fit.Models.DTOs
         public string Address { get; set; }
         public string Qr { get; set; }
         public string Token { get; set; }
+        public double? weight { get; set; }
+        public double? length { get; set; }
         public string RefreshToken { get; set; }
         public int NotificationsNumber { get; set; }
         public string Name { get; set; }
@@ -35,6 +37,8 @@ namespace G4Fit.Models.DTOs
                 ImageName = requiredUser.ImageUrl,
                 Email = requiredUser.Email,
                 Qr = requiredUser.QR,
+                weight = requiredUser.weight,
+                length = requiredUser.length,
                 Address = requiredUser.Address,
                 CountryId = requiredUser.CountryId,
                 IDNumber = requiredUser.IDNumber,

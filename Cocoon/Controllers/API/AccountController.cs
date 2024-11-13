@@ -55,6 +55,8 @@ namespace G4Fit.Controllers.API
                 profileDTO.IDNumber = user.IDNumber;
                 profileDTO.weight = user.weight;
                 profileDTO.length = user.length;
+                profileDTO.Qr = user.QR;
+                profileDTO.Email = user.Email;
                 profileDTO.PhoneNumberCode = user.PhoneNumberCountryCode;
                 profileDTO.CountryId = user.CountryId;
                 baseResponse.Data = profileDTO;

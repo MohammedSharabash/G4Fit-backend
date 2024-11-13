@@ -12,6 +12,7 @@ namespace G4Fit.Models.DTOs
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public string IDNumber { get; set; }
+        public string Qr { get; set; }
         public double? weight { get; set; }
         public double? length { get; set; }
         public string Email { get; set; }
