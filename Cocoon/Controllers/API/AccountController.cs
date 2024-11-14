@@ -82,11 +82,13 @@ namespace G4Fit.Controllers.API
                 try
                 {
                     var user = await UserManager.FindByIdAsync(CurrentUserId);
-                    var Country = db.Countries.Find(model.CountryId);
+                    var Country = db.Countries.Find(1);
                     if (user != null)
                     {
                         user.Name = model.Name;
                         user.PhoneNumber = model.PhoneNumber != null ? model.PhoneNumber : user.PhoneNumber;
+                        user.weight = model.weight != null ? model.weight : user.weight;
+                        user.length = model.length != null ? model.length : user.length;
                         user.Address = model.Address;
                         user.Email = model.Email != null ? model.Email : user.Email;
                         //user.IDNumber = model.IDNumber;
@@ -757,7 +759,7 @@ namespace G4Fit.Controllers.API
                     AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, new AuthenticationProperties());
                     DateTime currentUtc = DateTime.UtcNow.ToUniversalTime();
                     ticket.Properties.IssuedUtc = currentUtc;
-                    ticket.Properties.ExpiresUtc = currentUtc.Add(TimeSpan.FromDays(3650));
+                    ticket.Properties.ExpiresUtc = currentUtc.Add(TimeSpan.FromMinutes(30));
                     string accessToken = Startup.OAuthOptions.AccessTokenFormat.Protect(ticket);
                     Request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
                     return accessToken;

@@ -53,7 +53,7 @@ namespace G4Fit
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(3065),
                 RefreshTokenProvider = new OAuthCustomRefreshTokenProvider(),
                 // In Serviceion mode set AllowInsecureHttp = false
-                AllowInsecureHttp = true
+                AllowInsecureHttp = false
             };
 
             // Enable the application to use bearer tokens to authenticate users

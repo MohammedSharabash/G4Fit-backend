@@ -26,7 +26,7 @@ namespace G4Fit.Providers
             var refreshTokenProperties = new AuthenticationProperties(context.Ticket.Properties.Dictionary)
             {
                 IssuedUtc = context.Ticket.Properties.IssuedUtc,
-                ExpiresUtc = DateTime.UtcNow.AddYears(10)
+                ExpiresUtc = DateTime.UtcNow.AddMonths(5)
             };
             var refreshTokenTicket = await Task.Run(() => new AuthenticationTicket(context.Ticket.Identity, refreshTokenProperties));
 

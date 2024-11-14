@@ -44,7 +44,7 @@
                     <li data-id="Sell"><a href="@Url.Action("Index", "Home")?#Sell">@Website.MostSold</a></li>
                     @*<li data-id="Offer"><a href="@Url.Action("Index", "Home")?#Offer">@Website.Offers</a></li>*@
                     @*<li><a href="@Url.Action("Index", "Packages")">@Website.Packages</a></li>*@
-                    <li data-id="About"><a href="@Url.Action("About", "Home")">@Website.AboutUs</a></li>
+                    <li data-id="About"><a href="@Url.Action("Index", "about")">@Website.AboutUs</a></li>
                     @if (User.Identity.IsAuthenticated == true)
                     {
                         <li><a href="javascript:document.getElementById('logoutForm').submit()">@Website.Logout</a></li>
