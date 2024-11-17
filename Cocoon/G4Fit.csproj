@@ -1727,7 +1727,7 @@
     <Content Include="Content\Services.xlsx" />
     <Content Include="Content\ServicesDetails.xlsx" />
     <None Include="Properties\PublishProfiles\FolderProfile4.pubxml" />
-    <None Include="Properties\PublishProfiles\site12245-WebDeploy.pubxml" />
+    <None Include="Properties\PublishProfiles\site12245-WebDeploy1.pubxml" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\jquery-3.5.1.min.js" />

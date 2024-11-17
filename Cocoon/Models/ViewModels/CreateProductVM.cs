@@ -26,7 +26,7 @@ namespace G4Fit.Models.ViewModels
         //[Required(ErrorMessage = "هل الخدمة محددة بوقت؟")]
         public bool IsTimeBoundService { get; set; }
         //[Required(ErrorMessage = "عدد ايام الاشتراك بالخدمه مطلوب")]
-        public int ServiceDays { get; set; }
+        public int ServiceDays { get; set; } = 1;
         //[Required(ErrorMessage = "الكميه مطلوبه")]
         public long Inventory { get; set; }
         [Required(ErrorMessage = "القسم مطلوب")]
