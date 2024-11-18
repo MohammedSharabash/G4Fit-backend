@@ -87,7 +87,7 @@
                                         <label for="DescriptionAr" class="col-sm-2 control-label">وصف الخدمه بالعربى:</label>
                                         <div class="col-sm-10">
                                             @*@Html.TextAreaFor(model => model.DescriptionAr, htmlAttributes: new { @class = "form-control", rows = 4 })*@
-                                            @Html.TextAreaFor(w => w.DescriptionAr, new { @class = "rich-text-editor" })
+                                            @Html.TextAreaFor(w => w.DescriptionAr, new { @class = "", id = "tiny" })
                                             @Html.ValidationMessageFor(d => d.DescriptionAr, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
@@ -98,7 +98,7 @@
                                         <label for="DescriptionEn" class="col-sm-2 control-label">وصف الخدمه بالانجليزى:</label>
                                         <div class="col-sm-10">
                                             @*@Html.TextAreaFor(model => model.DescriptionEn, htmlAttributes: new { @class = "form-control", rows = 4 })*@
-                                            @Html.TextAreaFor(w => w.DescriptionEn, new { @class = "rich-text-editor" })
+                                            @Html.TextAreaFor(w => w.DescriptionEn, new { id = "tiny" })
                                             @Html.ValidationMessageFor(d => d.DescriptionEn, "", new { @class = "text-danger" })
                                         </div>
                                     </div>

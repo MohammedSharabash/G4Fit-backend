@@ -241,6 +241,16 @@
             })
         })
     </script>
+    <script src="https://cdn.tiny.cloud/1/saggjtoxehqeyb9p4cl39dx96fcu1ybata3acvozn0ww329d/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <!-- Place the following <script> and <textarea> tags in your HTML's <body> -->
+    <script>
+        tinymce.init({
+            selector: 'textarea#tiny',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
+    </script>
     @if (TempData["Success"] != null)
     {
         <script>

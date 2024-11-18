@@ -9,11 +9,11 @@
         {
             <h3>محتوى صفحه سياسة الاستبدال والاسترجاع باللغة العربية:</h3>
             <br />
-            @Html.TextAreaFor(w => w.ContentAr, new { @class = "rich-text-editor" })
+            @Html.TextAreaFor(w => w.ContentAr, new { id = "tiny" })
             <br />
             <h3>محتوى صفحه سياسة الاستبدال والاسترجاع باللغة الانجليزية:</h3>
             <br />
-            @Html.TextAreaFor(w => w.ContentEn, new { @class = "rich-text-editor" })
+            @Html.TextAreaFor(w => w.ContentEn, new { id = "tiny" })
 
             <button type="submit" class="btn btn-success">حفظ</button>
         }
