@@ -29,7 +29,6 @@ namespace G4Fit.Models.DTOs
         public string Address { get; set; }
 
         [Required]
-        [StringLength(6, MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 

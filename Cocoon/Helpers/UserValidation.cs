@@ -145,11 +145,11 @@ namespace G4Fit.Helpers
                     return Errors.SomethingIsWrong;
             }
 
-            var IsValidPassword = registerDTO.Password.All(char.IsDigit);
-            if (!IsValidPassword)
-            {
-                return Errors.PasswordFieldMustBeStringWithMinimumLengthOf6Chars;
-            }
+            //var IsValidPassword = registerDTO.Password.All(char.IsDigit);
+            //if (!IsValidPassword)
+            //{
+            //    return Errors.PasswordFieldMustBeStringWithMinimumLengthOf6Chars;
+            //}
 
             var Country = db.Countries.FirstOrDefault(s => s.IsDeleted == false && s.Id == registerDTO.CountryId);
             if (Country == null)
