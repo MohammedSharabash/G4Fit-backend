@@ -466,7 +466,7 @@ namespace Cocoon.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password must be 6 letters only.
+        ///   Looks up a localized string similar to Password must be 6 letters or more.
         /// </summary>
         public static string PasswordFieldIMinimumLength {
             get {

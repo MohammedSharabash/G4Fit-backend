@@ -11,7 +11,7 @@ namespace G4Fit.Models.ViewModels
         public string Provider { get; set; } //Email or Phone Number
 
         [Required(ErrorMessageResourceName = "PasswordFieldIsRequired", ErrorMessageResourceType = typeof(Website))]
-        [StringLength(6, MinimumLength = 6, ErrorMessageResourceType = typeof(Website), ErrorMessageResourceName = "PasswordFieldIMinimumLength")]
+        //[StringLength(6, MinimumLength = 6, ErrorMessageResourceType = typeof(Website), ErrorMessageResourceName = "PasswordFieldIMinimumLength")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }

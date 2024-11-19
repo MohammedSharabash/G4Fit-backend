@@ -178,7 +178,7 @@
     <value>Password does not match</value>
   </data>
   <data name="PasswordFieldIMinimumLength" xml:space="preserve">
-    <value>Password must be 6 letters only</value>
+    <value>Password must be 6 letters or more</value>
   </data>
   <data name="PasswordFieldIsRequired" xml:space="preserve">
     <value>Password field is required</value>

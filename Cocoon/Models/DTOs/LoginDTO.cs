@@ -12,7 +12,7 @@ namespace G4Fit.Models.DTOs
         public string Provider { get; set; }
 
         [Required]
-        [StringLength(100, MinimumLength = 6)]
+        //[StringLength(100, MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }

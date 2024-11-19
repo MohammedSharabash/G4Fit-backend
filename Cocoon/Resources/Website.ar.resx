@@ -178,7 +178,7 @@
     <value>كلمه السر غير متطابقة</value>
   </data>
   <data name="PasswordFieldIMinimumLength" xml:space="preserve">
-    <value>كلمه السر يجب ان تكون 6 ارقام فقط</value>
+    <value>كلمه السر يجب ان تكون 6 احرف علي الاقل</value>
   </data>
   <data name="PasswordFieldIsRequired" xml:space="preserve">
     <value>كلمه السر مطلوبة</value>
