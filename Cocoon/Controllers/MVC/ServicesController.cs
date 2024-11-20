@@ -35,7 +35,11 @@ namespace G4Fit.Controllers.MVC
         public ActionResult Create()
         {
             ViewBag.Categories = db.SubCategories.Where(d => d.IsDeleted == false/* && d.Category.IsDeleted == false*/).ToList();
-            return View();
+            var model = new CreateServiceVM()
+            {
+                ServiceDays = 1
+            };
+            return View(model);
         }
 
         [HttpPost]
