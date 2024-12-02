@@ -5,9 +5,9 @@
 }
 <section class="member_profile">
     <div class="container">
-        <div class="card wow fadeInUp">
+        <div class="card wow fadeInUp" style="background-color: #292929;">
             <div class="card-header">
-                <h2 class="h3 text-right"><span><i class="fas fa-star"></i>@(culture == "ar" ? "طلبات قيد التحضير " : "New Orders")<i class="fas fa-people-carry"></i></span></h2>
+                <h2 class="h3 text-right"><span>@*<i class="fas fa-star"></i>*@@(culture == "ar" ? "طلبات قيد التحضير " : "New Orders")@*<i class="fas fa-people-carry"></i>*@</span></h2>
             </div>
             <div class="card-body">
                 <div class="swiper-container">
@@ -34,6 +34,41 @@
                                             <img class="rounded-circle" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100px" height="100">
                                             <h3 class="h4">@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)</h3>
                                             <h5>#@order.Code</h5>
+                                            @if (order.Items.Any(x => x.Service.IsTimeBoundService))
+                                            {
+                                                <div class="Date d-flex">
+                                                    <div class="From">
+                                                        <p>@(culture == "ar" ? "الغرض من الاشتراك " : "Purpose Of Subscription")</p>
+                                                        @switch (order.PurposeOfSubscription)
+                                                        {
+                                                            case G4Fit.Models.Enums.PurposeOfSubscription.Muscle_Building:
+                                                                <span>
+                                                                    @(culture == "ar" ? "كتله عضليه" : "Muscle Building")
+                                                                </span>
+                                                                break;
+                                                            case G4Fit.Models.Enums.PurposeOfSubscription.Weight_Loss:
+                                                                <span>
+                                                                    @(culture == "ar" ? "خسارة وزن" : "Weight Loss")
+                                                                </span>
+                                                                break;
+                                                            case G4Fit.Models.Enums.PurposeOfSubscription.Weight_Gain:
+                                                                <span>
+                                                                    @(culture == "ar" ? "زياده وزن" : "Weight Gain")
+                                                                </span>
+                                                                break;
+                                                            case G4Fit.Models.Enums.PurposeOfSubscription.General_Health:
+                                                                <span>
+                                                                    @(culture == "ar" ? "صحه عامه" : "General Health")
+                                                                </span>
+                                                                break;
+                                                        }
+
+                                                    </div>
+
+                                                </div>
+
+
+                                            }
                                             <div class="Date d-flex">
                                                 <div class="From">
                                                     <p>@(culture == "ar" ? "تاريخ الطلب" : "Order Date")</p><span>@order.CreatedOn.ToString("dd MMMM yyyy")</span>
@@ -51,9 +86,9 @@
                 </div>
             </div>
         </div>
-        <div class="card wow zoomIn">
+        <div class="card wow zoomIn" style="background-color: #292929;">
             <div class="card-header">
-                <h2 class="h3 text-right"><span><i class="fas fa-star"></i>@(culture == "ar" ? "طلباتى السابقة " : "Previous Orders")<i class="fas fa-people-carry"></i></span></h2>
+                <h2 class="h3 text-right"><span>@*<i class="fas fa-star"></i>*@@(culture == "ar" ? "طلباتى السابقة " : "Previous Orders")@*<i class="fas fa-people-carry"></i>*@</span></h2>
             </div>
             <div class="card-body">
                 <div class="swiper-container">
@@ -81,13 +116,48 @@
                                             <img class="rounded-circle" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100px" height="100">
                                             <h3 class="h4">@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)</h3>
                                             <h5>#@order.Code</h5>
+                                            @if (order.Items.Any(x => x.Service.IsTimeBoundService))
+                                            {
+                                                <div class="Date d-flex">
+                                                    <div class="From">
+                                                        <p>@(culture == "ar" ? "الغرض من الاشتراك " : "Purpose Of Subscription")</p>
+                                                        @switch (order.PurposeOfSubscription)
+                                                        {
+                                                            case G4Fit.Models.Enums.PurposeOfSubscription.Muscle_Building:
+                                                                <span>
+                                                                    @(culture == "ar" ? "كتله عضليه" : "Muscle Building")
+                                                                </span>
+                                                                break;
+                                                            case G4Fit.Models.Enums.PurposeOfSubscription.Weight_Loss:
+                                                                <span>
+                                                                    @(culture == "ar" ? "خسارة وزن" : "Weight Loss")
+                                                                </span>
+                                                                break;
+                                                            case G4Fit.Models.Enums.PurposeOfSubscription.Weight_Gain:
+                                                                <span>
+                                                                    @(culture == "ar" ? "زياده وزن" : "Weight Gain")
+                                                                </span>
+                                                                break;
+                                                            case G4Fit.Models.Enums.PurposeOfSubscription.General_Health:
+                                                                <span>
+                                                                    @(culture == "ar" ? "صحه عامه" : "General Health")
+                                                                </span>
+                                                                break;
+                                                        }
+
+                                                    </div>
+
+                                                </div>
+
+
+                                            }
                                             <div class="Date d-flex">
                                                 <div class="From">
                                                     <p>@(culture == "ar" ? "تاريخ الطلب" : "Order Date")</p><span>@order.CreatedOn.ToString("dd MMMM yyyy")</span>
                                                 </div><i class="fas fa-handshake fa-2x"></i>
                                                 @*<div class="To">
-                                                        <p>تاريخ الوصول</p><span>20/5/2020</span>
-                                                    </div>*@
+                <p>تاريخ الوصول</p><span>20/5/2020</span>
+            </div>*@
                                             </div>
                                         </div>
                                     }

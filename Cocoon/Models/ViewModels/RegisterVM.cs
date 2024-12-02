@@ -15,7 +15,7 @@ namespace G4Fit.Models.ViewModels
 
         [Required(ErrorMessageResourceName = "PhoneNumberFieldIsRequired", ErrorMessageResourceType = typeof(Website))]
         public string PhoneNumber { get; set; }
-        [Required(ErrorMessageResourceName = "IDNumberFieldIsRequired", ErrorMessageResourceType = typeof(Website))]
+        //[Required(ErrorMessageResourceName = "IDNumberFieldIsRequired", ErrorMessageResourceType = typeof(Website))]
         public string IDNumber { get; set; }
         [Required(ErrorMessageResourceName = "AddressFieldIsRequired", ErrorMessageResourceType = typeof(Website))]
         public string Address { get; set; }

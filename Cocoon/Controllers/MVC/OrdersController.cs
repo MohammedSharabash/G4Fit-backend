@@ -253,7 +253,7 @@ namespace G4Fit.Controllers.MVC
         [AllowAnonymous]
         public async Task<JsonResult> AddTimeBoundServiceToCart(AddTimeBoundServiceItemToBasketDTO toCartDTO)
         {
-            string base_url = Request.Url.GetLeftPart(UriPartial.Authority) + "/api/orders/addTimeBoundServicetobasket";
+            string base_url = Request.Url.GetLeftPart(UriPartial.Authority) + "/api/orders/AddTimeBoundServiceToCart";
             var Token = Request.Cookies["G4Fit-data-token"];
             string TokenValue = null;
             string Anonymous = null;
@@ -707,7 +707,7 @@ namespace G4Fit.Controllers.MVC
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var UserOrders = db.Orders.Where(x => x.UserId == CurrentUserId && x.OrderStatus != OrderStatus.Initialized && !x.IsDeleted);

@@ -164,7 +164,7 @@
             <div class="carousel-inner">
                 @foreach (var slider in Model.Sliders)
                 {
-                    <div class="carousel-item"><img src="~/Content/Images/Sliders/@slider.ImageUrl" width="100%" height="100%"></div>
+                    <div class="carousel-item"><img class="SliderImage" src="~/Content/Images/Sliders/@slider.ImageUrl" width="100%" height="100%"></div>
                 }
             </div><a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#main_slider" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">next</span></a>
         </div>
@@ -172,188 +172,81 @@
 }
 <!-- End Carousel Section -->
 <!-- Start Categories Section -->
-@if (Model.Categories != null && Model.Categories.Count() > 0)
-{
-    int Skip = 0;
-    int CurrentRow = 0;
-    var NumberOfCarouselItems = Math.Ceiling((double)(Model.Categories.Count() / 7.00));
-    <section class="Categories text-center mt-3" id="Cats">
-        <div class="container">
-            <div class="Slider d-none d-lg-block wow bounceInLeft" data-wow-duration="1s">
-                <div class="carousel slide text-center" id="cat_slider">
-                    <div class="carousel-inner">
-                        @for (int i = 0; i < NumberOfCarouselItems; i++)
-                        {
-                            <div class="carousel-item @(i == 0 ? "active" : "")">
-                                <div class="row">
-                                    @foreach (var cat in Model.Categories.Skip(Skip))
-                                    {
-                                        CurrentRow += 1;
-                                        if (CurrentRow % 7 != 0)
+@*@if (Model.Categories != null && Model.Categories.Count() > 0)
+    {
+        int Skip = 0;
+        int CurrentRow = 0;
+        var NumberOfCarouselItems = Math.Ceiling((double)(Model.Categories.Count() / 7.00));
+        <section class="Categories text-center mt-3" id="Cats">
+            <div class="container">
+                <div class="Slider d-none d-lg-block wow bounceInLeft" data-wow-duration="1s">
+                    <div class="carousel slide text-center" id="cat_slider">
+                        <div class="carousel-inner">
+                            @for (int i = 0; i < NumberOfCarouselItems; i++)
+                            {
+                                <div class="carousel-item @(i == 0 ? "active" : "")">
+                                    <div class="row">
+                                        @foreach (var cat in Model.Categories.Skip(Skip))
                                         {
-                                            <div class="col-4" onclick="window.location.href='/SubCategories/View?CatId=@cat.Id'">
-                                                <div class="Cat">
-                                                    <img src="@(cat.ImageUrl != null ? "/Content/Images/Categories/" + cat.ImageUrl : "/Content/assets/imgs/doesnotexist.png")">
-                                                    <div class="info" style="display:flex">
-                                                        <h3 class="h5"><a href="@Url.Action("View", "SubCategories", new { CatId = cat.Id })">@(culture == "ar" ? cat.NameAr : cat.NameEn)</a></h3>
+                                            CurrentRow += 1;
+                                            if (CurrentRow % 7 != 0)
+                                            {
+                                                <div class="col-4" onclick="window.location.href='/SubCategories/View?CatId=@cat.Id'">
+                                                    <div class="Cat">
+                                                        <img src="@(cat.ImageUrl != null ? "/Content/Images/Categories/" + cat.ImageUrl : "/Content/assets/imgs/doesnotexist.png")">
+                                                        <div class="info" style="display:flex">
+                                                            <h3 class="h5"><a href="@Url.Action("View", "SubCategories", new { CatId = cat.Id })">@(culture == "ar" ? cat.NameAr : cat.NameEn)</a></h3>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>}
-                                        else
-                                        {
-                                            Skip += 6;
-                                            CurrentRow = 0;
-                                            break;
+                                                </div>}
+                                            else
+                                            {
+                                                Skip += 6;
+                                                CurrentRow = 0;
+                                                break;
+                                            }
                                         }
-                                    }
-                                </div>
-                            </div>}
+                                    </div>
+                                </div>}
+                        </div>
+                        <a class="carousel-control-prev" href="#cat_slider" role="button" data-slide="prev"><span class="fas fa-chevron-circle-left fa-3x" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#cat_slider" role="button" data-slide="next"><span class="fas fa-chevron-circle-right fa-3x" aria-hidden="true"></span><span class="sr-only">next</span></a>
+                        <ol class="carousel-indicators">
+                            @for (int i = 0; i < NumberOfCarouselItems; i++)
+                            {
+                                <li class="@(i == 0 ? "active" : "")" data-target="#cat_slider" data-slide-to="@i"></li>
+                            }
+                        </ol>
                     </div>
-                    <a class="carousel-control-prev" href="#cat_slider" role="button" data-slide="prev"><span class="fas fa-chevron-circle-left fa-3x" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#cat_slider" role="button" data-slide="next"><span class="fas fa-chevron-circle-right fa-3x" aria-hidden="true"></span><span class="sr-only">next</span></a>
-                    <ol class="carousel-indicators">
-                        @for (int i = 0; i < NumberOfCarouselItems; i++)
-                        {
-                            <li class="@(i == 0 ? "active" : "")" data-target="#cat_slider" data-slide-to="@i"></li>
-                        }
-                    </ol>
                 </div>
-            </div>
-            <div class="Grid d-lg-none wow zoomIn" data-wow-duration="1s">
-                <div class="container">
-                    <div class="row">
-                        @foreach (var cat in Model.Categories)
-                        {
-                            <div class="col-sm-12 col-md-6 col-lg-3" onclick="window.location.href='/SubCategories/View?CatId=@cat.Id'">
-                                <div class="Cat">
-                                    <img src="@(cat.ImageUrl != null ? "/Content/Images/Categories/" + cat.ImageUrl : "/Content/assets/imgs/doesnotexist.png")">
-                                    <div class="info" style="display:flex">
-                                        <h3 class="h5"><a href="@Url.Action("View", "SubCategories", new { CatId = cat.Id })">@(culture == "ar" ? cat.NameAr : cat.NameEn)</a></h3>
+                <div class="Grid d-lg-none wow zoomIn" data-wow-duration="1s">
+                    <div class="container">
+                        <div class="row">
+                            @foreach (var cat in Model.Categories)
+                            {
+                                <div class="col-sm-12 col-md-6 col-lg-3" onclick="window.location.href='/SubCategories/View?CatId=@cat.Id'">
+                                    <div class="Cat">
+                                        <img src="@(cat.ImageUrl != null ? "/Content/Images/Categories/" + cat.ImageUrl : "/Content/assets/imgs/doesnotexist.png")">
+                                        <div class="info" style="display:flex">
+                                            <h3 class="h5"><a href="@Url.Action("View", "SubCategories", new { CatId = cat.Id })">@(culture == "ar" ? cat.NameAr : cat.NameEn)</a></h3>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
+                            }
+                        </div>
                     </div>
                 </div>
+                <hr>
             </div>
-            <hr>
-        </div>
-    </section>}
+        </section>}*@
 <!-- End Categories Section-->
 <!-- Start New Section -->
-@if (Model.LatestServices != null && Model.LatestServices.Count() > 0)
-{
-    <section class="most_new" id="New">
-        <div class="container">
-            <h2 class="h3 text-right wow fadeInDown"><span><i class="fas fa-star"></i>@(culture == "ar" ? "جديدنــا" : "Our latest") <i class="fas fa-people-carry"></i></span></h2>
-            <div class="swiper-container">
-                <div class="swiper-wrapper">
-                    @foreach (var Service in Model.LatestServices)
-                    {
-                        string ServiceImage = null;
-                        if (Service.Images != null && Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
-                        {
-                            ServiceImage = Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
-                        }
-                        <div class="swiper-slide hvr-underline-from-center">
-                            <a href="@Url.Action("View", "Services", new { Id = Service.Id })"><img src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100%" height="400"></a>
-                            <div class="Tools">
-                                <div class="main_info">
-                                    <h6><a class="text-black" href="@Url.Action("View", "Services", new { Id = Service.Id })">@(culture == "ar" ? Service.NameAr : Service.NameEn)</a></h6>
-                                    @*<p><a href="@Url.Action("View", "Categories", new { CatId = Service.SubCategoryId })" class="text-black">@(culture == "ar" ? Service.SubCategory.NameAr : Service.SubCategory.NameEn)</a></p>*@
-                                </div>
-
-                            </div>
-                            <div class="sub_info"><span>@(Service.OfferPrice.HasValue ? Service.OfferPrice.Value : Service.OriginalPrice) @Website.SAR</span>@*<i class="fas fa-cart-plus fa-lg hvr-pulse-grow" onclick="AddToCart(this,'@Service.Id', 1)"></i>*@</div>
-                            <div class="clearfix"></div>
-                            @*@if (Service.Colors != null && Service.Colors.Count(s => s.IsDeleted == false) > 0)
-                                {
-                                    <div class="Colors text-right">
-                                        <ul class="list-unstyled">
-                                            @foreach (var color in Service.Colors.Where(s => s.IsDeleted == false))
-                                            {
-                                                <li style="background-color:@color.Color;cursor:pointer;" class="@(color.Id == Service.Colors.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")" data-color="@color.Id"></li>
-                                            }
-                                        </ul>
-                                    </div>
-                                }
-                                @if (Service.Sizes != null && Service.Sizes.Count(s => s.IsDeleted == false) > 0)
-                                {
-                                    <div class="Size text-right">
-                                        <ul class="list-unstyled">
-                                            @foreach (var size in Service.Sizes.Where(s => s.IsDeleted == false))
-                                            {
-                                                <li style="cursor:pointer;" class="@(size.Id == Service.Sizes.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")" data-size="@size.Id">@size.Size</li>
-                                            }
-                                        </ul>
-                                    </div>
-                                }*@
-                        </div>}
-                </div>
-            </div>
-            <hr>
-        </div>
-    </section>}
-<!-- End New Section-->
-<!-- Start Most Sell Section -->
-@if (Model.MostSoldServices != null && Model.MostSoldServices.Count() > 0)
-{
-    <section class="most_sell" id="Sell">
-        <div class="container">
-            <h2 class="h3 text-right wow fadeInDown"><span><i class="fas fa-star"></i>@(culture == "ar" ? "الاكثر مبيعاً" : "Most Sold") <i class="fas fa-people-carry"></i></span></h2>
-            <div class="swiper-container">
-                <div class="swiper-wrapper">
-                    @foreach (var Service in Model.LatestServices)
-                    {
-                        string ServiceImage = null;
-                        if (Service.Images != null && Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
-                        {
-                            ServiceImage = Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
-                        }
-                        <div class="swiper-slide hvr-underline-from-center">
-                            <a href="@Url.Action("View", "Services", new { Id = Service.Id })"><img src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100%" height="400"></a>
-                            <div class="Tools">
-                                <div class="main_info">
-                                    <h6><a class="text-black" href="@Url.Action("View", "Services", new { Id = Service.Id })">@(culture == "ar" ? Service.NameAr : Service.NameEn)</a></h6>
-                                    @*<p><a href="@Url.Action("View", "Categories", new { CatId = Service.SubCategoryId })" class="text-black">@(culture == "ar" ? Service.SubCategory.NameAr : Service.SubCategory.NameEn)</a></p>*@
-                                </div>
-                                <div class="sub_info"><span>@(Service.OfferPrice.HasValue ? Service.OfferPrice.Value : Service.OriginalPrice) @Website.SAR</span>@*<i class="fas fa-cart-plus fa-lg hvr-pulse-grow" onclick="AddToCart(this,'@Service.Id', 1)"></i>*@</div>
-                                <div class="clearfix"></div>
-                                @*@if (Service.Colors != null && Service.Colors.Count(s => s.IsDeleted == false) > 0)
-                                    {
-                                        <div class="Colors text-right">
-                                            <ul class="list-unstyled">
-                                                @foreach (var color in Service.Colors.Where(s => s.IsDeleted == false))
-                                                {
-                                                    <li style="background-color:@color.Color;cursor:pointer;" class="@(color.Id == Service.Colors.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")" data-color="@color.Id"></li>
-                                                }
-                                            </ul>
-                                        </div>
-                                    }
-                                    @if (Service.Sizes != null && Service.Sizes.Count(s => s.IsDeleted == false) > 0)
-                                    {
-                                        <div class="Size text-right">
-                                            <ul class="list-unstyled">
-                                                @foreach (var size in Service.Sizes.Where(s => s.IsDeleted == false))
-                                                {
-                                                    <li style="cursor:pointer;" class="@(size.Id == Service.Sizes.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")" data-size="@size.Id">@size.Size</li>
-                                                }
-                                            </ul>
-                                        </div>
-                                    }*@
-                            </div>
-                        </div>}
-                </div>
-            </div>
-            <hr>
-        </div>
-    </section>}
 <!-- End Most Sell Section -->
 <!-- Start Best Offer Section -->
 @if (Model.OffersServices != null && Model.OffersServices.Count(s => s.IsDeleted == false) > 0)
 {
     <section class="best_offer text-center" id="Offer">
         <div class="container">
-            <h2 class="h3 text-right wow fadeInDown"><span><i class="fas fa-star"></i>@(culture == "ar" ? "عروضنا الخاصة" : "Special Offers") <i class="fas fa-people-carry"></i></span></h2>
+            <h2 class="h3 text-right wow fadeInDown"><span>@(culture == "ar" ? "عروضنا الخاصة" : "Special Offers")</span></h2>
             <div class="swiper-container">
                 <div class="swiper-wrapper">
                     @foreach (var Service in Model.OffersServices)
@@ -415,7 +308,7 @@
         {
             <section class="Sports" id="Sport">
                 <div class="container">
-                    <h2 class="h3 text-right wow fadeInDown"><span><i class="fas fa-star"></i>@(culture == "ar" ? category.NameAr : category.NameEn)<i class="fas fa-people-carry"></i></span></h2>
+                    <h2 class="h3 text-right wow fadeInDown"><span>@(culture == "ar" ? category.NameAr : category.NameEn)</span></h2>
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
                             @foreach (var Service in Services)
@@ -466,7 +359,7 @@
     }
 }
 
-<div class="row mb-5">
+<div class="row mb-5" style="margin:0px!important;">
     <div class="col-12 text-center">
         <!-- عنصر الفيديو مع خصائص التحكم -->
         <video id="videoPlayer" style="height:500px;width:75%;padding-top:25px" @*controls*@ autoplay muted>

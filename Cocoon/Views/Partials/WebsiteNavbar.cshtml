@@ -40,8 +40,12 @@
                 <ul class="list-unstyled d-none d-lg-block">
                     <li data-id="Home"><a href="@Url.Action("Index", "Home")?#Home">@Website.Home</a></li>
                     <li data-id="Cats"><a href="@Url.Action("Index", "Home")?#Cats">@Website.Categories</a></li>
-                    <li data-id="New"><a href="@Url.Action("Index", "Home")?#New">@Website.Latest</a></li>
-                    <li data-id="Sell"><a href="@Url.Action("Index", "Home")?#Sell">@Website.MostSold</a></li>
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <li><a href="@Url.Action("View", "SubCategories", new { CatId = cat.Id })">@(culture=="ar"? cat.NameAr: cat.NameEn)</a></li>
+                    }
+                    @*<li data-id="New"><a href="@Url.Action("Index", "Home")?#New">@Website.Latest</a></li>*@
+                    @*<li data-id="Sell"><a href="@Url.Action("Index", "Home")?#Sell">@Website.MostSold</a></li>*@
                     @*<li data-id="Offer"><a href="@Url.Action("Index", "Home")?#Offer">@Website.Offers</a></li>*@
                     @*<li><a href="@Url.Action("Index", "Packages")">@Website.Packages</a></li>*@
                     <li data-id="About"><a href="@Url.Action("Index", "about")">@Website.AboutUs</a></li>
@@ -60,15 +64,15 @@
                 <ul class="list-unstyled d-flex">
                     @if (culture == "ar")
                     {
-                        <li class="langs hvr-pulse-grow mx-3"><a href="javascript:document.getElementById('lang_en').submit()">@*<img src="~/Content/web/img/flags/usa.svg">*@English</a></li>
+                        <li class="langs hvr-pulse-grow mx-3" style="font-size:x-large;"><a href="javascript:document.getElementById('lang_en').submit()">@*<img src="~/Content/web/img/flags/usa.svg">*@English</a></li>
                     }
                     else
                     {
-                        <li class="langs hvr-pulse-grow mx-3"><a href="javascript:document.getElementById('lang_ar').submit()"> @*<img src="~/Content/web/img/flags/sar.svg">*@ اللغة العربية</a></li>
+                        <li class="langs hvr-pulse-grow mx-3" style="font-size:x-large;"><a href="javascript:document.getElementById('lang_ar').submit()"> @*<img src="~/Content/web/img/flags/sar.svg">*@ اللغة العربية</a></li>
                     }
                     @if (User.Identity.IsAuthenticated == true)
                     {
-                        <li class="note">
+                        <li class="note" style="color: #fff;font-size:x-large;">
                             <i class="fas fa-bell fa-lg"></i>
                             @if (Model.NotificationsCount > 0)
                             {
@@ -92,7 +96,7 @@
                             </ul>
                         </li>
                     }
-                    <li class="shopping-cart-container">
+                    <li class="shopping-cart-container" style="font-size:x-large;">
                         <a href="@Url.Action("Cart", "Orders")">
                             <i class="fas fa-shopping-cart fa-lg hvr-pulse-grow"></i>
                             @if (Model.ShoppingCartCount > 0)
@@ -119,14 +123,14 @@
                     {
                         if (!string.IsNullOrEmpty(Model.UserImage))
                         {
-                            <li><img class="rounded-circle User hvr-pulse-grow" src="~/Content/Images/Users/@Model.UserImage" width="25" height="25"></li>
+                            <li style="font-size:x-large;"><img class="rounded-circle User hvr-pulse-grow" src="~/Content/Images/Users/@Model.UserImage" width="35" height="35"></li>
                         }
                         else
                         {
-                            <li><img class="rounded-circle User hvr-pulse-grow" src="~/Content/web/img/logo/1.png" width="25" height="25"></li>
+                            <li style="font-size:x-large;"><img class="rounded-circle User hvr-pulse-grow" src="~/Content/web/img/logo/1.png" width="35" height="35"></li>
                         }
                     }
-                    <li><i class="fas fa-bars fa-lg nav_toggeler hvr-pulse-grow"></i></li>
+                    <li style="font-size:x-large;"><i class="fas fa-bars fa-lg nav_toggeler hvr-pulse-grow"></i></li>
                 </ul>
             </div>
         </div>

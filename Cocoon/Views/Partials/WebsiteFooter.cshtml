@@ -4,7 +4,7 @@
 }
 <style>
     a {
-        color: black;
+        color: white;
         font-weight: 600;
     }
 
@@ -96,7 +96,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-sm-6 col-md-3 col-lg-3">
+            <div class="col-sm-6 col-md-6 col-lg-6">
                 <h6 class="mt-2" style="font-weight:bold">@(culture == "ar" ? "معلومات الشركة" : "About Company")</h6>
                 <br />
                 <ul>
@@ -151,34 +151,33 @@
                         <li><a href="@Url.Action("Index", "Informations")">@(culture == "ar" ? "التعليمات" : "Instructions")</a></li>
                     </ul>
                 </div>*@
-            <div class="col-sm-6 col-md-3 col-lg-3">
+            <div class="col-sm-6 col-md-6 col-lg-6">
                 <h6 class="mt-2" style="font-weight:bold">@(culture == "ar" ? "اتصل بنا" : "Contact us")</h6>
                 <br />
                 <ul>
                     <li><a href="tel:@(Model.About != null ? Model.About.Hotline : "#")">@(culture == "ar" ? "جوال" : "Mobile"): @(Model.About != null ? Model.About.Hotline : "")</a></li>
                     <li><a href="mailto:@(Model.About != null ? Model.About.Email : "#")">@(culture == "ar" ? "البريد الالكترونى" : "Email"): @(Model.About != null ? Model.About.Email : "")</a></li>
-                    <li style="font-weight:600;color:black">
+                    <li style="font-weight:600;color:white">
                         @(culture == "ar" ? "تابعنا على" : "Follow us"):
-                        <br />
                         @if (Model.About != null && Model.About.WhatsApp != null)
-                        {<a style="margin:4px;" href="@Model.About.WhatsApp"><i class="fab fa-whatsapp"></i></a>}
+                        {<a style="margin:4px;" href="@Model.About.WhatsApp" title="@(culture == "ar" ? "واتساب" : "Whatsapp")"><i class="fab fa-whatsapp"></i></a>}
                         @if (Model.About != null && Model.About.Facebook != null)
-                        {<a style="margin:4px;" href="@Model.About.Facebook"><i class="fab fa-facebook"></i></a>}
+                        {<a style="margin:4px;" href="@Model.About.Facebook" title="@(culture == "ar" ? "فيس بوك" : "Facebook")"><i class="fab fa-facebook"></i></a>}
                         @if (Model.About != null && Model.About.Twitter != null)
-                        {<a style="margin:4px;" href="@Model.About.Twitter"><i class="fab fa-twitter"></i></a>
+                        {<a style="margin:4px;" href="@Model.About.Twitter" title="@(culture == "ar" ? "تويتر إكس" : "Twitter X")"><i class="fab fa-twitter"></i></a>
                         }
                         @if (Model.About != null && Model.About.Instagram != null)
-                        {<a style="margin:4px;" href="@Model.About.Instagram"><i class="fab fa-instagram"></i></a>
+                        {<a style="margin:4px;" href="@Model.About.Instagram" title="@(culture == "ar" ? "انستجرام" : "Instagram")"><i class="fab fa-instagram"></i></a>
                         }
                         @if (Model.About != null && Model.About.YouTube != null)
-                        {<a style="margin:4px;" href="@Model.About.YouTube"><i class="fab fa-youtube"></i></a>
+                        {<a style="margin:4px;" href="@Model.About.YouTube" title="@(culture == "ar" ? "يوتيوب" : "YouTube")"><i class="fab fa-youtube"></i></a>
                         }
                         @if (Model.About != null && Model.About.SnapChat != null)
-                        {<a style="margin:4px;" href="@(Model.About != null ? Model.About.SnapChat : "#")"><i class="fab fa-snapchat"></i></a>
+                        {<a style="margin:4px;" href="@(Model.About != null ? Model.About.SnapChat : "#")" title="@(culture == "ar" ? "واتساب" : "SnapChat")"><i class="fab fa-snapchat"></i></a>
                         } @if (Model.About != null && Model.About.TikTok != null)
                         {
                             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-                            <a style="margin:4px;" href="@(Model.About != null ? Model.About.TikTok : "#")">  <i class="bi bi-tiktok"></i></a>
+                            <a style="margin:4px;" href="@(Model.About != null ? Model.About.TikTok : "#")" title="@(culture == "ar" ? "تيكتوك" : "TikTok")">  <i class="bi bi-tiktok"></i></a>
                         }
                     </li>
                 </ul>
@@ -195,7 +194,7 @@
         </div>
     </div>
     <hr>
-    <p class="text-center"><i class="fas fa-star"></i> حقوق النشر محفوظة لمجموعة G4Fit التجارية &copy @DateTime.UtcNow.Year</p>
+    <p class="text-center">@*<i class="fas fa-star"></i>*@ حقوق النشر محفوظة لمجموعة G4Fit التجارية &copy @DateTime.UtcNow.Year</p>
     @*<p class="text-center">Powered by <a href="https://project-eg.com" target="_blank">Project-Egy</a></p>*@
 </footer>
 
