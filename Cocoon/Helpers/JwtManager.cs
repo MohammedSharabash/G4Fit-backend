@@ -8,29 +8,6 @@ using System.Configuration;
 public class JwtManager
 {
 
-    //public static string GenerateToken(string Id, string Email, string role = "User")
-    //{
-    //    var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToString(ConfigurationManager.AppSettings["config:JwtKey"])));
-
-    //    var tokenHandler = new JwtSecurityTokenHandler();
-
-    //    var tokenDescriptor = new SecurityTokenDescriptor
-    //    {
-    //        Subject = new ClaimsIdentity(new[]
-    //        {
-    //            new Claim(ClaimTypes.NameIdentifier, Id),
-    //            new Claim(ClaimTypes.Name, Email),
-    //            new Claim(ClaimTypes.Role, role),
-    //        }),
-    //        Expires = DateTime.Now.AddDays(Convert.ToInt32(Convert.ToString(ConfigurationManager.AppSettings["config:JwtDurationInDays"]))),
-    //        SigningCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256Signature)
-    //    };
-
-    //    var stoken = tokenHandler.CreateToken(tokenDescriptor);
-    //    var token = tokenHandler.WriteToken(stoken);
-
-    //    return token;
-    //}
     public static string GenerateToken(string Id, string Email, string role = "User")
     {
         // Get the key from configuration (ensure it's at least 256 bits long)
@@ -65,5 +42,33 @@ public class JwtManager
 
         return token;
     }
+    // Method to validate a refresh token and extract claims
+    public static ClaimsPrincipal ValidateRefreshToken(string refreshToken)
+    {
+        try
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(Convert.ToString(ConfigurationManager.AppSettings["config:JwtKey"]));
 
+            // Token validation parameters
+            var validationParameters = new TokenValidationParameters
+            {
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidIssuer = Convert.ToString(ConfigurationManager.AppSettings["config:JwtValidIssuer"]),
+                ValidAudience = Convert.ToString(ConfigurationManager.AppSettings["config:JwtValidAudiance"]),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = false, // You can set this to true if you want to validate expiration as well
+            };
+
+            // Validate the token and extract the claims
+            var principal = tokenHandler.ValidateToken(refreshToken, validationParameters, out SecurityToken validatedToken);
+
+            return principal; // Returns ClaimsPrincipal containing user claims (Id, Email, etc.)
+        }
+        catch (Exception)
+        {
+            return null; // Invalid token or error in validation
+        }
+    }
 }

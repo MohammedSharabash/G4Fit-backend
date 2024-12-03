@@ -503,6 +503,57 @@ namespace G4Fit.Controllers.API
             }
             return Ok(baseResponse);
         }
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("RefreshToken")]
+        public IHttpActionResult GenerateNewAccessTokenFromRefreshToken(string refreshToken)
+        {
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                baseResponse.ErrorCode = Errors.InvalidRefreshToken;
+                return Ok(baseResponse);
+            }
+
+            try
+            {
+                // Validate the refresh token and get claims
+                var refreshTokenClaims = JwtManager.ValidateRefreshToken(refreshToken);
+                if (refreshTokenClaims == null)
+                {
+                    baseResponse.ErrorCode = Errors.InvalidRefreshToken;
+                    return Content(HttpStatusCode.BadRequest, baseResponse);
+                }
+
+                // Extract UserId and Email from the claims
+                string userId = refreshTokenClaims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                string userEmail = refreshTokenClaims.FindFirst(ClaimTypes.Name)?.Value;
+
+                if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(userEmail))
+                {
+                    baseResponse.ErrorCode = Errors.InvalidRefreshToken;
+                    return Content(HttpStatusCode.BadRequest, baseResponse);
+                }
+
+                // Generate a new access token
+                string newAccessToken = JwtManager.GenerateToken(userId, userEmail);
+
+                if (!string.IsNullOrEmpty(newAccessToken))
+                {
+                    baseResponse.Data = new { AccessToken = newAccessToken };
+                    return Ok(baseResponse);
+                }
+                else
+                {
+                    baseResponse.ErrorCode = Errors.InvalidRefreshToken;
+                    return Content(HttpStatusCode.BadRequest, baseResponse);
+                }
+            }
+            catch (Exception)
+            {
+                baseResponse.ErrorCode = Errors.InvalidRefreshToken;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
+            }
+        }
 
         [HttpGet]
         [Route("ForgotPassword")]
