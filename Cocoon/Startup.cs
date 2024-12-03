@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using G4Fit.Models.Data;
 using G4Fit.Models.Domains;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
+using Microsoft.Owin.Security.DataHandler.Encoder;
 using Owin;
+using Microsoft.Owin.Security.Jwt;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.OAuth;
+using Microsoft.IdentityModel.Tokens;
+using System.Configuration;
 
 [assembly: OwinStartup(typeof(G4Fit.Startup))]
 
@@ -17,6 +24,27 @@ namespace G4Fit
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+
+            var issuer = Convert.ToString(ConfigurationManager.AppSettings["config:JwtValidIssuer"]);
+            var audience = Convert.ToString(ConfigurationManager.AppSettings["config:JwtValidAudiance"]);
+            var secret = Convert.ToString(ConfigurationManager.AppSettings["config:JwtKey"]);  // Should be a strong key
+
+            app.UseJwtBearerAuthentication(
+                new JwtBearerAuthenticationOptions
+                {
+                    AuthenticationMode = AuthenticationMode.Active,
+                    TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = issuer,
+                        ValidAudience = audience,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+                    }
+                });
+
+
             CreateRoles();
             CreateAdminUser();
         }
@@ -65,7 +93,7 @@ namespace G4Fit
                 }
 
             }
-           
+
         }
     }
 }

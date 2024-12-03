@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
 
@@ -30,7 +31,7 @@ namespace G4Fit.Controllers.API
         [Route("WalletData")]
         public IHttpActionResult GetWalletData(string lang = "en")
         {
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = db.Users.Find(CurrentUserId);
             if (user == null)
             {

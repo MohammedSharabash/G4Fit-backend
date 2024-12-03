@@ -36,7 +36,7 @@ namespace G4Fit.Controllers.API
         [Route("Get")]
         public IHttpActionResult GetAllPromotionalSections(string lang = "ar")
         {
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var Sections = db.PromotionalSections.Where(s => s.IsDeleted == false).OrderBy(s => s.SortingNumber).ToList();
             List<CategoryDTO> sectionDtos = new List<CategoryDTO>();
             foreach (var category in Sections)

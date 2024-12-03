@@ -44,7 +44,7 @@ namespace G4Fit.Controllers.API
         public async Task<IHttpActionResult> Profile(string lang = "en")
         {
             UserProfileDTO profileDTO = new UserProfileDTO();
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await UserManager.FindByIdAsync(CurrentUserId);
             if (user != null)
             {
@@ -69,7 +69,8 @@ namespace G4Fit.Controllers.API
         [HttpPut]
         public async Task<IHttpActionResult> EditProfile(UpdateProfileDTO model)
         {
-            string CurrentUserId = User.Identity.GetUserId();
+            //string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             Errors IsValidData = UserValidation.ValidateUpdateProfileApi(model, CurrentUserId);
             if (IsValidData != Errors.Success)
             {
@@ -329,7 +330,7 @@ namespace G4Fit.Controllers.API
         [HttpGet]
         public async Task<IHttpActionResult> Verify(int Vcode, string PhoneNumber = null)
         {
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             ApplicationUser user = null;
 
             if (!string.IsNullOrEmpty(CurrentUserId))
@@ -405,7 +406,7 @@ namespace G4Fit.Controllers.API
         [HttpGet]
         public IHttpActionResult SetUserCountry(long CountryId, string PhoneNumber)
         {
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = db.Users.Find(CurrentUserId);
             if (user == null)
             {
@@ -476,7 +477,7 @@ namespace G4Fit.Controllers.API
                 return Content(HttpStatusCode.InternalServerError, baseResponse);
             }
 
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await UserManager.FindByIdAsync(CurrentUserId);
             if (user.LoginType != LoginType.G4FitRegisteration)
             {
@@ -751,18 +752,8 @@ namespace G4Fit.Controllers.API
             {
                 try
                 {
-                    ClaimsIdentity oAuthIdentity = new ClaimsIdentity(Startup.OAuthOptions.AuthenticationType);
-                    if (Email != null) oAuthIdentity.AddClaim(new Claim(ClaimTypes.Name, Email));
-                    oAuthIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, Id));
-                    oAuthIdentity.AddClaim(new Claim(ClaimTypes.Role, "User"));
-
-                    AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, new AuthenticationProperties());
-                    DateTime currentUtc = DateTime.UtcNow.ToUniversalTime();
-                    ticket.Properties.IssuedUtc = currentUtc;
-                    ticket.Properties.ExpiresUtc = currentUtc.Add(TimeSpan.FromMinutes(30));
-                    string accessToken = Startup.OAuthOptions.AccessTokenFormat.Protect(ticket);
-                    Request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-                    return accessToken;
+                    string accessToken = JwtManager.GenerateToken(Id, Email);
+                    return accessToken ?? null;
                 }
                 catch (Exception)
                 {

@@ -14,19 +14,16 @@ namespace G4Fit
     public partial class Startup
     {
         public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
-
         public static string PublicClientId { get; private set; }
 
-        // For more information on configuring authentication, please visit https://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
-            // Configure the db context and user manager to use a single instance per request
+            // Create per-request contexts for the ApplicationDbContext and UserManager
             app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 
-            // Enable the application to use a cookie to store information for the signed in user
-            // and to use a cookie to temporarily store information about a user logging in with a third party login provider
+            // Use cookie authentication to store the logged-in user's information.
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
@@ -34,49 +31,30 @@ namespace G4Fit
                 LoginPath = new PathString("/Account/Login"),
                 Provider = new CookieAuthenticationProvider
                 {
-                    // Enables the application to validate the security stamp when the user logs in.
-                    // This is a security feature which is used when you change a password or add an external login to your account.  
                     OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ApplicationUser>(
-                        validateInterval: TimeSpan.FromDays(3020),
+                        validateInterval: TimeSpan.FromDays(3020),  // Set interval to revalidate identity.
                         regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
                 }
             });
+
+            // Enable third-party external login (like Google, Facebook, etc.)
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
-            // Configure the application for OAuth based flow
-            PublicClientId = "self";
+            // Configure OAuth server for issuing tokens
+            PublicClientId = "self";  // For self-issued client IDs.
+
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
-                TokenEndpointPath = new PathString("/Token"),
+                TokenEndpointPath = new PathString("/Token"),  // The URL where tokens are requested.
                 Provider = new ApplicationOAuthProvider(PublicClientId),
-                AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(3065),
-                RefreshTokenProvider = new OAuthCustomRefreshTokenProvider(),
-                // In Serviceion mode set AllowInsecureHttp = false
-                AllowInsecureHttp = false
+                AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),  // Endpoint for external logins.
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(3065),  // Set token expiration time.
+                RefreshTokenProvider = new OAuthCustomRefreshTokenProvider(),  // Handle refresh tokens.
+                AllowInsecureHttp = false  // Set to true in development environments, but always use HTTPS in production.
             };
 
-            // Enable the application to use bearer tokens to authenticate users
+            // Enable OAuth bearer tokens to authenticate requests.
             app.UseOAuthBearerTokens(OAuthOptions);
-
-            // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
-
-            //app.UseTwitterAuthentication(
-            //    consumerKey: "",
-            //    consumerSecret: "");
-
-            //app.UseFacebookAuthentication(
-            //    appId: "",
-            //    appSecret: "");
-
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
         }
     }
 }

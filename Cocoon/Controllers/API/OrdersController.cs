@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -758,7 +759,7 @@ namespace G4Fit.Controllers.API
         public async Task<IHttpActionResult> CheckOut(CheckOutOrderDTO model)
         {
 
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             #region user data
             var Headers = HttpContext.Current.Request.Headers;
@@ -1089,7 +1090,7 @@ namespace G4Fit.Controllers.API
         [Route("currentorders")]
         public IHttpActionResult GetCurrentOrders(string lang = "en")
         {
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var Orders = db.Orders.Where(d => d.UserId == CurrentUserId && d.OrderStatus == OrderStatus.Placed && d.IsDeleted == false).OrderByDescending(s => s.CreatedOn).ToList();
             List<CurrentOrderDTO> orderDTOs = new List<CurrentOrderDTO>();
             foreach (var order in Orders)
@@ -1126,7 +1127,7 @@ namespace G4Fit.Controllers.API
         [Route("previousorders")]
         public IHttpActionResult GetPreviousOrders(string lang = "en")
         {
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var Orders = db.Orders.Where(d => d.UserId == CurrentUserId && d.OrderStatus == OrderStatus.Delivered && d.IsDeleted == false).OrderByDescending(s => s.CreatedOn).ToList();
             List<PreviousOrderDTO> orderDTOs = new List<PreviousOrderDTO>();
             foreach (var order in Orders)

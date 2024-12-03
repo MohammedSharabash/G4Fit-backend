@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
 
@@ -43,7 +44,7 @@ namespace G4Fit.Controllers.API
                 return Content(HttpStatusCode.BadRequest, baseResponse);
             }
 
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var PushTokenInDB = db.UserPushTokens.FirstOrDefault(x => x.PushToken == pushTokenDTO.PushToken && x.OS == pushTokenDTO.OS && x.UserId == CurrentUserId);
             if (PushTokenInDB != null)
             {
@@ -78,7 +79,7 @@ namespace G4Fit.Controllers.API
         [HttpGet]
         public IHttpActionResult GetUserNotifications()
         {
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var Notifications = db.Notifications.Where(d => d.IsDeleted == false && d.UserId == CurrentUserId).OrderByDescending(d => d.CreatedOn).ThenByDescending(d => d.IsSeen).ToList();
             if (Notifications == null || Notifications.Count() <= 0)
             {

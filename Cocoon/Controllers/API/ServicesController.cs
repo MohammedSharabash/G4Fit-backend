@@ -36,7 +36,7 @@ namespace G4Fit.Controllers.API
         [Route("details")]
         public IHttpActionResult GetServiceDetails(long ServiceId, string lang = "en")
         {
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var Service = db.Services.Find(ServiceId);
             if (Service == null || Service.IsHidden == true || Service.IsDeleted == true)
             {
@@ -102,7 +102,7 @@ namespace G4Fit.Controllers.API
                 return Content(HttpStatusCode.NotFound, baseResponse);
             }
 
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var Headers = HttpContext.Current.Request.Headers;
             string AnonymousKey = string.Empty;
             try
@@ -164,7 +164,7 @@ namespace G4Fit.Controllers.API
         [Route("myFavourite")]
         public IHttpActionResult GetMyFavouriteServices(string lang = "en")
         {
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var Headers = HttpContext.Current.Request.Headers;
             string AnonymousKey = string.Empty;
             try
@@ -216,7 +216,7 @@ namespace G4Fit.Controllers.API
                   return Content(HttpStatusCode.BadRequest, baseResponse);
               }*/
 
-            string CurrentUserId = User.Identity.GetUserId();
+            string CurrentUserId = ((ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var category = db.SubCategories.FirstOrDefault(s => s.IsDeleted == false && s.Id == CatId /*&& s.Category.IsDeleted == false*/);
             if (category == null)
             {
