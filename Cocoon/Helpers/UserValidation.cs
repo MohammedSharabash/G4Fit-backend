@@ -77,11 +77,11 @@ namespace G4Fit.Helpers
 
             if (ModelErrors == null || ModelErrors.Count <= 0)
             {
-                var IsValidPhoneNumber = loginDTO.Provider.All(char.IsDigit);
-                if (IsValidPhoneNumber == false || loginDTO.Provider.Contains("+"))
-                {
-                    return Errors.InvalidPhoneNumber;
-                }
+                //var IsValidPhoneNumber = loginDTO.Provider.All(char.IsDigit);
+                //if (IsValidPhoneNumber == false || loginDTO.Provider.Contains("+"))
+                //{
+                //    return Errors.InvalidPhoneNumber;
+                //}
             }
 
             return Errors.Success;

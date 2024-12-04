@@ -15,6 +15,7 @@ namespace G4Fit.Models.Domains
         public decimal OriginalPrice { get; set; }
         public decimal? OfferPrice { get; set; } // if there is offer
         public bool IsHidden { get; set; }
+        public bool HardDelete { get; set; } = false;
         public bool IsTimeBoundService { get; set; } = false;
         public int ServiceDays { get; set; } = 0;
         public int SellCounter { get; set; }

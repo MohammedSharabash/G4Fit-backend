@@ -1,13 +1,27 @@
 ﻿@{
     Layout = null;
+    var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>تسجيل الدخول</title>
+    <title>G4Fit | تسجيل الدخول</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="تسجيل الدخول - لوحة إدارة G4Fit" />
+    <meta property="og:description" content="قم بتسجيل الدخول إلى لوحة إدارة G4Fit لإدارة النظام بسهولة." />
+    <meta property="og:image" content="@Url.Content("~/Content/web/img/logo/g4fitLogo.jpg")" />
+    <meta property="og:url" content="https://@Request.Url.AbsoluteUri" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="تسجيل الدخول - لوحة إدارة G4Fit">
+    <meta name="twitter:description" content="قم بتسجيل الدخول إلى لوحة إدارة G4Fit لإدارة النظام بسهولة.">
+    <meta name="twitter:image" content="@Url.Content("~/Content/web/img/logo/g4fitLogo.jpg")">
+
     <!-- Bootstrap 3.3.4 -->
     <link href="~/Content/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Font Awesome -->

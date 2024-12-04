@@ -59,6 +59,12 @@ namespace G4Fit
                 role.Name = "Admin";
                 roleManager.Create(role);
             }
+            if (!roleManager.RoleExists("SubAdmin"))
+            {
+                var role = new IdentityRole();
+                role.Name = "SubAdmin";
+                roleManager.Create(role);
+            }
             if (!roleManager.RoleExists("Supplier"))
             {
                 var role = new IdentityRole();

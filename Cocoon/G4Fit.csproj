@@ -444,6 +444,10 @@
     <Compile Include="Migrations\202411132105284_about.Designer.cs">
       <DependentUpon>202411132105284_about.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202412041315272_harddelete.cs" />
+    <Compile Include="Migrations\202412041315272_harddelete.Designer.cs">
+      <DependentUpon>202412041315272_harddelete.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Data\ApplicationDbContext.cs" />
     <Compile Include="Models\Domains\ApplicationUser.cs" />
@@ -518,6 +522,7 @@
     <Compile Include="Models\Enums\PeriodType.cs" />
     <Compile Include="Models\Enums\SupplierType.cs" />
     <Compile Include="Models\Enums\TransactionType.cs" />
+    <Compile Include="Models\ViewModels\CreateSubAdminVM.cs" />
     <Compile Include="Models\ViewModels\ProductsVM.cs" />
     <Compile Include="Models\ViewModels\CheckoutVM.cs" />
     <Compile Include="Models\ViewModels\cpLoginViewModel.cs" />
@@ -1897,6 +1902,8 @@
     <Content Include="Views\SubCategories\View.cshtml" />
     <Content Include="Views\about\Dashboard.cshtml" />
     <Content Include="Views\about\Index.cshtml" />
+    <Content Include="Views\Users\SubAdmins.cshtml" />
+    <Content Include="Views\Users\CreateSubAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1946,6 +1953,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202411132105284_about.resx">
       <DependentUpon>202411132105284_about.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202412041315272_harddelete.resx">
+      <DependentUpon>202412041315272_harddelete.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Website.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

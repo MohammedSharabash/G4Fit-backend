@@ -54,7 +54,7 @@ namespace G4Fit.Controllers.MVC
             return PartialView(headerVM);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult AdminSideMenu()
         {
             var CurrentUser = db.Users.Find(CurrentUserId);

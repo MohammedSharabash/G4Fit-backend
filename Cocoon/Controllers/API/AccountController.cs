@@ -423,12 +423,12 @@ namespace G4Fit.Controllers.API
 
             if (!string.IsNullOrEmpty(PhoneNumber))
             {
-                var IsValidPhoneNumber = PhoneNumber.All(char.IsDigit);
-                if (IsValidPhoneNumber == false || PhoneNumber.Contains("+"))
-                {
-                    baseResponse.ErrorCode = Errors.InvalidPhoneNumber;
-                    return Content(HttpStatusCode.NotFound, baseResponse);
-                }
+                //var IsValidPhoneNumber = PhoneNumber.All(char.IsDigit);
+                //if (IsValidPhoneNumber == false || PhoneNumber.Contains("+"))
+                //{
+                //    baseResponse.ErrorCode = Errors.InvalidPhoneNumber;
+                //    return Content(HttpStatusCode.NotFound, baseResponse);
+                //}
             }
 
             if (UserValidation.IsPhoneExists(PhoneNumber, CurrentUserId) == true)

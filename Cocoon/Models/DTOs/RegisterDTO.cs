@@ -19,7 +19,7 @@ namespace G4Fit.Models.DTOs
         [Required]
         public string PhoneNumber { get; set; }
 
-        [Required]
+        //[Required]
         public string IDNumber { get; set; }
 
         [Required]

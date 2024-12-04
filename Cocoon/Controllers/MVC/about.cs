@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace G4Fit.Controllers.MVC
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,SubAdmin")]
     public class aboutController : BaseController
     {
         public ActionResult Dashboard()

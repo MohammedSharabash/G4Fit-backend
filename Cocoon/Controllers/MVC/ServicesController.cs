@@ -15,7 +15,7 @@ using System.Data.Entity.Validation;
 
 namespace G4Fit.Controllers.MVC
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,SubAdmin")]
     public class ServicesController : BaseController
     {
         [HttpGet]
@@ -23,11 +23,11 @@ namespace G4Fit.Controllers.MVC
         {
             if (CatId.HasValue == true)
             {
-                return View(db.Services.Where(s => s.SupplierId.HasValue == false && s.SubCategoryId == CatId.Value).OrderByDescending(s => s.CreatedOn).ToList());
+                return View(db.Services.Where(s => !s.HardDelete && s.SupplierId.HasValue == false && s.SubCategoryId == CatId.Value).OrderByDescending(s => s.CreatedOn).ToList());
             }
             else
             {
-                return View(db.Services.Where(s => s.SupplierId.HasValue == false).OrderByDescending(s => s.CreatedOn).ToList());
+                return View(db.Services.Where(s => !s.HardDelete && s.SupplierId.HasValue == false).OrderByDescending(s => s.CreatedOn).ToList());
             }
         }
 
@@ -75,6 +75,7 @@ namespace G4Fit.Controllers.MVC
                             Inventory = model.Inventory,
                             ServiceDays = model.ServiceDays,
                             SubCategoryId = model.CategoryId,
+                            HardDelete = false,
                             IsHidden = false,
                             SortingNumber = LatestSortingNumber + 1
                         };
@@ -138,7 +139,7 @@ namespace G4Fit.Controllers.MVC
                 return RedirectToAction("Dashboard");
 
             var Service = db.Services.FirstOrDefault(s => s.SupplierId.HasValue == false && s.Id == ServiceId.Value);
-            if (Service == null)
+            if (Service == null || Service.HardDelete)
                 return RedirectToAction("Dashboard");
 
             var ServiceVM = EditServiceVM.ToEditServiceVM(Service);
@@ -356,6 +357,7 @@ namespace G4Fit.Controllers.MVC
                                             Inventory = ServiceVM.Inventory,
                                             SubCategoryId = ServiceVM.CategoryId,
                                             IsHidden = false,
+                                            HardDelete = false,
                                             SortingNumber = LatestSortingNumber + 1,
                                             IsTimeBoundService = false,
                                             ServiceDays = 0,
@@ -575,6 +577,27 @@ namespace G4Fit.Controllers.MVC
             }
             return RedirectToAction("Dashboard");
         }
+        [HttpGet]
+        public ActionResult HardDelete(long? ServiceId)
+        {
+            if (ServiceId.HasValue == false)
+                return RedirectToAction("Dashboard");
+
+            var Service = db.Services.Find(ServiceId.Value);
+            if (Service == null)
+                return RedirectToAction("Dashboard");
+
+            if (Service.IsDeleted == true)
+            {
+                Service.HardDelete = true;
+                db.SaveChanges();
+            }
+            if (Service.SupplierId.HasValue == true)
+            {
+                return RedirectToAction("Suppliers");
+            }
+            return RedirectToAction("Dashboard");
+        }
 
         public ActionResult Details(long? ServiceId)
         {
@@ -582,7 +605,7 @@ namespace G4Fit.Controllers.MVC
                 return RedirectToAction("Dashboard");
 
             var Service = db.Services.Find(ServiceId.Value);
-            if (Service == null)
+            if (Service == null || Service.HardDelete)
                 return RedirectToAction("Dashboard");
 
             if (Service.SupplierId.HasValue == true)

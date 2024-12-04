@@ -28,13 +28,13 @@ namespace G4Fit.Controllers.MVC
     [Authorize]
     public class OrdersController : BaseController
     {
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult Dashboard()
         {
             return View(db.Orders.Where(s => s.IsDeleted == false && s.OrderStatus != OrderStatus.Initialized && s.UserId != null).OrderByDescending(s => s.CreatedOn));
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult ToggleDelivered(long? OrderId)
         {
             if (OrderId.HasValue == false)
@@ -54,7 +54,7 @@ namespace G4Fit.Controllers.MVC
             db.SaveChanges();
             return RedirectToAction("Dashboard");
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult ToggleCanceled(long? OrderId)
         {
             if (OrderId.HasValue == false)
@@ -116,7 +116,7 @@ namespace G4Fit.Controllers.MVC
             return RedirectToAction("Dashboard");
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult TogglePaid(long? OrderId)
         {
             if (OrderId.HasValue == false)
@@ -142,7 +142,7 @@ namespace G4Fit.Controllers.MVC
             return RedirectToAction("Dashboard");
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult Details(long? OrderId)
         {
             if (OrderId.HasValue == false)
@@ -160,7 +160,7 @@ namespace G4Fit.Controllers.MVC
             return RedirectToAction("Dashboard");
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult TransactionHistory(long? OrderId)
         {
             if (OrderId.HasValue == false)
@@ -707,7 +707,7 @@ namespace G4Fit.Controllers.MVC
             }
         }
 
-        //[Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult Index()
         {
             var UserOrders = db.Orders.Where(x => x.UserId == CurrentUserId && x.OrderStatus != OrderStatus.Initialized && !x.IsDeleted);

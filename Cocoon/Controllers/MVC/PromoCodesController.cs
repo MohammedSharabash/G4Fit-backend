@@ -1,5 +1,6 @@
 ﻿using G4Fit.Helpers;
 using G4Fit.Models.Domains;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Web.Mvc;
 
 namespace G4Fit.Controllers.MVC
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,SubAdmin")]
     public class PromoCodesController : BaseController
     {
         //All general coupons
@@ -99,7 +100,10 @@ namespace G4Fit.Controllers.MVC
                 return RedirectToAction("Edit", new { Id });
             }
 
-            ViewBag.Users = db.Users.ToList();
+            ViewBag.Users = db.Users.Where(user => !db.Set<IdentityUserRole>()
+                    .Join(db.Roles, userRole => userRole.RoleId, role => role.Id,
+                        (userRole, role) => new { userRole.UserId, role.Name })
+                    .Any(roleUser => roleUser.UserId == user.Id && (roleUser.Name == "Admin" || roleUser.Name == "SubAdmin"))).ToList();
             return View(Promo);
         }
 
@@ -209,7 +213,10 @@ namespace G4Fit.Controllers.MVC
                 db.SaveChanges();
                 return RedirectToAction("Specials");
             }
-            ViewBag.Users = db.Users.ToList();
+            ViewBag.Users = db.Users.Where(u => !db.Set<IdentityUserRole>()
+                    .Join(db.Roles, userRole => userRole.RoleId, role => role.Id,
+                        (userRole, role) => new { userRole.UserId, role.Name })
+                    .Any(roleUser => roleUser.UserId == u.Id && (roleUser.Name == "Admin" || roleUser.Name == "SubAdmin"))).ToList();
             return View(PromoCode);
         }
 
@@ -222,7 +229,10 @@ namespace G4Fit.Controllers.MVC
         [HttpGet]
         public ActionResult CreateSpecial()
         {
-            ViewBag.Users = db.Users.ToList();
+            ViewBag.Users = db.Users.Where(u => !db.Set<IdentityUserRole>()
+                    .Join(db.Roles, userRole => userRole.RoleId, role => role.Id,
+                        (userRole, role) => new { userRole.UserId, role.Name })
+                    .Any(roleUser => roleUser.UserId == u.Id && (roleUser.Name == "Admin" || roleUser.Name == "SubAdmin"))).ToList();
             return View();
         }
 
@@ -328,7 +338,10 @@ namespace G4Fit.Controllers.MVC
                 db.SaveChanges();
                 return RedirectToAction("Specials");
             }
-            ViewBag.Users = db.Users.ToList();
+            ViewBag.Users = db.Users.Where(u => !db.Set<IdentityUserRole>()
+                    .Join(db.Roles, userRole => userRole.RoleId, role => role.Id,
+                        (userRole, role) => new { userRole.UserId, role.Name })
+                    .Any(roleUser => roleUser.UserId == u.Id && (roleUser.Name == "Admin" || roleUser.Name == "SubAdmin"))).ToList();
             return View(PromoCode);
         }
 

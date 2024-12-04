@@ -138,7 +138,7 @@
     <div id="cover-spin"></div>
     <div class="wrapper">
         @Html.Action("Header", "Partials")
-        @if (User.IsInRole("Admin"))
+        @if (User.IsInRole("Admin") || User.IsInRole("SubAdmin"))
         {
             @Html.Action("AdminSideMenu", "Partials")
         }

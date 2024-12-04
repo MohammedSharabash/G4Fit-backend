@@ -21,7 +21,7 @@ namespace G4Fit.Controllers.MVC
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult SellWithUs()
         {
             var Content = db.CompanyDatas.FirstOrDefault(w => w.IsDeleted == false);
@@ -37,7 +37,7 @@ namespace G4Fit.Controllers.MVC
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         [HttpPost]
         public ActionResult SellWithUs(HTMLContentVM content)
         {
@@ -70,7 +70,7 @@ namespace G4Fit.Controllers.MVC
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult SellingPolicy()
         {
             var Content = db.CompanyDatas.FirstOrDefault(w => w.IsDeleted == false);
@@ -86,7 +86,7 @@ namespace G4Fit.Controllers.MVC
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         [HttpPost]
         public ActionResult SellingPolicy(HTMLContentVM content)
         {
@@ -119,14 +119,14 @@ namespace G4Fit.Controllers.MVC
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult Dashboard()
         {
             var Suppliers = db.Suppliers.OrderByDescending(w => w.CreatedOn).ToList();
             return View(Suppliers);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult Verify(long? SupplierId)
         {
             var supplier = db.Suppliers.Find(SupplierId);
@@ -139,7 +139,7 @@ namespace G4Fit.Controllers.MVC
             return RedirectToAction("Dashboard");
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult ToggleBlock(long? SupplierId)
         {
             var Supplier = db.Suppliers.Find(SupplierId);
@@ -159,7 +159,7 @@ namespace G4Fit.Controllers.MVC
             return RedirectToAction("Dashboard");
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult AcceptSupplier(long? SupplierId)
         {
             var Supplier = db.Suppliers.Find(SupplierId);
@@ -172,7 +172,7 @@ namespace G4Fit.Controllers.MVC
             return RedirectToAction("Dashboard");
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult RejectSupplier(long? SupplierId)
         {
             var Supplier = db.Suppliers.Find(SupplierId);
@@ -188,7 +188,7 @@ namespace G4Fit.Controllers.MVC
             return RedirectToAction("Dashboard");
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SubAdmin")]
         public ActionResult Information(long? SupplierId)
         {
             var Supplier = db.Suppliers.Find(SupplierId);
@@ -244,12 +244,12 @@ namespace G4Fit.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(supplier.PhoneNumber))
                 {
-                    var IsValidPhoneNumber = supplier.PhoneNumber.All(char.IsDigit);
-                    if (IsValidPhoneNumber == false || supplier.PhoneNumber.Contains("+"))
-                    {
-                        ModelState.AddModelError("PhoneNumber", culture == "ar" ? "رقم الهاتف غير صحيح" : "Invalid phone number");
-                        goto Return;
-                    }
+                    //var IsValidPhoneNumber = supplier.PhoneNumber.All(char.IsDigit);
+                    //if (IsValidPhoneNumber == false || supplier.PhoneNumber.Contains("+"))
+                    //{
+                    //    ModelState.AddModelError("PhoneNumber", culture == "ar" ? "رقم الهاتف غير صحيح" : "Invalid phone number");
+                    //    goto Return;
+                    //}
                 }
 
                 var Country = db.Countries.FirstOrDefault(s => s.IsDeleted == false && s.Id == supplier.CountryId);

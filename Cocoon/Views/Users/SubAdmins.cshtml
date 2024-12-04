@@ -1,0 +1,82 @@
+﻿@model IEnumerable<G4Fit.Models.Domains.ApplicationUser>
+@{
+    Layout = "~/Views/Dashboard/Layout.cshtml";
+    ViewBag.Title = "مساعدي الادمن ";
+    var Cities = ViewBag.Cities as List<G4Fit.Models.Domains.City>;
+}
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title text-center"><i class="fa fa-fw fa-users"></i> @ViewBag.Title</h3>
+    </div>
+    <div class="panel-body">
+        <div style="margin-bottom:15px;">
+            <a href="@Url.Action("CreateSubAdmin")" class="btn btn-primary"><i class="fa fa-plus"></i> اضافه مساعد جديد</a>
+        </div>
+        <hr />
+        <h4 class="text-center">عدد مساعدي الادمن [@Model.Count()] عضو</h4>
+        <hr />
+        <div class="table-responsive">
+            <table id="table" cellpadding="0" cellspacing="0" border="0" class="table text-center table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>الحاله</th>
+                        <th style="width:15%">الاسم</th>
+                        <th>البريد الالكتروني</th>
+                        <th>رقم الهاتف</th>
+                        <th>العنوان</th>
+                        <th>تاريخ التسجيل</th>
+                        <th>التحكم</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderByDescending(d => d.CreatedOn))
+                    {
+                        <tr>
+                            <td>
+                                @if (item.IsDeleted == true)
+                                {
+                                    <span class="badge bg-red">محظور</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-green">نشط</span>
+                                }
+                            </td>
+                            <td>
+                                @item.Name
+                            </td>
+                            <td>
+                                @item.Email
+                            </td>
+                            <td>
+                                <a href="tel:@item.PhoneNumber">@item.PhoneNumber</a>
+                            </td>
+                            @*<td>
+                                    @if (item.CityId != null)
+                                    {
+                                        <p>
+                                            @Cities.FirstOrDefault(x => x.Id == item.CityId).NameAr - @Cities.FirstOrDefault(x => x.Id == item.CityId).NameEn
+                                        </p>
+                                    }
+                                </td>*@
+                            <td>
+                                @item.Address
+                            </td>
+                            <td>
+                                @{
+                                    var CreatedOn = TimeZoneInfo.ConvertTimeFromUtc(item.CreatedOn, TimeZoneInfo.FindSystemTimeZoneById("Arab Standard Time"));
+                                }
+                                <span dir="auto">@CreatedOn.ToString("dd MMM, yyyy")</span><br />
+                                <span dir="auto">@CreatedOn.ToString("hh:mm tt")</span>
+                            </td>
+                            <td>
+                                @Html.ActionLink(item.IsDeleted == true ? "فك الحظر" : "حظر", "ToggleBlock", new { Id = item.Id })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

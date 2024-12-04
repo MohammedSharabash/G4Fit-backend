@@ -1,5 +1,6 @@
 ﻿using G4Fit.Models.ViewModels;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System;
@@ -19,7 +20,7 @@ namespace G4Fit.Controllers.MVC
             {
                 return RedirectToAction("Login");
             }
-            if (!User.IsInRole("Admin"))
+            if (!User.IsInRole("Admin") && !User.IsInRole("SubAdmin"))
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -37,9 +38,16 @@ namespace G4Fit.Controllers.MVC
             ViewBag.OrdersTodayCount = db.Orders.Count(i => i.OrderStatus == Models.Enums.OrderStatus.Delivered && i.CreatedOn >= startOfDay && i.CreatedOn <= endOfDay);
             ViewBag.OrdersMonthAmount = db.Orders.Where(i => i.OrderStatus == Models.Enums.OrderStatus.Delivered && i.CreatedOn >= startOfMonth && i.CreatedOn <= endOfMonth).Sum(x => (decimal?)x.Total) ?? 0;
             ViewBag.OrdersMonthCount = db.Orders.Count(i => i.OrderStatus == Models.Enums.OrderStatus.Delivered && i.CreatedOn >= startOfMonth && i.CreatedOn <= endOfMonth);
-            ViewBag.UsersCount = db.Users.Count();
+            ViewBag.UsersCount = db.Users.Where(user => !db.Set<IdentityUserRole>()
+                    .Join(db.Roles, userRole => userRole.RoleId, role => role.Id,
+                        (userRole, role) => new { userRole.UserId, role.Name })
+                    .Any(roleUser => roleUser.UserId == user.Id && (roleUser.Name == "Admin" || roleUser.Name == "SubAdmin"))).Count();
+
             ViewBag.ItemsCount = db.Services.Count();
-            ViewBag.NewUsersCount = db.Users.Count(i => i.CreatedOn >= startOfMonth && i.CreatedOn <= endOfMonth);
+            ViewBag.NewUsersCount = db.Users.Where(user => !db.Set<IdentityUserRole>()
+                    .Join(db.Roles, userRole => userRole.RoleId, role => role.Id,
+                        (userRole, role) => new { userRole.UserId, role.Name })
+                    .Any(roleUser => roleUser.UserId == user.Id && (roleUser.Name == "Admin" || roleUser.Name == "SubAdmin"))).Count(i => i.CreatedOn >= startOfMonth && i.CreatedOn <= endOfMonth);
             //ViewBag.CategoriesCount = db.Categories.Count(i => !i.IsDeleted);
             ViewBag.CategoriesCount = db.SubCategories.Count(i => !i.IsDeleted);
             ViewBag.SubCategoriesCount = db.SubCategories.Count(i => !i.IsDeleted);
@@ -69,17 +77,18 @@ namespace G4Fit.Controllers.MVC
             {
                 return View(model);
             }
+            var user = await UserManager.FindByEmailAsync(model.Email);
 
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, false, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
                     CurrentUserId = UserManager.FindByEmail(model.Email).Id;
-                    if (UserManager.IsInRole(CurrentUserId, "Admin"))
+                    if ((UserManager.IsInRole(CurrentUserId, "Admin") || UserManager.IsInRole(CurrentUserId, "SubAdmin")) && !user.IsDeleted)
                         return RedirectToAction("index", "cp");
 
                     AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("login", "cp");
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "محاولة دخول خاطئه");
@@ -91,7 +100,8 @@ namespace G4Fit.Controllers.MVC
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("login", "cp");
+            //return RedirectToAction("Index", "Home");
         }
 
         private ApplicationSignInManager _signInManager;

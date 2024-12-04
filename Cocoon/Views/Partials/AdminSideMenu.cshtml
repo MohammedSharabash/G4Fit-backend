@@ -92,7 +92,7 @@
 
             @{
                 var ListOfKeywords = new List<string>
-                                        {
+                                                {
                                 "sellingpolicy","sellwithus","company","datas","privacy","deliveryrules","terms","exchange","howto","customersupport","informations"
                             };
             }
@@ -138,6 +138,12 @@
             <li class="treeview @(Request.Url.AbsolutePath.ToLower().Contains("clients") ? "active" : "")">
                 <a href="@Url.Action("Clients", "Users")">
                     <i class="fa fa-users"></i> <span>مستخدمى التطبيق</span>
+                </a>
+            </li>
+
+            <li class="treeview @(Request.Url.AbsolutePath.ToLower().Contains("subadmins") ? "active" : "")">
+                <a href="@Url.Action("SubAdmins", "Users")">
+                    <i class="fa fa-users"></i> <span>مساعدي الادمن</span>
                 </a>
             </li>
 

@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace G4Fit.Controllers.MVC
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,SubAdmin")]
     public class CompanyDatasController : BaseController
     {
         [HttpGet]

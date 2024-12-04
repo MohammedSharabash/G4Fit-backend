@@ -45,7 +45,7 @@
                                 {
                                     <span class="badge bg-red pt-5 pb-5">القسم الرئيسى محذوف</span>
                                     <br /><br />}
-                               
+
                                 @if (Service.Offers != null && Service.Offers.Count(d => d.IsDeleted == false && d.IsFinished == false) > 0)
                                 {
                                     <span class="badge bg-green pt-5 pb-5">يوجد عرض نشط</span>}
@@ -87,6 +87,8 @@
                                 <a class="btn btn-warning" style="margin-bottom:10px" href="@Url.Action("ToggleHide", new { ServiceId = Service.Id })">@(Service.IsHidden == true ? "اظهار علي الموقع" : "اخفاء  من الموقع")</a> |
                                 <a class="btn btn-primary" style="margin-bottom:10px" href="@Url.Action("Edit", new { ServiceId = Service.Id })"><i class="fa fa-edit"></i></a>
                                 <a class="btn btn-primary" style="margin-bottom:10px" href="@Url.Action("ToggleDelete", new { ServiceId = Service.Id })">@(Service.IsDeleted == true ? "استعادة" : "حذف")</a>
+                                @if (Service.IsDeleted && !Service.HardDelete)
+                                {<a class="btn btn-danger" style="margin-bottom:10px" href="@Url.Action("HardDelete", new { ServiceId = Service.Id })">حذف نهائي</a>}
                             </td>
                         </tr>
                     }
