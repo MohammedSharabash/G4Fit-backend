@@ -26,6 +26,7 @@ namespace G4Fit.Models.Domains
         public string QR { get; set; }
         public DateTime CreatedOn { get; set; }
         public LoginType LoginType { get; set; }
+        public SubAdminRole Role { get; set; } = SubAdminRole.All;
         public long? CountryId { get; set; }
         public long? CityId { get; set; }
         public decimal Wallet { get; set; }

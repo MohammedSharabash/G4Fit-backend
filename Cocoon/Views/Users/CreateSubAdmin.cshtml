@@ -91,6 +91,31 @@
                                 </div>
                             </div>
 
+                            <div class="row" style="margin:10px;">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Role" class="col-sm-5 control-label required">الصلاحيات :</label>
+                                        <div class="col-sm-7">
+                                            @Html.DropDownListFor(
+                                                model => model.Role,
+                                                new SelectList(
+                                                    Enum.GetValues(typeof(G4Fit.Models.Enums.SubAdminRole))
+                                                        .Cast<G4Fit.Models.Enums.SubAdminRole>()
+                                                        .Select(e => new SelectListItem
+                                                        {
+                                                            Value = e.ToString(),
+                                                            Text = GetEnumDisplayName(e)
+                                                        }),
+                                                    "Value",
+                                                    "Text"),
+                                                "- اختر الصلاحية -",
+                                                new { @class = "form-control text-center" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
 
                             <div class="row" style="margin:10px;">
                                 <div class="col-lg-6">
@@ -155,4 +180,12 @@
             alert("حدث خطأ ما، برجاء المحاوله لاحقاً");
         }
     </script>
+}
+@functions{
+    public string GetEnumDisplayName(Enum enumValue)
+    {
+        var field = enumValue.GetType().GetField(enumValue.ToString());
+        var attribute = (System.ComponentModel.DataAnnotations.DisplayAttribute)Attribute.GetCustomAttribute(field, typeof(System.ComponentModel.DataAnnotations.DisplayAttribute));
+        return attribute == null ? enumValue.ToString() : attribute.Name;
+    }
 }

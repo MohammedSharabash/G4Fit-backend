@@ -15,7 +15,7 @@ using System.Data.Entity.Validation;
 
 namespace G4Fit.Controllers.MVC
 {
-    [AdminAuthorizeAttribute(Roles = "Admin,SubAdmin")]
+    [AdminAuthorizeAttribute(Roles = "Admin")]
     public class ServicesController : BaseController
     {
         [HttpGet]

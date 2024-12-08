@@ -6,20 +6,54 @@ using System.Web;
 using System.Web.Mvc;
 using G4Fit.Models.ViewModels;
 using G4Fit.Helpers;
+using G4Fit.Models.Enums;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace G4Fit.Controllers.MVC
 {
     [AdminAuthorizeAttribute(Roles = "Admin,SubAdmin")]
     public class NotificationsController : BaseController
     {
+        private ApplicationUserManager _userManager;
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
         public ActionResult Index()
         {
+
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.Notifications)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             return View();
         }
 
         [HttpPost]
         public async Task<ActionResult> Create(CreateNotificationVM notificationVM)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.Notifications)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             if (ModelState.IsValid == true)
             {
                 switch (notificationVM.OS)

@@ -592,6 +592,15 @@ namespace Cocoon.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Role is required.
+        /// </summary>
+        public static string RoleFieldIsRequired {
+            get {
+                return ResourceManager.GetString("RoleFieldIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SAR.
         /// </summary>
         public static string SAR {

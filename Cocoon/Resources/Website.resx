@@ -354,4 +354,7 @@
   <data name="Tabby" xml:space="preserve">
     <value>Tabby</value>
   </data>
+  <data name="RoleFieldIsRequired" xml:space="preserve">
+    <value>Role is required</value>
+  </data>
 </root>

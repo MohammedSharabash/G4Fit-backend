@@ -18,6 +18,9 @@ namespace G4Fit.Models.ViewModels
         public string PhoneNumber { get; set; }
         [Required(ErrorMessageResourceName = "AddressFieldIsRequired", ErrorMessageResourceType = typeof(Website))]
         public string Address { get; set; }
+
+        [Required(ErrorMessageResourceName = "RoleFieldIsRequired", ErrorMessageResourceType = typeof(Website))]
+        public SubAdminRole Role { get; set; } = SubAdminRole.All;
         [Required(ErrorMessageResourceName = "EmailFieldIsRequired", ErrorMessageResourceType = typeof(Website))]
         [EmailAddress]
         public string Email { get; set; }

@@ -1,6 +1,9 @@
 ﻿using G4Fit.Helpers;
 using G4Fit.Models.Domains;
+using G4Fit.Models.Enums;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,21 +15,61 @@ namespace G4Fit.Controllers.MVC
     [AdminAuthorizeAttribute(Roles = "Admin,SubAdmin")]
     public class PromoCodesController : BaseController
     {
+        private ApplicationUserManager _userManager;
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
         //All general coupons
         public ActionResult Index()
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.PromoCodes)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             return View(db.PromoCodes.Where(w => string.IsNullOrEmpty(w.UserId)).ToList());
         }
 
         //All special coupons
         public ActionResult Specials()
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.PromoCodes)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             return View(db.PromoCodes.Where(w => !string.IsNullOrEmpty(w.UserId)).ToList());
         }
 
         [HttpGet]
         public ActionResult ToggleDelete(long? Id)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.PromoCodes)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             if (Id.HasValue == false)
                 return RedirectToAction("Index");
 
@@ -50,6 +93,15 @@ namespace G4Fit.Controllers.MVC
         [HttpGet]
         public ActionResult Finish(long? Id)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.PromoCodes)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             if (Id.HasValue == false)
                 return RedirectToAction("Index");
 
@@ -70,6 +122,15 @@ namespace G4Fit.Controllers.MVC
         [HttpGet]
         public ActionResult Edit(long? Id)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.PromoCodes)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             if (Id.HasValue == false)
                 return RedirectToAction("Index");
 
@@ -88,6 +149,15 @@ namespace G4Fit.Controllers.MVC
         [HttpGet]
         public ActionResult EditSpecial(long? Id)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.PromoCodes)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             if (Id.HasValue == false)
                 return RedirectToAction("Specials");
 
@@ -110,6 +180,15 @@ namespace G4Fit.Controllers.MVC
         [HttpPost]
         public ActionResult Edit(PromoCode PromoCode)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.PromoCodes)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             var DateTimeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"));
             if (PromoCode.FinishOn.HasValue)
             {
@@ -162,6 +241,15 @@ namespace G4Fit.Controllers.MVC
         [HttpPost]
         public ActionResult EditSpecial(PromoCode PromoCode)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.PromoCodes)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             var user = db.Users.Find(PromoCode.UserId);
             if (user == null)
             {
@@ -223,12 +311,30 @@ namespace G4Fit.Controllers.MVC
         [HttpGet]
         public ActionResult Create()
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.PromoCodes)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             return View();
         }
 
         [HttpGet]
         public ActionResult CreateSpecial()
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.PromoCodes)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             ViewBag.Users = db.Users.Where(u => !db.Set<IdentityUserRole>()
                     .Join(db.Roles, userRole => userRole.RoleId, role => role.Id,
                         (userRole, role) => new { userRole.UserId, role.Name })
@@ -239,6 +345,15 @@ namespace G4Fit.Controllers.MVC
         [HttpPost]
         public ActionResult Create(PromoCode PromoCode)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.PromoCodes)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             var DateTimeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"));
             if (PromoCode.FinishOn.HasValue)
             {
@@ -289,6 +404,15 @@ namespace G4Fit.Controllers.MVC
         [HttpPost]
         public ActionResult CreateSpecial(PromoCode PromoCode)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.PromoCodes)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             var user = db.Users.Find(PromoCode.UserId);
             if (user == null)
             {
@@ -348,6 +472,15 @@ namespace G4Fit.Controllers.MVC
         [HttpGet]
         public ActionResult Items(long? PromoCodeId)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.PromoCodes)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             if (PromoCodeId.HasValue == true)
             {
                 var PromoCode = db.PromoCodes.Find(PromoCodeId);
@@ -366,6 +499,15 @@ namespace G4Fit.Controllers.MVC
         [HttpGet]
         public ActionResult ItemsSpecial(long? PromoCodeId)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.PromoCodes)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             if (PromoCodeId.HasValue == true)
             {
                 var PromoCode = db.PromoCodes.Find(PromoCodeId);

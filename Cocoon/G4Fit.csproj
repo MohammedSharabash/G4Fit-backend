@@ -449,6 +449,10 @@
     <Compile Include="Migrations\202412041315272_harddelete.Designer.cs">
       <DependentUpon>202412041315272_harddelete.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202412081429451_roles.cs" />
+    <Compile Include="Migrations\202412081429451_roles.Designer.cs">
+      <DependentUpon>202412081429451_roles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Data\ApplicationDbContext.cs" />
     <Compile Include="Models\Domains\ApplicationUser.cs" />
@@ -513,6 +517,7 @@
     <Compile Include="Models\DTOs\UserDTO.cs" />
     <Compile Include="Models\DTOs\UserProfileDTO.cs" />
     <Compile Include="Models\Enums\Errors.cs" />
+    <Compile Include="Models\Enums\SubAdminRole.cs" />
     <Compile Include="Models\Enums\PurposeOfSubscription.cs" />
     <Compile Include="Models\Enums\LoginType.cs" />
     <Compile Include="Models\Enums\MediaType.cs" />
@@ -1958,6 +1963,9 @@
     <EmbeddedResource Include="Migrations\202412041315272_harddelete.resx">
       <DependentUpon>202412041315272_harddelete.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202412081429451_roles.resx">
+      <DependentUpon>202412081429451_roles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Website.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -63,6 +63,7 @@ namespace G4Fit.Controllers.MVC
             {
                 sideMenuVM.UserImage = CurrentUser.ImageUrl;
                 sideMenuVM.Name = CurrentUser.Name;
+                sideMenuVM.Role = CurrentUser.Role;
             }
             return PartialView(sideMenuVM);
         }

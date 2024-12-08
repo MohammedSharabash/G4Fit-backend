@@ -354,4 +354,7 @@
   <data name="Tabby" xml:space="preserve">
     <value>تابي</value>
   </data>
+  <data name="RoleFieldIsRequired" xml:space="preserve">
+    <value>اختيار الصلاحيه مطلوب</value>
+  </data>
 </root>

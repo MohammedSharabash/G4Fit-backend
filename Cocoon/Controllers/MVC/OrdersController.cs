@@ -31,12 +31,31 @@ namespace G4Fit.Controllers.MVC
         [AdminAuthorizeAttribute(Roles = "Admin,SubAdmin")]
         public ActionResult Dashboard()
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.Orders)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             return View(db.Orders.Where(s => s.IsDeleted == false && s.OrderStatus != OrderStatus.Initialized && s.UserId != null).OrderByDescending(s => s.CreatedOn));
         }
 
         [AdminAuthorizeAttribute(Roles = "Admin,SubAdmin")]
         public ActionResult ToggleDelivered(long? OrderId)
         {
+
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.Orders)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             if (OrderId.HasValue == false)
             {
                 return RedirectToAction("Dashboard");
@@ -57,6 +76,16 @@ namespace G4Fit.Controllers.MVC
         [AdminAuthorizeAttribute(Roles = "Admin,SubAdmin")]
         public ActionResult ToggleCanceled(long? OrderId)
         {
+
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.Orders)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             if (OrderId.HasValue == false)
             {
                 return RedirectToAction("Dashboard");
@@ -119,6 +148,16 @@ namespace G4Fit.Controllers.MVC
         [AdminAuthorizeAttribute(Roles = "Admin,SubAdmin")]
         public ActionResult TogglePaid(long? OrderId)
         {
+
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.Orders)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             if (OrderId.HasValue == false)
             {
                 return RedirectToAction("Dashboard");
@@ -145,6 +184,16 @@ namespace G4Fit.Controllers.MVC
         [AdminAuthorizeAttribute(Roles = "Admin,SubAdmin")]
         public ActionResult Details(long? OrderId)
         {
+
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.Orders)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             if (OrderId.HasValue == false)
             {
                 return RedirectToAction("Dashboard");
@@ -163,6 +212,16 @@ namespace G4Fit.Controllers.MVC
         [AdminAuthorizeAttribute(Roles = "Admin,SubAdmin")]
         public ActionResult TransactionHistory(long? OrderId)
         {
+
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.Orders)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             if (OrderId.HasValue == false)
             {
                 return RedirectToAction("Dashboard");
@@ -723,7 +782,7 @@ namespace G4Fit.Controllers.MVC
             {
                 Anonymous = anonymousCooky.Value;
             }
-            var UserOrder = db.Orders.FirstOrDefault(x => ((x.UserId == CurrentUserId && x.UserId != null) || x.UnknownUserKeyIdentifier == Anonymous) && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
+            var UserOrder = db.Orders.FirstOrDefault(x => ((x.UserId == CurrentUserId && x.UserId != null)) && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
             if (UserOrder == null)
             {
                 return RedirectToAction("Index", "Home");

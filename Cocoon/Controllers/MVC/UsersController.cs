@@ -33,12 +33,22 @@ namespace G4Fit.Controllers.MVC
         [HttpGet]
         public ActionResult Clients()
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var user = db.Users.Find(CurrentUserId);
+                if (user.Role != SubAdminRole.All && user.Role != SubAdminRole.Users)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
+
             var nonAdminUsers = db.Users
-                .Where(user => !db.Set<IdentityUserRole>()
-                    .Join(db.Roles, userRole => userRole.RoleId, role => role.Id,
-                        (userRole, role) => new { userRole.UserId, role.Name })
-                    .Any(roleUser => roleUser.UserId == user.Id && (roleUser.Name == "Admin" || roleUser.Name == "SubAdmin")))
-                .ToList();
+            .Where(user => !db.Set<IdentityUserRole>()
+                .Join(db.Roles, userRole => userRole.RoleId, role => role.Id,
+                    (userRole, role) => new { userRole.UserId, role.Name })
+                .Any(roleUser => roleUser.UserId == user.Id && (roleUser.Name == "Admin" || roleUser.Name == "SubAdmin")))
+            .ToList();
 
             ViewBag.Cities = db.Cities
                 .Where(s => !s.IsDeleted && !s.Country.IsDeleted)
@@ -46,6 +56,7 @@ namespace G4Fit.Controllers.MVC
 
             return View(nonAdminUsers);
         }
+        [AdminAuthorizeAttribute(Roles = "Admin")]
         [HttpGet]
         public ActionResult SubAdmins()
         {
@@ -62,12 +73,14 @@ namespace G4Fit.Controllers.MVC
 
             return View(nonAdminUsers);
         }
+        [AdminAuthorizeAttribute(Roles = "Admin")]
         [HttpGet]
         public ActionResult CreateSubAdmin()
         {
             ViewBag.Countries = db.Cities.Where(s => s.IsDeleted == false).ToList();
             return View(new CreateSubAdminVM());
         }
+        [AdminAuthorizeAttribute(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> CreateSubAdmin(CreateSubAdminVM model)
         {
@@ -118,7 +131,7 @@ namespace G4Fit.Controllers.MVC
                         Vcode = 1111;
                         var City = db.Cities.Find(registerDTO.CountryId);
                         var Country = db.Countries.Find(City.CountryId);
-                        var user = new ApplicationUser() { LoginType = LoginType.G4FitRegisteration, VerificationCode = Vcode, UserName = Email, Email = Email, Address = registerDTO.Address, IDNumber = registerDTO.IDNumber, Name = registerDTO.Name, PhoneNumber = registerDTO.PhoneNumber, PhoneNumberCountryCode = Country.PhoneCode, CityId = registerDTO.CountryId, CountryId = City.CountryId };
+                        var user = new ApplicationUser() { LoginType = LoginType.G4FitRegisteration, VerificationCode = Vcode, UserName = Email, Role = model.Role, Email = Email, Address = registerDTO.Address, IDNumber = registerDTO.IDNumber, Name = registerDTO.Name, PhoneNumber = registerDTO.PhoneNumber, PhoneNumberCountryCode = Country.PhoneCode, CityId = registerDTO.CountryId, CountryId = City.CountryId };
 
                         //var qr = QRCodes.GenerateQR(user.IDNumber);
                         //user.QR = qr;
@@ -197,6 +210,15 @@ namespace G4Fit.Controllers.MVC
         [HttpGet]
         public ActionResult Details(string Id)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.Users)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             var user = db.Users.Find(Id);
             if (user != null)
             {
@@ -208,6 +230,15 @@ namespace G4Fit.Controllers.MVC
         [HttpGet]
         public ActionResult ToggleBlock(string Id)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.Users)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             var user = db.Users.Find(Id);
             if (user != null)
             {
@@ -227,6 +258,15 @@ namespace G4Fit.Controllers.MVC
 
         public ActionResult Verify(string Id)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.Users)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             var user = db.Users.Find(Id);
             if (user != null)
             {
@@ -240,6 +280,15 @@ namespace G4Fit.Controllers.MVC
         [HttpGet]
         public ActionResult Wallet(string Id)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.Users)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             var user = db.Users.Find(Id);
             if (user != null)
             {
@@ -251,6 +300,15 @@ namespace G4Fit.Controllers.MVC
         [HttpPost]
         public ActionResult AddOrSubtractToUserWallet(string UserId, decimal Amount, string Way, HttpPostedFileBase Attachment, bool IsAdd)
         {
+            #region Check SubAdmin Role
+            CurrentUserId = User.Identity.GetUserId();
+            if (UserManager.IsInRole(CurrentUserId, "SubAdmin"))
+            {
+                var SubAdmin = db.Users.Find(CurrentUserId);
+                if (SubAdmin.Role != SubAdminRole.All && SubAdmin.Role != SubAdminRole.Users)
+                    return RedirectToAction("Index", "Cp");
+            }
+            #endregion
             var user = db.Users.Find(UserId);
             if (user == null)
             {
@@ -307,5 +365,6 @@ namespace G4Fit.Controllers.MVC
             TempData["SubmitSuccess"] = true;
             return RedirectToAction("Wallet", new { Id = UserId });
         }
+
     }
 }

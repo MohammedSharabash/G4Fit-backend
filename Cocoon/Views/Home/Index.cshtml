@@ -299,7 +299,7 @@
 <!-- Start Sports Section-->
 @if (Model.Categories != null && Model.Categories.Count() > 0)
 {
-    foreach (var category in Model.Categories.Where(s => s.IsDeleted == false && s.Services.Count(w => w.IsDeleted == false && w.Inventory > 0 && w.IsHidden == false) > 0))
+    foreach (var category in Model.Categories.Where(s => s.IsDeleted == false && s.Services.Count(w => w.IsDeleted == false && (w.Inventory > 0 || w.IsTimeBoundService) && w.IsHidden == false) > 0))
     {
         List<G4Fit.Models.Domains.Service> Services = new List<G4Fit.Models.Domains.Service>();
 
