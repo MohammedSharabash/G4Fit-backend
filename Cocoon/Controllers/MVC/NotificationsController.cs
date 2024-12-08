@@ -9,7 +9,7 @@ using G4Fit.Helpers;
 
 namespace G4Fit.Controllers.MVC
 {
-    [Authorize(Roles = "Admin,SubAdmin")]
+    [AdminAuthorizeAttribute(Roles = "Admin,SubAdmin")]
     public class NotificationsController : BaseController
     {
         public ActionResult Index()

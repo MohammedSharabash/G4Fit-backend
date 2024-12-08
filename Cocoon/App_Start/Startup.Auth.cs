@@ -29,10 +29,12 @@ namespace G4Fit
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 CookieName = "G4FitIdentity",
                 LoginPath = new PathString("/Account/Login"),
+                ExpireTimeSpan = TimeSpan.FromHours(24), // تمديد الكوكي إلى 24 ساعة
+                SlidingExpiration = true, // يجدد الجلسة مع كل طلب جديد
                 Provider = new CookieAuthenticationProvider
                 {
                     OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ApplicationUser>(
-                        validateInterval: TimeSpan.FromDays(3020),  // Set interval to revalidate identity.
+                        validateInterval: TimeSpan.FromMinutes(30),  // Set interval to revalidate identity.
                         regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
                 }
             });
@@ -48,7 +50,7 @@ namespace G4Fit
                 TokenEndpointPath = new PathString("/Token"),  // The URL where tokens are requested.
                 Provider = new ApplicationOAuthProvider(PublicClientId),
                 AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),  // Endpoint for external logins.
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(3065),  // Set token expiration time.
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(365),  // Set token expiration time.
                 RefreshTokenProvider = new OAuthCustomRefreshTokenProvider(),  // Handle refresh tokens.
                 AllowInsecureHttp = false  // Set to true in development environments, but always use HTTPS in production.
             };

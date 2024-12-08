@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace G4Fit.Controllers.MVC
 {
-    [Authorize(Roles = "Admin,SubAdmin")]
+    [AdminAuthorizeAttribute(Roles = "Admin,SubAdmin")]
     public class CountriesController : BaseController
     {
         [HttpGet]

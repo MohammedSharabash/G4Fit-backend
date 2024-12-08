@@ -178,9 +178,11 @@ namespace G4Fit.Controllers.API
                         ImageName = MediaControl.Upload(FilePath.Users, Image, MediaType.Image);
                         user.ImageUrl = ImageName;
                     }
-
-                    var qr = QRCodes.GenerateQR(user.IDNumber);
-                    user.QR = qr;
+                    if (!string.IsNullOrWhiteSpace(user.IDNumber))
+                    {
+                        var qr = QRCodes.GenerateQR(user.IDNumber);
+                        user.QR = qr;
+                    }
                     IdentityResult result = await UserManager.CreateAsync(user, registerDTO.Password);
                     if (!result.Succeeded)
                     {

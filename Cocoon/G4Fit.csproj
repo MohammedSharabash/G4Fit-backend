@@ -336,6 +336,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\AdminAuthorizeAttribute.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
@@ -1956,6 +1957,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202412041315272_harddelete.resx">
       <DependentUpon>202412041315272_harddelete.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Website.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

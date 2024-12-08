@@ -65,7 +65,7 @@ h2 span {
     text-align: center;
     font-size: 18px;
     overflow: hidden;
-    border: 1px solid #CCC;
+    border: 1px solid #a0bb3a;
     border-radius: 10px
 }
 
@@ -259,7 +259,7 @@ h2 span {
         }
 
 .side_bar {
-    background-color: #738d73;
+    background-color: #a0bb3a;
     color: #FFF;
     width: 200px;
     height: 100%;
@@ -278,7 +278,8 @@ h2 span {
         .side_bar ul li:hover {
             color: #AAA;
             cursor: pointer;
-            padding-left: 15px
+            padding-left: 15px;
+            scale: 1.1;
         }
 
 .user_bar {
@@ -794,7 +795,7 @@ h2 span {
         border: none;
         margin: 5px;
         padding-top: 10px;
-        box-shadow: 0 0 10px #CCC
+        box-shadow: 0 0 10px #a0bb3a
     }
 
         .member_profile .card .card-body .swiper-slide h3 {
@@ -1918,5 +1919,14 @@ input[type=number] {
 @media screen and (max-width:600px) {
     .SliderImage {
         object-fit: contain;
+    }
+    .carousel-item {
+        height: 250px !important
+    }
+    #main_slider {
+        height: 250px !important
+    }
+    #Home {
+        height: 250px !important
     }
 }

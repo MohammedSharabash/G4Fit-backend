@@ -6,20 +6,39 @@
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
     ViewBag.Title = "تفاصيل الطلب رقم " + Model.Code;
 }
+
+
+<style>
+    .logo-print {
+        position: absolute;
+        left: 0; /* Align logo to the left */
+        top: 0; /* Align logo to the top */
+        z-index: 1; /* Behind the text */
+        height: 55px; /* Adjust size as needed */
+    }
+
+    /*.order-header {
+        position: relative;*/ /* Establishes a stacking context */
+        /*display: inline-block;
+        z-index: 2;*/ /* Above the logo */
+        /*margin-left: 20px;*/ /* Adjust to align with logo */
+    /*}*/
+</style>
 <div class="row">
     <!-- Left col -->
     <div class="col-md-12">
         <!-- TABLE: LATEST ORDERS -->
         <div class="box box-info">
-            <div class="box-header with-border">
+            <div class="box-header with-border no-print">
                 <a class="btn btn-default no-print" href="@Url.Action("Dashboard", "Orders")">العودة</a>
                 <h3 class="box-title no-print">@ViewBag.Title</h3>
-                <div class="box-tools pull-right">
+                <div class="box-tools pull-right  no-print">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                 </div>
             </div><!-- /.box-header -->
             <div class="box-body">
-                <div class="text-center" style="margin-bottom:10px;">
+                <div class="text-center" style="margin-bottom: 10px; position: relative; ">
+                    <img src="~/Content/web/img/logo/g4fitLogo.jpg" alt="Logo" class="logo-print" />
                     <h4>الطلب رقم @Model.Code</h4>
                     <h4 style="margin:10px">
                         @switch (Model.OrderStatus)
@@ -95,12 +114,6 @@
                                                     الكمية / الإشتراك
                                                 </th>
                                                 <th>
-                                                    الحجم
-                                                </th>
-                                                <th>
-                                                    اللون
-                                                </th>
-                                                <th>
                                                     السعر
                                                 </th>
                                             </tr>
@@ -118,26 +131,6 @@
                                                     {
                                                         <td id="quantity">@item.Quantity أيام إشتراك</td>
                                                     }
-                                                    <td>
-                                                        @if (item.SizeId.HasValue == true)
-                                                        {
-                                                            <span>@item.Size.Size</span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span>بدون حجم</span>
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        @if (item.ColorId.HasValue == true)
-                                                        {
-                                                            <span id="color" style="background-color:@item.Color.Color">@item.Color.Color</span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span>بدون لون</span>
-                                                        }
-                                                    </td>
                                                     <td>
                                                         @item.Price ريال سعودي
                                                         <br />

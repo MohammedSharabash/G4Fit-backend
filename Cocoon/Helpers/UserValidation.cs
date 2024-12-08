@@ -115,8 +115,9 @@ namespace G4Fit.Helpers
                 //}
                 // التأكد أن رقم الهوية السعودية يتكون من 10 أرقام
                 string pattern = @"^\d{10}$";
-                if (!Regex.IsMatch(registerDTO.IDNumber, pattern))
-                    return Errors.InvalidIDNumber;
+                if (!string.IsNullOrWhiteSpace(registerDTO.IDNumber))
+                    if (!Regex.IsMatch(registerDTO.IDNumber, pattern))
+                        return Errors.InvalidIDNumber;
             }
 
 
@@ -159,8 +160,9 @@ namespace G4Fit.Helpers
 
             if (IsPhoneExists(registerDTO.PhoneNumber))
                 return Errors.PhoneNumberAlreadyExists;
-            if (IsIDNumberExists(registerDTO.IDNumber))
-                return Errors.IDNumberAlreadyExists;
+            if (!string.IsNullOrWhiteSpace(registerDTO.IDNumber))
+                if (IsIDNumberExists(registerDTO.IDNumber))
+                    return Errors.IDNumberAlreadyExists;
             if (IsEmailExists(registerDTO.Email))
                 return Errors.EmailAlreadyExists;
 

@@ -22,7 +22,7 @@ using G4Fit.Helper;
 
 namespace G4Fit.Controllers.MVC
 {
-    [Authorize(Roles = "Admin,SubAdmin")]
+    [AdminAuthorizeAttribute(Roles = "Admin,SubAdmin")]
     public class UsersController : BaseController
     {
         public UserManager<ApplicationUser> UserManager;
@@ -154,13 +154,13 @@ namespace G4Fit.Controllers.MVC
                 }
             }
 
-            if (!string.IsNullOrEmpty(registerDTO.PhoneNumber))
-            {
-                // التأكد أن رقم الجوال السعودي يبدأ بـ 05 ويتكون من 10 أرقام
-                string pattern = @"^05[0-9]{8}$";
-                if (!Regex.IsMatch(registerDTO.PhoneNumber, pattern))
-                    Errors.Add("القسم المطلوب غير متاح");
-            }
+            //if (!string.IsNullOrEmpty(registerDTO.PhoneNumber))
+            //{
+            //    // التأكد أن رقم الجوال السعودي يبدأ بـ 05 ويتكون من 10 أرقام
+            //    string pattern = @"^05[0-9]{8}$";
+            //    if (!Regex.IsMatch(registerDTO.PhoneNumber, pattern))
+            //        Errors.Add("الرقم المطلوب غير متاح");
+            //}
 
 
 

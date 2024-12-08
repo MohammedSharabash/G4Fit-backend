@@ -9,7 +9,7 @@
 
 //namespace G4Fit.Controllers.MVC
 //{
-//    [Authorize(Roles = "Admin,SubAdmin")]
+//    [AdminAuthorizeAttribute(Roles = "Admin,SubAdmin")]
 //    public class CategoriesController : BaseController
 //    {
 //        [HttpGet]

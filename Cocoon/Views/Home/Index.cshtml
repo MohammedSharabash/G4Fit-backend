@@ -159,7 +159,7 @@
 <!-- Start Carousel Section -->
 @if (Model.Sliders != null && Model.Sliders.Count() > 0)
 {
-    <section class="main_carousel" id="Home">
+    <section class="main_carousel mb-5" id="Home">
         <div class="carousel slide text-center" id="main_slider" data-ride="carousel">
             <div class="carousel-inner">
                 @foreach (var slider in Model.Sliders)
@@ -242,6 +242,7 @@
 <!-- Start New Section -->
 <!-- End Most Sell Section -->
 <!-- Start Best Offer Section -->
+<hr />
 @if (Model.OffersServices != null && Model.OffersServices.Count(s => s.IsDeleted == false) > 0)
 {
     <section class="best_offer text-center" id="Offer">
@@ -307,7 +308,7 @@
         if (Services.Any() == true)
         {
             <section class="Sports" id="Sport">
-                <div class="container">
+                <div class="container mt-5">
                     <h2 class="h3 text-right wow fadeInDown"><span>@(culture == "ar" ? category.NameAr : category.NameEn)</span></h2>
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
