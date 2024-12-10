@@ -50,6 +50,8 @@ namespace G4Fit.Controllers.MVC
                 Data.AddressAr = model.AddressAr;
                 Data.AddressEn = model.AddressEn;
                 Data.Email = model.Email;
+                Data.Longitude = model.Longitude;
+                Data.Latitude = model.Latitude;
                 db.SaveChanges();
             }
             else

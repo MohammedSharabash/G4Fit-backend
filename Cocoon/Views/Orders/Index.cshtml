@@ -7,10 +7,10 @@
     <div class="container">
         <div class="card wow fadeInUp" style="background-color: #292929;">
             <div class="card-header">
-                <h2 class="h3 text-right"><span>@*<i class="fas fa-star"></i>*@@(culture == "ar" ? "طلبات قيد التحضير " : "New Orders")@*<i class="fas fa-people-carry"></i>*@</span></h2>
+                <h2 class="h3 @(culture == "ar" ? "text-right" : "")"><span>@*<i class="fas fa-star"></i>*@@(culture == "ar" ? "طلبات قيد التحضير " : "New Orders")@*<i class="fas fa-people-carry"></i>*@</span></h2>
             </div>
             <div class="card-body">
-                <div class="swiper-container">
+                <div class="swiper-container"dir=@(culture == "ar" ? "rtl" : "ltr")>
                     <div class="swiper-wrapper">
                         @if (Model == null || Model.Count(s => s.OrderStatus == G4Fit.Models.Enums.OrderStatus.Placed) <= 0)
                         {
@@ -88,10 +88,10 @@
         </div>
         <div class="card wow zoomIn" style="background-color: #292929;">
             <div class="card-header">
-                <h2 class="h3 text-right"><span>@*<i class="fas fa-star"></i>*@@(culture == "ar" ? "طلباتى السابقة " : "Previous Orders")@*<i class="fas fa-people-carry"></i>*@</span></h2>
+                <h2 class="h3 @(culture == "ar" ? "text-right" : "")"><span>@*<i class="fas fa-star"></i>*@@(culture == "ar" ? "طلباتى السابقة " : "Previous Orders")@*<i class="fas fa-people-carry"></i>*@</span></h2>
             </div>
             <div class="card-body">
-                <div class="swiper-container">
+                <div class="swiper-container"dir=@(culture == "ar" ? "rtl" : "ltr")>
                     <div class="swiper-wrapper">
                         @if (Model == null || Model.Count(s => s.OrderStatus == G4Fit.Models.Enums.OrderStatus.Delivered) <= 0)
                         {

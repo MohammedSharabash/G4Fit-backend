@@ -21,6 +21,8 @@
                                 @Html.HiddenFor(d => d.Id)
                             }
 
+                            <input value="@Model.Latitude" name="Latitude" id="Latitude" hidden />
+                            <input value="@Model.Longitude" name="Longitude" id="Longitude" hidden />
 
                             <div class="row" style="margin:10px;">
                                 <div class="col-lg-6">
@@ -273,6 +275,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <input type="hidden" id="Latitude" name="Latitude" value="@Model.Latitude" />
+                            <input type="hidden" id="Longitude" name="Longitude" value="@Model.Longitude" />
+                            <div class="row" style="margin:10px;">
+                                <input id="Addresss" name="Addresss"
+                                       class="controls form-control"
+                                       style="text-align:center"
+                                       type="text" required
+                                       placeholder="برجاء أدخال موقع المتجر" />
+                                <div id="map" style="width:100% ; height:400px;"></div>
+                            </div>
 
                             <button type="submit" class="btn btn-success">حفظ</button>
                         }
@@ -282,3 +294,76 @@
         </div>
     </div>
 </div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSOoFAB-bipL5HnpDoUGQ_mv97-HnjkMc&callback=initAutocomplete&libraries=places&v=weekly"
+            defer></script>
+    <script>
+        "use strict";
+        function initAutocomplete() {
+            // قراءة القيم من الحقول المخفية
+            let lat = parseFloat(document.getElementById("Latitude").value) || 26.638744414485046;
+            let lng = parseFloat(document.getElementById("Longitude").value) || 29.634362261560685;
+
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: lat, lng: lng },
+                zoom: 13,
+                mapTypeId: "roadmap"
+            });
+
+            // إضافة المؤشر على الموقع المبدئي
+            let marker = new google.maps.Marker({
+                map: map,
+                position: { lat: lat, lng: lng },
+                draggable: true
+            });
+
+            // تحديث القيم عند تحريك المؤشر
+            google.maps.event.addListener(marker, 'dragend', function () {
+                document.getElementById("Latitude").value = marker.getPosition().lat();
+                document.getElementById("Longitude").value = marker.getPosition().lng();
+            });
+
+            const input = document.getElementById("Addresss");
+            const searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            map.addListener("bounds_changed", () => {
+                searchBox.setBounds(map.getBounds());
+            });
+
+            searchBox.addListener("places_changed", () => {
+                const places = searchBox.getPlaces();
+
+                if (places.length === 0) return;
+
+                const bounds = new google.maps.LatLngBounds();
+
+                places.forEach(place => {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+
+                    marker.setPosition(place.geometry.location);
+
+                    document.getElementById("Latitude").value = place.geometry.location.lat();
+                    document.getElementById("Longitude").value = place.geometry.location.lng();
+
+                    if (place.geometry.viewport) {
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+
+                map.fitBounds(bounds);
+            });
+        }
+
+    </script>
+
+}

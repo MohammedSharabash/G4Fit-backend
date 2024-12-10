@@ -19,7 +19,7 @@
                             <h3>الرصيد الحالى: <span class="text-@(Model.Wallet >= 0 ? "green" : "red")">@Model.Wallet ريال سعودي</span></h3>
                         </div>
                     </div>
-                    <div class="col-lg-6 text-right">
+                    <div class="col-lg-6 @(culture == "ar" ? "text-right" : "")">
                         <label>لاضافه او خصم رصيد برجاء ملئ البيانات التاليه:</label>
                         @if (TempData["SubmitError"] != null)
                         {

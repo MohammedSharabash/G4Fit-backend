@@ -160,7 +160,7 @@
 @if (Model.Sliders != null && Model.Sliders.Count() > 0)
 {
     <section class="main_carousel mb-5" id="Home">
-        <div class="carousel slide text-center" id="main_slider" data-ride="carousel">
+        <div class="carousel slide text-center" id="main_slider" data-ride="carousel" data-bs-interval="1000">
             <div class="carousel-inner">
                 @foreach (var slider in Model.Sliders)
                 {
@@ -241,61 +241,6 @@
 <!-- End Categories Section-->
 <!-- Start New Section -->
 <!-- End Most Sell Section -->
-<!-- Start Best Offer Section -->
-<hr />
-@if (Model.OffersServices != null && Model.OffersServices.Count(s => s.IsDeleted == false) > 0)
-{
-    <section class="best_offer text-center" id="Offer">
-        <div class="container">
-            <h2 class="h3 text-right wow fadeInDown"><span>@(culture == "ar" ? "عروضنا الخاصة" : "Special Offers")</span></h2>
-            <div class="swiper-container">
-                <div class="swiper-wrapper">
-                    @foreach (var Service in Model.OffersServices)
-                    {
-                        string ServiceImage = null;
-                        if (Service.Images != null && Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
-                        {
-                            ServiceImage = Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
-                        }
-                        <div class="swiper-slide hvr-underline-from-center">
-                            <a href="@Url.Action("View", "Services", new { Id = Service.Id })"><img src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100%" height="400"></a>
-                            <div class="Tools">
-                                <div class="main_info">
-                                    <h6><a class="text-black" href="@Url.Action("View", "Services", new { Id = Service.Id })">@(culture == "ar" ? Service.NameAr : Service.NameEn)</a></h6>
-                                    @*<p><a href="@Url.Action("View", "Categories", new { CatId = Service.SubCategoryId })" class="text-black">@(culture == "ar" ? Service.SubCategory.NameAr : Service.SubCategory.NameEn)</a></p>*@
-                                </div>
-                                <div class="sub_info"><span>@Service.OriginalPrice @Website.SAR</span><span>@Service.OfferPrice.Value @Website.SAR</span>@*<i class="fas fa-cart-plus fa-lg hvr-pulse-grow" onclick="AddToCart(this,'@Service.Id', 1)"></i>*@</div>
-                                <div class="clearfix"></div>
-                                @*@if (Service.Colors != null && Service.Colors.Count(s => s.IsDeleted == false) > 0)
-                                    {
-                                        <div class="Colors text-right">
-                                            <ul class="list-unstyled">
-                                                @foreach (var color in Service.Colors.Where(s => s.IsDeleted == false))
-                                                {
-                                                    <li style="background-color:@color.Color;cursor:pointer;" class="@(color.Id == Service.Colors.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")" data-color="@color.Id"></li>
-                                                }
-                                            </ul>
-                                        </div>
-                                    }
-                                    @if (Service.Sizes != null && Service.Sizes.Count(s => s.IsDeleted == false) > 0)
-                                    {
-                                        <div class="Size text-right">
-                                            <ul class="list-unstyled">
-                                                @foreach (var size in Service.Sizes.Where(s => s.IsDeleted == false))
-                                                {
-                                                    <li style="cursor:pointer;" class="@(size.Id == Service.Sizes.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")" data-size="@size.Id">@size.Size</li>
-                                                }
-                                            </ul>
-                                        </div>
-                                    }*@
-                            </div>
-                        </div>}
-                </div>
-            </div>
-            <hr>
-        </div>
-    </section>}
-<!-- End Best Offer Section-->
 <!-- Start Sports Section-->
 @if (Model.Categories != null && Model.Categories.Count() > 0)
 {
@@ -309,8 +254,8 @@
         {
             <section class="Sports" id="Sport">
                 <div class="container mt-5">
-                    <h2 class="h3 text-right wow fadeInDown"><span>@(culture == "ar" ? category.NameAr : category.NameEn)</span></h2>
-                    <div class="swiper-container">
+                    <h2 class="h3 @(culture == "ar" ? "text-right" : "") wow fadeInDown"><span>@(culture == "ar" ? category.NameAr : category.NameEn)</span></h2>
+                    <div class="swiper-container" dir=@(culture == "ar" ? "rtl" : "ltr")>
                         <div class="swiper-wrapper">
                             @foreach (var Service in Services)
                             {
@@ -326,11 +271,22 @@
                                             <h6><a class="text-black" href="@Url.Action("View", "Services", new { Id = Service.Id })">@(culture == "ar" ? Service.NameAr : Service.NameEn)</a></h6>
                                             @*<p><a href="@Url.Action("View", "Categories", new { CatId = Service.SubCategoryId })" class="text-black">@(culture == "ar" ? Service.SubCategory.NameAr : Service.SubCategory.NameEn)</a></p>*@
                                         </div>
-                                        <div class="sub_info"><span>@(Service.OfferPrice.HasValue ? Service.OfferPrice.Value : Service.OriginalPrice) @Website.SAR</span>@*<i class="fas fa-cart-plus fa-lg hvr-pulse-grow" onclick="AddToCart(this,'@Service.Id', 1)"></i>*@</div>
+                                        <div class="sub_info">
+                                            @if (Service.OfferPrice.HasValue)
+                                            {
+                                                <span style="text-decoration: line-through !important;">@Service.OriginalPrice @Website.SAR</span><span style="color: #a0bb3a!important;">@Service.OfferPrice.Value @Website.SAR</span>
+                                            }
+
+                                            else
+                                            {
+                                                <span>@Service.OriginalPrice @Website.SAR</span>
+                                            }
+                                            @*<i class="fas fa-cart-plus fa-lg hvr-pulse-grow" onclick="AddToCart(this,'@Service.Id', 1)"></i>*@
+                                        </div>
                                         <div class="clearfix"></div>
                                         @*@if (Service.Colors != null && Service.Colors.Count(s => s.IsDeleted == false) > 0)
                                             {
-                                                <div class="Colors text-right">
+                                                <div class="Colors @(culture == "ar" ? "text-right" : "")">
                                                     <ul class="list-unstyled">
                                                         @foreach (var color in Service.Colors.Where(s => s.IsDeleted == false))
                                                         {
@@ -341,7 +297,7 @@
                                             }
                                             @if (Service.Sizes != null && Service.Sizes.Count(s => s.IsDeleted == false) > 0)
                                             {
-                                                <div class="Size text-right">
+                                                <div class="Size @(culture == "ar" ? "text-right" : "")">
                                                     <ul class="list-unstyled">
                                                         @foreach (var size in Service.Sizes.Where(s => s.IsDeleted == false))
                                                         {
@@ -369,6 +325,87 @@
         </video>
     </div>
 </div>
+<input value="@Model.About.Latitude" name="Latitude" id="Latitude" hidden />
+<input value="@Model.About.Longitude" name="Longitude" id="Longitude" hidden />
+
+<div class="row mb-5" style="margin:0px!important;">
+    <div class="container mt-5">
+        <div id="map" style="width:100% ; height:400px;"></div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSOoFAB-bipL5HnpDoUGQ_mv97-HnjkMc&callback=initAutocomplete&libraries=places&v=weekly"
+            defer></script>
+    <script>
+        "use strict";
+        function initAutocomplete() {
+            // قراءة القيم من الحقول المخفية
+            let lat = parseFloat(document.getElementById("Latitude").value) || 26.638744414485046;
+            let lng = parseFloat(document.getElementById("Longitude").value) || 29.634362261560685;
+
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: lat, lng: lng },
+                zoom: 13,
+                mapTypeId: "roadmap"
+            });
+
+            // إضافة المؤشر على الموقع المبدئي
+            let marker = new google.maps.Marker({
+                map: map,
+                position: { lat: lat, lng: lng },
+                draggable: true
+            });
+
+            // تحديث القيم عند تحريك المؤشر
+            google.maps.event.addListener(marker, 'dragend', function () {
+                document.getElementById("Latitude").value = marker.getPosition().lat();
+                document.getElementById("Longitude").value = marker.getPosition().lng();
+            });
+
+            const input = document.getElementById("Addresss");
+            const searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            map.addListener("bounds_changed", () => {
+                searchBox.setBounds(map.getBounds());
+            });
+
+            searchBox.addListener("places_changed", () => {
+                const places = searchBox.getPlaces();
+
+                if (places.length === 0) return;
+
+                const bounds = new google.maps.LatLngBounds();
+
+                places.forEach(place => {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+
+                    marker.setPosition(place.geometry.location);
+
+                    document.getElementById("Latitude").value = place.geometry.location.lat();
+                    document.getElementById("Longitude").value = place.geometry.location.lng();
+
+                    if (place.geometry.viewport) {
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+
+                map.fitBounds(bounds);
+            });
+        }
+
+    </script>
+
+}
 
 <script>
     var Videos = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Videos)); // تحويل قائمة الفيديوهات إلى JSON
@@ -421,7 +458,7 @@
         <section class="About" id="About">
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-12 col-md-6 text-right">
+                    <div class="col-sm-12 col-md-6 @(culture == "ar" ? "text-right" : "")">
                         <h2 class="h1">@(culture == "ar" ? "من نحن ؟" : "Who are we?")</h2>
                         @if (culture == "ar" && Model.About.DescriptionAr != null)
                         {

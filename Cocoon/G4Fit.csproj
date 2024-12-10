@@ -453,6 +453,10 @@
     <Compile Include="Migrations\202412081429451_roles.Designer.cs">
       <DependentUpon>202412081429451_roles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202412101222221_location.cs" />
+    <Compile Include="Migrations\202412101222221_location.Designer.cs">
+      <DependentUpon>202412101222221_location.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Data\ApplicationDbContext.cs" />
     <Compile Include="Models\Domains\ApplicationUser.cs" />
@@ -1636,6 +1640,7 @@
     <Content Include="Content\web\img\logo\g4fitLogo.jpg" />
     <Content Include="Content\web\img\logo\logo.jpg" />
     <Content Include="Content\web\img\logo\texture.png" />
+    <Content Include="Content\web\img\logo\user.jpg" />
     <Content Include="Content\web\img\payments.png" />
     <Content Include="Content\web\js\all.min.js" />
     <Content Include="Content\web\js\bootstrap.min.js" />
@@ -1966,6 +1971,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202412081429451_roles.resx">
       <DependentUpon>202412081429451_roles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202412101222221_location.resx">
+      <DependentUpon>202412101222221_location.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Website.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

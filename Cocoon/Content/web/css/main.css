@@ -1,5 +1,6 @@
 * {
-    direction: rtl
+    /*    direction: rtl
+*/
 }
 
 body {
@@ -16,7 +17,7 @@ hr {
 
 h2 span {
     /*background-color: #000;*/
-    color: #FFF;
+    color: #a0bb3a;
     display: inline-block;
     padding: 5px 10px;
     border-radius: 15px 0 0 15px
@@ -464,7 +465,7 @@ h2 span {
 
 .About {
     /*background-image: url('../img/logo/bg3.jpeg');*/
-    /*background-image: url(../img/background/1.png);*/
+    /*background-image: url(../img/background/user.jpg);*/
     background-color: #fefefc;
     border-top-left-radius: 50% 5%;
     border-top-right-radius: 50% 5%;
@@ -1920,12 +1921,15 @@ input[type=number] {
     .SliderImage {
         object-fit: contain;
     }
+
     .carousel-item {
         height: 250px !important
     }
+
     #main_slider {
         height: 250px !important
     }
+
     #Home {
         height: 250px !important
     }

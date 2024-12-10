@@ -103,7 +103,7 @@
                 <div class="pt-3 pt-xl-0 pt-md-0 pt-sm-0 col-sm-12 col-md-8 col-lg-10">
                     <div class="card wow fadeInDown" style="background-color: #292929;">
                         <div class="card-header">
-                            <h2 class="h5 text-right">
+                            <h2 class="h5 @(culture == "ar" ? "text-right" : "")">
                                 <span>
                                     @*<i class="fas fa-star"></i>*@
                                     @if (subCategory != null)
@@ -147,7 +147,7 @@
                                                     <div class="clearfix"></div>
                                                     @*@if (Service.Colors != null && Service.Colors.Count(s => s.IsDeleted == false) > 0)
                                                         {
-                                                            <div class="Colors text-right">
+                                                            <div class="Colors @(culture == "ar" ? "text-right" : "")">
                                                                 <ul class="list-unstyled">
                                                                     @foreach (var color in Service.Colors.Where(s => s.IsDeleted == false))
                                                                     {
@@ -158,7 +158,7 @@
                                                         }
                                                         @if (Service.Sizes != null && Service.Sizes.Count(s => s.IsDeleted == false) > 0)
                                                         {
-                                                            <div class="Size text-right">
+                                                            <div class="Size @(culture == "ar" ? "text-right" : "")">
                                                                 <ul class="list-unstyled">
                                                                     @foreach (var size in Service.Sizes.Where(s => s.IsDeleted == false))
                                                                     {

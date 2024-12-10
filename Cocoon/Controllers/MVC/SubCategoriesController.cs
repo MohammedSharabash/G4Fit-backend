@@ -13,21 +13,22 @@ namespace G4Fit.Controllers.MVC
     public class SubCategoriesController : BaseController
     {
         [HttpGet]
-        public ActionResult Index(long? CatId, string q)
+        public ActionResult Index(long? CatId/*, string q*/)
         {
             List<SubCategory> SubCategories = new List<SubCategory>();
-            if (!string.IsNullOrEmpty(q) && q.ToLower() == "deleted")
-            {
-                SubCategories = db.SubCategories.Where(x => x.IsDeleted).ToList();
-            }
-            else
-            {
-                SubCategories = db.SubCategories.Where(x => !x.IsDeleted).ToList();
-            }
-            if (CatId.HasValue == true)
-            {
-                SubCategories = SubCategories.Where(w => /*w.SubCategoryId == CatId*/ true).ToList();
-            }
+            SubCategories = db.SubCategories.ToList();
+            //if (!string.IsNullOrEmpty(q) && q.ToLower() == "deleted")
+            //{
+            //    SubCategories = db.SubCategories.Where(x => x.IsDeleted).ToList();
+            //}
+            //else
+            //{
+            //    SubCategories = db.SubCategories.Where(x => !x.IsDeleted).ToList();
+            //}
+            //if (CatId.HasValue == true)
+            //{
+            //    SubCategories = SubCategories.Where(w => /*w.SubCategoryId == CatId*/ true).ToList();
+            //}
             ViewBag.SubCategories = SubCategories;
             //ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
             return View();
@@ -151,11 +152,11 @@ namespace G4Fit.Controllers.MVC
                 return Json(new { Sucess = false, Message = "القسم المطلوب غير متوفر" }, JsonRequestBehavior.AllowGet);
             }
 
-            var ExistingSubCategoryNumber = db.SubCategories.FirstOrDefault(w => w.Id != CatId && w.SortingNumber == Number);
-            if (ExistingSubCategoryNumber != null)
-            {
-                return Json(new { Sucess = false, Message = $"القسم {ExistingSubCategoryNumber.NameAr} له نفس الترتيب" }, JsonRequestBehavior.AllowGet);
-            }
+            //var ExistingSubCategoryNumber = db.SubCategories.FirstOrDefault(w => w.Id != CatId && w.SortingNumber == Number);
+            //if (ExistingSubCategoryNumber != null)
+            //{
+            //    return Json(new { Sucess = false, Message = $"القسم {ExistingSubCategoryNumber.NameAr} له نفس الترتيب" }, JsonRequestBehavior.AllowGet);
+            //}
 
             SubCategory.SortingNumber = Number;
             CRUD<SubCategory>.Update(SubCategory);

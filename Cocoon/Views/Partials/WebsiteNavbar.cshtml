@@ -28,7 +28,7 @@
 <nav class="main_nav fixed-top">
     <div class="container">
         <div class="Contain d-flex">
-            <div class="Logo text-right hvr-grow">
+            <div class="Logo @(culture == "ar" ? "text-right" : "") hvr-grow">
                 <!--i(class="fab fa-optin-monster fa-3x")-->
                 <a href="@Url.Action("Index", "Home")">
                     @*<img src="~/Content/web/img/logo-removebg.png" width="90" height="60">*@
@@ -64,21 +64,21 @@
                 <ul class="list-unstyled d-flex">
                     @if (culture == "ar")
                     {
-                        <li class="langs hvr-pulse-grow mx-3" style="font-size:x-large;"><a href="javascript:document.getElementById('lang_en').submit()">@*<img src="~/Content/web/img/flags/usa.svg">*@English</a></li>
+                        <li class="langs hvr-pulse-grow mx-3" style="font-size:large;width: max-content;"><a href="javascript:document.getElementById('lang_en').submit()">@*<img src="~/Content/web/img/flags/usa.svg">*@English</a></li>
                     }
                     else
                     {
-                        <li class="langs hvr-pulse-grow mx-3" style="font-size:x-large;"><a href="javascript:document.getElementById('lang_ar').submit()"> @*<img src="~/Content/web/img/flags/sar.svg">*@ اللغة العربية</a></li>
+                        <li class="langs hvr-pulse-grow mx-3" style="font-size:large;width: max-content;"><a href="javascript:document.getElementById('lang_ar').submit()"> @*<img src="~/Content/web/img/flags/sar.svg">*@ اللغة العربية</a></li>
                     }
                     @if (User.Identity.IsAuthenticated == true)
                     {
-                        <li class="note" style="color: #fff;font-size:x-large;">
+                        <li class="note" style="color: #fff;font-size:large;">
                             <i class="fas fa-bell fa-lg"></i>
                             @if (Model.NotificationsCount > 0)
                             {
                                 <sup class="rounded-circle">@Model.NotificationsCount</sup>
                             }
-                            <ul class="notifications text-right">
+                            <ul class="notifications @(culture == "ar" ? "text-right" : "")">
                                 @if (Model.Notifications == null || Model.Notifications.Count() <= 0)
                                 {
                                     <li style="color:white;" class="text-center">@(culture == "ar" ? "لا توجد اشعارات متاحة" : "You don't have notifications")</li>
@@ -96,7 +96,7 @@
                             </ul>
                         </li>
                     }
-                    <li class="shopping-cart-container" style="font-size:x-large;">
+                    <li class="shopping-cart-container" style="font-size:large;">
                         <a href="@Url.Action("Cart", "Orders")">
                             <i class="fas fa-shopping-cart fa-lg hvr-pulse-grow"></i>
                             @if (Model.ShoppingCartCount > 0)
@@ -123,14 +123,14 @@
                     {
                         if (!string.IsNullOrEmpty(Model.UserImage))
                         {
-                            <li style="font-size:x-large;"><img class="rounded-circle User hvr-pulse-grow" src="~/Content/Images/Users/@Model.UserImage" width="35" height="35"></li>
+                            <li style="font-size:large;"><img class="rounded-circle User hvr-pulse-grow" src="~/Content/Images/Users/@Model.UserImage" width="35" height="35"></li>
                         }
                         else
                         {
-                            <li style="font-size:x-large;"><img class="rounded-circle User hvr-pulse-grow" src="~/Content/web/img/logo/1.png" width="35" height="35"></li>
+                            <li style="font-size:large;"><img class="rounded-circle User hvr-pulse-grow" src="~/Content/web/img/logo/user.jpg" width="35" height="35"></li>
                         }
                     }
-                    <li style="font-size:x-large;"><i class="fas fa-bars fa-lg nav_toggeler hvr-pulse-grow"></i></li>
+                    <li style="font-size:large;"><i class="fas fa-bars fa-lg nav_toggeler hvr-pulse-grow"></i></li>
                 </ul>
             </div>
         </div>
@@ -160,7 +160,7 @@
         else
         {
             <a href="@Url.Action("Profile", "Account")">
-                <img class="rounded-circle" src="~/Content/web/img/logo/1.png" width="100" height="100">
+                <img class="rounded-circle" src="~/Content/web/img/logo/user.jpg" width="100" height="100">
                 <h3 class="h4">@Model.Username</h3>
             </a>
         }

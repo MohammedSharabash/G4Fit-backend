@@ -83,7 +83,7 @@
                 <div class="pt-3 pt-xl-0 pt-md-0 pt-sm-0 col-sm-12 col-md-8 col-lg-10">
                     <div class="card wow fadeInDown" style="background-color: #292929;" >
                         <div class="card-header">
-                            <h2 class="h5 text-right">
+                            <h2 class="h5 @(culture == "ar" ? "text-right" : "")">
                                 <span>
                                     @*<i class="fas fa-star"></i>*@
                                     <span>@(culture == "ar" ? Model.NameAr : Model.NameEn)</span>

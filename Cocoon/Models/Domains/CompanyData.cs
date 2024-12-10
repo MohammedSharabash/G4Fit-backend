@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -8,7 +9,7 @@ namespace G4Fit.Models.Domains
 {
     public class CompanyData : BaseModel
     {
-		public string VideoUrl { get; set; }
+        public string VideoUrl { get; set; }
         public string DescriptionAr { get; set; }
         public string DescriptionEn { get; set; }
         public string VisionAr { get; set; }
@@ -41,7 +42,7 @@ namespace G4Fit.Models.Domains
         public string TermsConditionsAr { get; set; }
         [AllowHtml]
         public string TermsConditionsEn { get; set; }
-       [AllowHtml]
+        [AllowHtml]
         public string aboutConditionsAr { get; set; }
         [AllowHtml]
         public string aboutConditionsEn { get; set; }
@@ -73,5 +74,7 @@ namespace G4Fit.Models.Domains
         public string SupplierSellingPolicyAr { get; set; }
         [AllowHtml]
         public string SupplierSellingPolicyEn { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
     }
 }

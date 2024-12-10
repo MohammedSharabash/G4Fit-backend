@@ -13,7 +13,7 @@
             <li class="breadcrumb-item active" aria-current="page"><a href="@Request.Url">@(culture == "ar" ? Model.NameAr : Model.NameEn)</a></li>
         </ol>
     </nav>
-    <h2 class="h5 text-right wow fadeInDown"><span><i class="fas fa-star"></i>@(culture == "ar" ? Model.NameAr : Model.NameEn) <i class="fas fa-tag"></i></span></h2>
+    <h2 class="h5 @(culture == "ar" ? "text-right" : "") wow fadeInDown"><span><i class="fas fa-star"></i>@(culture == "ar" ? Model.NameAr : Model.NameEn) <i class="fas fa-tag"></i></span></h2>
     <div class="mt-4 text-@(culture == "ar" ? "right" : "left")">
         @if (Model.OfferPrice.HasValue == true)
         {

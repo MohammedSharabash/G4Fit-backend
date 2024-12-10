@@ -3,7 +3,7 @@
     string FacebookAppId = System.Configuration.ConfigurationManager.AppSettings["Facebook_App_ID"];
 }
 <!DOCTYPE html>
-<html>
+<html dir=@(culture == "ar" ? "rtl" : "ltr")>
 <head>
     <!-- Meta Rules-->
     <meta charset="utf-8">
