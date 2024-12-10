@@ -14,5 +14,6 @@ namespace G4Fit.Models.Domains
         public int SortingNumber { get; set; }
         //public virtual Category Category { get; set; }
         public virtual ICollection<Service> Services { get; set; }
+        public bool HardDelete { get; internal set; } = false;
     }
 }

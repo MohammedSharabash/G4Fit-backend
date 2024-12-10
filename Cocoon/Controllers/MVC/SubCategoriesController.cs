@@ -13,22 +13,21 @@ namespace G4Fit.Controllers.MVC
     public class SubCategoriesController : BaseController
     {
         [HttpGet]
-        public ActionResult Index(long? CatId/*, string q*/)
+        public ActionResult Index(long? CatId, string q)
         {
             List<SubCategory> SubCategories = new List<SubCategory>();
-            SubCategories = db.SubCategories.ToList();
-            //if (!string.IsNullOrEmpty(q) && q.ToLower() == "deleted")
-            //{
-            //    SubCategories = db.SubCategories.Where(x => x.IsDeleted).ToList();
-            //}
-            //else
-            //{
-            //    SubCategories = db.SubCategories.Where(x => !x.IsDeleted).ToList();
-            //}
-            //if (CatId.HasValue == true)
-            //{
-            //    SubCategories = SubCategories.Where(w => /*w.SubCategoryId == CatId*/ true).ToList();
-            //}
+            if (!string.IsNullOrEmpty(q) && q.ToLower() == "deleted")
+            {
+                SubCategories = db.SubCategories.Where(x => !x.HardDelete && x.IsDeleted).OrderBy(x => x.SortingNumber).ToList();
+            }
+            else
+            {
+                SubCategories = db.SubCategories.Where(x => !x.HardDelete && !x.IsDeleted).OrderBy(x => x.SortingNumber).ToList();
+            }
+            if (CatId.HasValue == true)
+            {
+                SubCategories = SubCategories.Where(w => /*w.SubCategoryId == CatId*/!w.HardDelete && true).OrderBy(x => x.SortingNumber).ToList();
+            }
             ViewBag.SubCategories = SubCategories;
             //ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
             return View();
@@ -162,6 +161,24 @@ namespace G4Fit.Controllers.MVC
             CRUD<SubCategory>.Update(SubCategory);
             db.SaveChanges();
             return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public ActionResult HardDelete(long? CatId)
+        {
+            if (CatId.HasValue == false)
+                return RedirectToAction("Index");
+
+            var cat = db.SubCategories.Find(CatId.Value);
+            if (cat == null)
+                return RedirectToAction("Index");
+
+            if (cat.IsDeleted == true)
+            {
+                cat.HardDelete = true;
+                db.SaveChanges();
+            }
+           
+            return RedirectToAction("Index");
         }
     }
 }

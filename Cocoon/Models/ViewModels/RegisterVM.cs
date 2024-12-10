@@ -19,7 +19,7 @@ namespace G4Fit.Models.ViewModels
         public string IDNumber { get; set; }
         [Required(ErrorMessageResourceName = "AddressFieldIsRequired", ErrorMessageResourceType = typeof(Website))]
         public string Address { get; set; }
-        [Required(ErrorMessageResourceName = "EmailFieldIsRequired", ErrorMessageResourceType = typeof(Website))]
+        //[Required(ErrorMessageResourceName = "EmailFieldIsRequired", ErrorMessageResourceType = typeof(Website))]
         [EmailAddress]
         public string Email { get; set; }
 

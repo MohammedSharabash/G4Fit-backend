@@ -163,8 +163,9 @@ namespace G4Fit.Helpers
             if (!string.IsNullOrWhiteSpace(registerDTO.IDNumber))
                 if (IsIDNumberExists(registerDTO.IDNumber))
                     return Errors.IDNumberAlreadyExists;
-            if (IsEmailExists(registerDTO.Email))
-                return Errors.EmailAlreadyExists;
+            if (!string.IsNullOrWhiteSpace(registerDTO.Email))
+                if (IsEmailExists(registerDTO.Email))
+                    return Errors.EmailAlreadyExists;
 
             if (!string.IsNullOrEmpty(registerDTO.ImageBase64))
             {
