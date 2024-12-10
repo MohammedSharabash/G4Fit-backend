@@ -418,6 +418,7 @@ namespace G4Fit.Controllers.API
                         BasketItemId = item.Id,
                         Image = item.Service.Images != null && item.Service.Images.FirstOrDefault(d => d.IsDeleted == false) != null ? "/Content/Images/Services/" + item.Service.Images.FirstOrDefault(d => d.IsDeleted == false).ImageUrl : null,
                         Price = item.Price.ToString() + (!string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? " ريال سعودي" : "SAR"),
+                        IsTimeBoundService = item.Service.IsTimeBoundService,
                         Quantity = item.Quantity,
                         Color = item.ColorId.HasValue == true ? item.Color.Color : null,
                         Size = item.SizeId.HasValue == true ? item.Size.Size : null,

@@ -14,6 +14,7 @@ namespace G4Fit.Models.DTOs
         public string Description { get; set; }
         public string Image { get; set; }
         public long ServiceId { get; set; }
+        public bool IsTimeBoundService { get; set; }
         public string Color { get; set; }
         public string Size { get; set; }
     }
