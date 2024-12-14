@@ -981,7 +981,7 @@ input[type=number] {
 }
 
 .text-black {
-    color: white
+    color: black;
 }
 
 .fa-cart-plus {

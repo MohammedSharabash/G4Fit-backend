@@ -372,6 +372,12 @@ namespace G4Fit.Controllers.MVC
                     {
                         TokenValue = Token.Value;
                     }
+                    else
+                    {
+                        var MessageError = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First .";
+                        ViewBag.MessageError = MessageError;
+                        return View(model);
+                    }
                     using (HttpClient httpClient = new HttpClient())
                     {
                         try

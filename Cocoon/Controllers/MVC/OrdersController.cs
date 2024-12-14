@@ -280,6 +280,9 @@ namespace G4Fit.Controllers.MVC
                 }
                 TokenValue = Token.Value;
             }
+            else
+                return Json(new { Success = false, IsNotLogin = true, Message = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First ." }, JsonRequestBehavior.AllowGet);
+
             using (HttpClient httpClient = new HttpClient())
             {
                 try
@@ -414,6 +417,9 @@ namespace G4Fit.Controllers.MVC
                 }
                 TokenValue = Token.Value;
             }
+            else
+                return Json(new { Success = false, IsNotLogin = true, Message = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First ." }, JsonRequestBehavior.AllowGet);
+
             string Anonymous = null;
             HttpCookie anonymousCooky = Request.Cookies["Anonymous"];
             if (anonymousCooky != null)
@@ -484,6 +490,9 @@ namespace G4Fit.Controllers.MVC
                 }
                 TokenValue = Token.Value;
             }
+            else
+                return Json(new { Success = false, IsNotLogin = true, Message = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First ." }, JsonRequestBehavior.AllowGet);
+
 
             using (HttpClient httpClient = new HttpClient())
             {
@@ -542,6 +551,8 @@ namespace G4Fit.Controllers.MVC
                 }
                 TokenValue = Token.Value;
             }
+            else
+                return Json(new { Success = false, IsNotLogin = true, Message = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First ." }, JsonRequestBehavior.AllowGet);
 
             using (HttpClient httpClient = new HttpClient())
             {
@@ -681,6 +692,8 @@ namespace G4Fit.Controllers.MVC
                 }
                 TokenValue = Token.Value;
             }
+            else
+                return Json(new { Success = false, IsNotLogin = true, Message = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First ." }, JsonRequestBehavior.AllowGet);
 
             using (HttpClient httpClient = new HttpClient())
             {
@@ -738,6 +751,8 @@ namespace G4Fit.Controllers.MVC
                 }
                 TokenValue = Token.Value;
             }
+            else
+                return Json(new { Success = false, IsNotLogin = true, Message = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First ." }, JsonRequestBehavior.AllowGet);
 
             using (HttpClient httpClient = new HttpClient())
             {
