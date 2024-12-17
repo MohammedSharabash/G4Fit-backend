@@ -401,6 +401,14 @@ namespace G4Fit.Controllers.API
             }
             ////SMS.SendMessageAsync("966", user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
             //SMS.SendMessageAsync("20", user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
+            // التحقق مما إذا كان الرقم يبدأ بمقدمة أرقام الهواتف المصرية
+            if (user.PhoneNumber.StartsWith("010") || user.PhoneNumber.StartsWith("011") || user.PhoneNumber.StartsWith("012") || user.PhoneNumber.StartsWith("015"))
+            {
+                // إرسال الرسالة إذا كان الرقم مصرياً
+                await SMS.SendMessageAsync("20", user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
+            }
+            else
+                await SMS.SendMessageAsync("966", user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
             return Ok(baseResponse);
         }
 
@@ -589,8 +597,16 @@ namespace G4Fit.Controllers.API
                     }
                     db.SaveChanges();
                     Transaction.Commit();
-                    ////SMS.SendMessageAsync(user.CountryId.HasValue == true ? user.Country.PhoneCode : "966", user.PhoneNumber, $"كلمه السر المؤقته هى [{RandomPassword}]");
-                    //SMS.SendMessageAsync(user.CountryId.HasValue == true ? user.Country.PhoneCode : "20", user.PhoneNumber, $"كلمه السر المؤقته هى [{RandomPassword}]");
+                    // التحقق مما إذا كان الرقم يبدأ بمقدمة أرقام الهواتف المصرية
+                    if (user.PhoneNumber.StartsWith("010") || user.PhoneNumber.StartsWith("011") || user.PhoneNumber.StartsWith("012") || user.PhoneNumber.StartsWith("015"))
+                    {
+                        // إرسال الرسالة إذا كان الرقم مصرياً
+                        await SMS.SendMessageAsync("20", user.PhoneNumber, $"كلمه السر المؤقته هى [{RandomPassword}]");
+                    }
+                    else
+                        await SMS.SendMessageAsync("966", user.PhoneNumber, $"كلمه السر المؤقته هى [{RandomPassword}]");
+
+
                     baseResponse.Data = new { Phone = user.PhoneNumber, Password = RandomPassword };
                     return Ok(baseResponse);
                 }
