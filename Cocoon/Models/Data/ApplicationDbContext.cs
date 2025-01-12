@@ -22,7 +22,7 @@ namespace G4Fit.Models.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<Service> Services { get; set; }
-        public DbSet<ServiceColor> ServiceColors { get; set; }
+        public DbSet<ServiceColor> ServiceTrainers { get; set; }
         public DbSet<ServiceOffer> ServiceOffers { get; set; }
         public DbSet<ServiceSize> ServiceSizes { get; set; }
         public DbSet<ServiceImage> ServiceImages { get; set; }
@@ -42,6 +42,7 @@ namespace G4Fit.Models.Data
         public DbSet<PromoCode> PromoCodes { get; set; }
         public DbSet<PromoCodeUser> PromoCodeUsers { get; set; }
         public DbSet<UserWallet> UserWallets { get; set; }
+        public DbSet<UserInBodyOperation> UserInBodyOperations { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
     }
 }

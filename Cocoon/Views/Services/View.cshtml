@@ -61,47 +61,33 @@
         <div class="col-xs-12 col-md-12 text-center m-auto">
             <hr style="margin:40px 0px" />
             <div class="mb-3 pb-3">
-                @*<div class="Service-details__hot">
+                <div class="Service-details__hot">
                     <h4>
-                        <strong><i class="fa fa-star" style="color:gold"></i> @(culture == "ar" ? "اختيار الكمية والالوان والمقاسات" : "Choose quantity, color and size") <i class="fa fa-star" style="color:gold"></i></strong>
+                        <strong><i class="fa fa-star" style="color:gold"></i> @(culture == "ar" ? "اختيار المدرب  " : "Choose Trainer") <i class="fa fa-star" style="color:gold"></i></strong>
                     </h4>
-                </div>*@
+                </div>
                 <div class="col-lg-12 col-md-12 text-center m-auto">
                     <div class="Services-details-desc">
-                        @*<div class="Services-color-switch">
-                            <span><strong>@Website.Color</strong></span>
-                            @if (Model.Colors.Any(s => s.IsDeleted == false))
-                            {
-                                <ul>
-                                    @foreach (var color in Model.Colors.Where(s => s.IsDeleted == false))
-                                    {
-                                        <li data-color="@color.Id" class="@(color.Id == Model.Colors.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")"><a href="javascript:void(0)" class="color-black" style="background-color:@color.Color"></a></li>
-                                    }
-                                </ul>
-                            }
-                            else
-                            {
-                                <p><strong>@(culture == "ar" ? "لا توجد الوان متاحه لهذا الخدمه" : "No colors available for this Service")</strong></p>
-                            }
-                        </div>
+
                         <br />
-                        <div class="Services-size-wrapper">
-                            <span>@Website.Size</span>
-                            @if (Model.Sizes.Any(s => s.IsDeleted == false))
-                            {
-                                <ul>
-                                    @foreach (var size in Model.Sizes.Where(s => s.IsDeleted == false))
-                                    {
-                                        <li data-size="@size.Id" class="@(size.Id == Model.Sizes.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")"><a href="javascript:void(0)">@size.Size</a></li>
-                                    }
-                                </ul>
-                            }
-                            else
-                            {
-                                <p><strong>@(culture == "ar" ? "لا توجد احجام متاحه لهذا الخدمه" : "No sizes available for this Service")</strong></p>
-                            }
-                        </div>
-                        <br />*@
+                        @*
+                            <div class="Services-size-wrapper">
+                                <span>@Website.Size</span>
+                                @if (Model.Sizes.Any(s => s.IsDeleted == false))
+                                {
+                                    <ul>
+                                        @foreach (var size in Model.Sizes.Where(s => s.IsDeleted == false))
+                                        {
+                                            <li data-size="@size.Id" class="@(size.Id == Model.Sizes.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")"><a href="javascript:void(0)">@size.Size</a></li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <p><strong>@(culture == "ar" ? "لا توجد احجام متاحه لهذا الخدمه" : "No sizes available for this Service")</strong></p>
+                                }
+                            </div>
+                            <br />*@
                         <div class="Services-add-to-cart">
                             <strong>@Website.Quantity</strong>
                             <div class="input-counter">
@@ -148,6 +134,42 @@
                 </div>
                 <div class="col-lg-12 col-md-12 text-center m-auto">
                     <div class="Services-details-desc">
+                        @*<div class="Services-color-switch">
+                                <span><strong> @(culture == "ar" ? "المدرب" : "Trainer")</strong></span>
+                                @if (Model.Colors.Any(s => s.IsDeleted == false))
+                                {
+                                    <ul>
+                                        @foreach (var trainer in Model.Colors.Where(s => s.IsDeleted == false))
+                                        {
+                                            <li data-color="@trainer.Id" class="@(trainer.Id == Model.Colors.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")"><a href="javascript:void(0)"></a>@trainer.Color"</li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <p><strong>@(culture == "ar" ? "لا توجد مدربين متاحين لهذه الخدمه" : "No Trainers available for this Service")</strong></p>
+                                }
+                            </div>*@
+                        <br />
+
+                        <div class="Services-size-wrapper">
+                            <span>@(culture == "ar" ? "المدرب" : "Trainer")</span>
+                            @if (Model.Colors.Any(s => s.IsDeleted == false))
+                            {
+                                <ul>
+                                    @foreach (var size in Model.Colors.Where(s => s.IsDeleted == false))
+                                    {
+                                        <li data-size="@size.Id" class="@(size.Id == Model.Colors.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")"><a href="javascript:void(0)">@size.Color</a></li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p><strong>@(culture == "ar" ? "لا توجد مدربين متاحين لهذه الخدمه" : "No Trainers available for this Service")</strong></p>
+                            }
+                        </div>
+                        <br />
+                        <br />
                         <div class="Services-add-to-cart">
                             <strong>@Website.StartDate</strong>
                             <div class="Start-input-counter">
@@ -235,8 +257,9 @@
         });
 
         function AddTimeBoundService() {
+            var SizeId = $("#current-size-data").attr("data-size");
             var date = $("#current-startdate-data").attr("data-startdate");
-            AddTimeBoundServicetobasketToCartFromServicePage('@Model.Id', date)
+            AddTimeBoundServicetobasketToCartFromServicePage('@Model.Id', date, SizeId)
         }
         function Add() {
             var ColorId = $("#current-color-data").attr("data-color");

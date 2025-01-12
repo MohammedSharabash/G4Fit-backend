@@ -18,6 +18,7 @@ namespace G4Fit.Models.Domains
         public bool HardDelete { get; set; } = false;
         public bool IsTimeBoundService { get; set; } = false;
         public int ServiceDays { get; set; } = 0;
+        public int InBodyCount { get; set; } = 0;
         public int SellCounter { get; set; }
         public long Inventory { get; set; } = 0;
         public int SortingNumber { get; set; }

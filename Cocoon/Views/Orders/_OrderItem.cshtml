@@ -33,7 +33,13 @@
 <td>@(Model.Service.OfferPrice.HasValue == true ? Model.Service.OfferPrice.Value : Model.Service.OriginalPrice) @Website.SAR</td>
 @if (Model.Service.IsTimeBoundService)
 {
-    <td class="Quantity"> <b class="Total">@Model.Quantity  أيام إشتراك</b></td>
+    <td class="Quantity">
+        <b class="Total">@Model.Quantity  أيام إشتراك</b>   @if (Model.ColorId.HasValue)
+        {
+            <br />
+            <span>  المدرب: @Model.Color.Color</span>
+        }
+    </td>
 }
 else
 {

@@ -19,9 +19,9 @@
 
     /*.order-header {
         position: relative;*/ /* Establishes a stacking context */
-        /*display: inline-block;
+    /*display: inline-block;
         z-index: 2;*/ /* Above the logo */
-        /*margin-left: 20px;*/ /* Adjust to align with logo */
+    /*margin-left: 20px;*/ /* Adjust to align with logo */
     /*}*/
 </style>
 <div class="row">
@@ -129,7 +129,15 @@
                                                     }
                                                     else
                                                     {
-                                                        <td id="quantity">@item.Quantity أيام إشتراك</td>
+                                                        <td id="quantity">
+                                                            @item.Quantity أيام إشتراك
+                                                            @if (item.ColorId.HasValue)
+                                                            {
+
+                                                                <br />
+                                                                <span>  المدرب: @item.Color.Color</span>
+                                                            }
+                                                        </td>
                                                     }
                                                     <td>
                                                         @item.Price ريال سعودي

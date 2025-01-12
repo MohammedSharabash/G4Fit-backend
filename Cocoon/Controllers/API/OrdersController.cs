@@ -109,6 +109,7 @@ namespace G4Fit.Controllers.API
                             UserId = CurrentUserId,
                             Code = Code,
                             DeliveryFees = DeliveryFees ?? 0,
+                            InBodyCount = Service.InBodyCount,
                             UnknownUserKeyIdentifier = AnonymousKey
                         };
                         if (Package != null)
@@ -181,6 +182,8 @@ namespace G4Fit.Controllers.API
                             OrderItem.SubTotal = OrderItem.Price * OrderItem.Quantity;
                             CRUD<OrderItem>.Update(OrderItem);
                         }
+
+                        UserOrder.InBodyCount = (Service.InBodyCount > UserOrder.InBodyCount) ? Service.InBodyCount : UserOrder.InBodyCount;
                         CRUD<Order>.Update(UserOrder);
                         OrderActions.CalculateOrderPrice(UserOrder);
                         db.SaveChanges();
@@ -278,6 +281,7 @@ namespace G4Fit.Controllers.API
                             OrderId = order.Id,
                             Price = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value : Service.OriginalPrice,
                             ServiceId = model.ServiceId,
+                            ColorId = model.trainerId,
                             Quantity = Service.ServiceDays,
                             StartDate = model.StartDate,
                             SubTotal = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value : Service.OriginalPrice,
@@ -311,6 +315,7 @@ namespace G4Fit.Controllers.API
                                 OrderId = UserOrder.Id,
                                 Price = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value : Service.OriginalPrice,
                                 ServiceId = model.ServiceId,
+                                ColorId = model.trainerId,
                                 Quantity = Service.ServiceDays,
                                 StartDate = model.StartDate,
                                 SubTotal = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value : Service.OriginalPrice,
@@ -1422,7 +1427,7 @@ namespace G4Fit.Controllers.API
 
                 if (item.ColorId.HasValue == true)
                 {
-                    var Color = db.ServiceColors.FirstOrDefault(s => s.Id == item.ColorId.Value);
+                    var Color = db.ServiceTrainers.FirstOrDefault(s => s.Id == item.ColorId.Value);
                     if (Color == null)
                     {
                         return Errors.ColorNotFound;
@@ -1457,7 +1462,7 @@ namespace G4Fit.Controllers.API
 
             if (model.ColorId.HasValue == true && model.ColorId.Value > 0)
             {
-                var Color = db.ServiceColors.FirstOrDefault(s => s.Id == model.ColorId.Value);
+                var Color = db.ServiceTrainers.FirstOrDefault(s => s.Id == model.ColorId.Value);
                 if (Color == null)
                 {
                     return Errors.ColorNotFound;

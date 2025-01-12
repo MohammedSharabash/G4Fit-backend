@@ -266,7 +266,7 @@ namespace G4Fit.Controllers.API
             {
                 try
                 {
-                    var RequiredUser = db.Users.FirstOrDefault(x => x.PhoneNumber == loginDTO.Provider);
+                    var RequiredUser = db.Users.FirstOrDefault(x => x.PhoneNumber == loginDTO.Provider && !x.IsDeleted);
                     if (RequiredUser == null)
                     {
                         baseResponse.ErrorCode = Errors.UserNotFound;
@@ -471,6 +471,19 @@ namespace G4Fit.Controllers.API
 
         [Authorize]
         [Route("ChangePassword")]
+        [HttpDelete]
+        [Route("Delete")]
+        public async Task<IHttpActionResult> Delete()
+        {
+
+            string CurrentUserId = User.Identity.GetUserId();
+
+            var CurrentUser = await UserManager.FindByIdAsync(CurrentUserId);
+
+            CurrentUser.IsDeleted = true;
+            await UserManager.UpdateAsync(CurrentUser);
+            return Ok(baseResponse);
+        }
         [HttpPost]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordDTO changePasswordDTO)
         {

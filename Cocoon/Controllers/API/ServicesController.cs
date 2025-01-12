@@ -67,10 +67,10 @@ namespace G4Fit.Controllers.API
             {
                 foreach (var color in Service.Colors.Where(s => s.IsDeleted == false))
                 {
-                    detailsDTO.Colors.Add(new ServiceColorDTO()
+                    detailsDTO.Trainers.Add(new ServiceColorDTO()
                     {
-                        Color = color.Color,
-                        ColorId = color.Id
+                        Name = color.Color,
+                        TrainerId = color.Id
                     });
                 }
             }

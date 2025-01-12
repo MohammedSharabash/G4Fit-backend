@@ -328,7 +328,7 @@ function AddToCartFromServicePage(id, ColorId, SizeId, Quantity) {
         }
     })
 }
-function AddTimeBoundServicetobasketToCartFromServicePage(id, date) {
+function AddTimeBoundServicetobasketToCartFromServicePage(id, date, SizeId) {
     $("#cover-spin").show();
     // Get the current date in Saudi Arabia
     var currentDate = new Date().toLocaleDateString("en-US", { timeZone: "Asia/Riyadh" });
@@ -343,7 +343,7 @@ function AddTimeBoundServicetobasketToCartFromServicePage(id, date) {
         toastr.error("التاريخ المحدد يجب أن يكون أكبر من أو يساوي التاريخ الحالي في السعودية.");
         return; // Exit the function if the date is invalid
     }
-    var model = { ServiceId: id, StartDate: date };
+    var model = { ServiceId: id, StartDate: date, trainerId: SizeId };
 
     $.ajax({
         url: "/Orders/AddTimeBoundServiceToCart",

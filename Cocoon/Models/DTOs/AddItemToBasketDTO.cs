@@ -16,6 +16,7 @@ namespace G4Fit.Models.DTOs
     {
         public DateTime StartDate { get; set; }
         public long ServiceId { get; set; }
+        public long? trainerId { get; set; }
 
     }
 }

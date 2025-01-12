@@ -352,6 +352,7 @@
     <Compile Include="Controllers\MVC\AccountController.cs" />
     <Compile Include="Controllers\MVC\BaseController.cs" />
     <Compile Include="Controllers\MVC\PromotionalSectionsController.cs" />
+    <Compile Include="Controllers\MVC\UserInBodyOperationsController.cs" />
     <Compile Include="Controllers\MVC\SubCategoriesController.cs" />
     <Compile Include="Controllers\MVC\CategoriesController.cs" />
     <Compile Include="Controllers\MVC\CustomerSupportController.cs" />
@@ -461,6 +462,10 @@
     <Compile Include="Migrations\202412101341370_ddddd.Designer.cs">
       <DependentUpon>202412101341370_ddddd.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202501020807438_UserInBodyOperation.cs" />
+    <Compile Include="Migrations\202501020807438_UserInBodyOperation.Designer.cs">
+      <DependentUpon>202501020807438_UserInBodyOperation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Data\ApplicationDbContext.cs" />
     <Compile Include="Models\Domains\ApplicationUser.cs" />
@@ -490,6 +495,7 @@
     <Compile Include="Models\Domains\Supplier.cs" />
     <Compile Include="Models\Domains\UserPackage.cs" />
     <Compile Include="Models\Domains\UserPushToken.cs" />
+    <Compile Include="Models\Domains\UserInBodyOperation.cs" />
     <Compile Include="Models\Domains\UserWallet.cs" />
     <Compile Include="Models\DTOs\AddItemToBasketDTO.cs" />
     <Compile Include="Models\DTOs\AppleTokenDTO.cs" />
@@ -1920,6 +1926,7 @@
     <Content Include="Views\about\Index.cshtml" />
     <Content Include="Views\Users\SubAdmins.cshtml" />
     <Content Include="Views\Users\CreateSubAdmin.cshtml" />
+    <Content Include="Views\UserInBodyOperations\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1982,6 +1989,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202412101341370_ddddd.resx">
       <DependentUpon>202412101341370_ddddd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202501020807438_UserInBodyOperation.resx">
+      <DependentUpon>202501020807438_UserInBodyOperation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Website.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

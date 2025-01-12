@@ -81,7 +81,15 @@
                         }
                         else
                         {
-                            <td><div class="qty">@item.Quantity أيام إشتراك</div></td>
+                    <td>
+                        <div class="qty">@item.Quantity أيام إشتراك</div>
+                        @if (item.ColorId.HasValue)
+                        {
+
+                            <br />
+                            <span>  المدرب: @item.Color.Color</span>
+                        }
+                    </td>
                         }
                         <td><div class="price">@item.SubTotal @(culture == "ar" ? "ريال سعودي" : "SAR")</div></td>
                     </tr>

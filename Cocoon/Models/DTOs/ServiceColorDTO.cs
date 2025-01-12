@@ -7,7 +7,7 @@ namespace G4Fit.Models.DTOs
 {
     public class ServiceColorDTO
     {
-        public long ColorId { get; set; }
-        public string Color { get; set; }
+        public long TrainerId { get; set; }
+        public string Name { get; set; }
     }
 }

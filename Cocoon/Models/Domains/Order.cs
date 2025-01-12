@@ -27,6 +27,8 @@ namespace G4Fit.Models.Domains
         public string Tabby_reference_id { get; set; } = "-1";
         public virtual ICollection<OrderItem> Items { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
+        public int InBodyCount { get; set; } = 0;
+        public int InBodyUsedCount { get; set; } = 0;
         public bool IsPaid { get; set; }
         public long? PackageId { get; set; }
         public virtual UserPackage Package { get; set; }

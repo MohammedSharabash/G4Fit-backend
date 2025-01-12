@@ -72,6 +72,7 @@
                                 <span dir="auto">@CreatedOn.ToString("hh:mm tt")</span>
                             </td>
                             <td>
+                                <a class="btn btn-info" href="@Url.Action("Index", "UserInBodyOperations", new { UserId = item.Id })">InBody List</a>
                                 @Html.ActionLink("معلومات", "Details", new { Id = item.Id }) |
                                 @Html.ActionLink("المحفظة", "Wallet", new { Id = item.Id }) |
                                 @Html.ActionLink(item.IsDeleted == true ? "فك الحظر" : "حظر", "ToggleBlock", new { Id = item.Id })

@@ -166,6 +166,44 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-lg-6" id="InBodyCount-container" style="display:none;">
+                                    <div class="form-group">
+                                        <label for="InBodyCount" class="col-sm-5 control-label required">عدد InBodyCount  بالخدمة:</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(model => model.InBodyCount, new { @class = "form-control valid", type = "number", required = true, @id = "InBodyCount" })
+                                            </div>
+                                            @Html.ValidationMessageFor(d => d.InBodyCount, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="Features-container" style="margin:10px;">
+                                <hr />
+                                <div class="col-lg-12 text-danger mb-15">
+                                    <h4>&bull; المدربات </h4>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="Features_0__FeatureAr" class="col-sm-2 control-label">مدربات الخدمه: </label>
+                                        <div class="col-sm-10">
+                                            @foreach (var trainer in Service.Colors.Where(s => s.IsDeleted == false))
+                                            {
+                                                <p id="Color_@trainer.Id">
+                                                    @trainer.Color
+                                                    <button type="button" class="fa fa-times btn-danger btn btn-sm" onclick="DeleteColor('@trainer.Id')"></button>
+                                                </p>
+                                            }
+                                            <div class="field_wrapper_color">
+                                                <div>
+                                                    <a href="javascript:void(0);" class="add_button_color btn btn-outline-primary my-3" title="Add field"><i class="fa fa-plus"></i> اضافه مدرب</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                             if (Model.Images != null && Model.Images.Count() > 0)
                             {
@@ -204,7 +242,8 @@
             var addButtonSize = $('.add_button_size'); //Add button selector
             var wrapperColor = $('.field_wrapper_color'); //Input field wrapper
             var wrapperSize = $('.field_wrapper_size'); //Input field wrapper
-            var fieldHTMLColor = '<div class="my-3 row"><div class="col-sm-6"><input type="color" placeholder="اللون" required name="Colors[]" value="" class="form-control d-inline"/></div><a href="javascript:void(0);" class="remove_button_color btn btn-outline-primary d-inline mx-3" title="Remove field"><a href="javascript:void(0);" class="remove_button_color btn btn-outline-primary d-inline mx-3" title="Remove field"><i class="fa fa-minus"></i> حذف اللون</a></div>'; //New input field html
+            //var fieldHTMLColor = '<div class="my-3 row"><div class="col-sm-6"><input type="color" placeholder="اللون" required name="Colors[]" value="" class="form-control d-inline"/></div><a href="javascript:void(0);" class="remove_button_color btn btn-outline-primary d-inline mx-3" title="Remove field"><a href="javascript:void(0);" class="remove_button_color btn btn-outline-primary d-inline mx-3" title="Remove field"><i class="fa fa-minus"></i> حذف اللون</a></div>'; //New input field html
+            var fieldHTMLColor = '<div class=" my-3 row mb-10 mr-5"><div class="col-sm-6"><input type="text" placeholder="الاسم" required name="Trainers[]" value="" class="form-control d-inline"/></div><div class="col-sm-2"><a href="javascript:void(0);" class="remove_button_color btn btn-outline-primary d-inline mx-3" title="Remove field"><a href="javascript:void(0);" class="remove_button_color btn btn-danger d-inline mx-3" title="Remove field" style="border-radius: 25px;" > حذف المدرب</a></div></div>'; //New input field html
             var fieldHTMLSize = '<div class="my-3 row"><div class="col-sm-6"><input type="text" placeholder="الحجم" required name="Sizes[]" value="" class="form-control d-inline"/></div><a href="javascript:void(0);" class="remove_button_size btn btn-outline-primary d-inline mx-3" title="Remove field"><a href="javascript:void(0);" class="remove_button_size btn btn-outline-primary d-inline mx-3" title="Remove field"><i class="fa fa-minus"></i> حذف الحجم</a></div>'; //New input field html
             var ColorCounter = 1; //Initial field counter is 1
             var SizeCounter = 1; //Initial field counter is 1
@@ -229,7 +268,7 @@
             //Once remove button is clicked
             $(wrapperColor).on('click', '.remove_button_color', function (e) {
                 e.preventDefault();
-                $(this).parent('div').remove(); //Remove field html
+                $(this).parent('div').parent('div').remove(); //Remove field html
                 ColorCounter--; //Decrement field counter
             });
 
@@ -266,7 +305,7 @@
         }
 
         function DeleteColor(Id) {
-            if (confirm("حذف هذا اللون؟")) {
+            if (confirm("حذف هذا المدرب؟")) {
                 $("#cover-spin").show();
                 $.ajax({
                     url: "@Url.Action("DeleteColor","Services")",
@@ -277,7 +316,7 @@
                             $("#Color_" + Id).remove();
                         }
                         else {
-                            toastr.error("هذا اللون غير متاح");
+                            toastr.error("هذا المدرب غير متاح");
                         }
                         $("#cover-spin").hide();
                     }
@@ -333,18 +372,21 @@
             var FeaturesContainer = document.getElementById("Features-container");
             var inventoryInput = document.getElementById("Inventory");
             var serviceDaysContainer = document.getElementById("service-days-container");
+            var InBodyCountContainer = document.getElementById("InBodyCount-container");
 
             // Function to toggle fields based on checkbox status
             function toggleFields() {
                 if (isTimeBoundServiceCheckbox.checked) {
                     // Show ServiceDays, hide Inventory and set its value to 1
                     serviceDaysContainer.style.display = "block";
-                    FeaturesContainer.style.display = "none";
+                    InBodyCountContainer.style.display = "block";
+                    FeaturesContainer.style.display = "block";
                     inventoryContainer.style.display = "none";
                 } else {
                     // Hide ServiceDays, show Inventory and clear value
                     serviceDaysContainer.style.display = "none";
-                    FeaturesContainer.style.display = "block";
+                    InBodyCountContainer.style.display = "none";
+                    FeaturesContainer.style.display = "none";
                     inventoryContainer.style.display = "block";
                 }
             }
@@ -376,15 +418,21 @@
             var timeBoundService = document.getElementById("IsTimeBoundService").checked;
             var inventoryContainer = document.getElementById("inventory-container");
             var serviceDaysContainer = document.getElementById("service-days-container");
+            var InBodyCountContainer = document.getElementById("InBodyCount-container");
+            var FeaturesContainer = document.getElementById("Features-container");
 
             if (timeBoundService) {
                 // إذا كانت الخدمة محددة بوقت، إخفاء كمية الخدمة وإظهار عدد أيام الاشتراك
                 inventoryContainer.style.display = "none";
                 serviceDaysContainer.style.display = "block";
+                InBodyCountContainer.style.display = "block";
+                FeaturesContainer.style.display = "block";
             } else {
                 // إذا لم تكن الخدمة محددة بوقت، إظهار كمية الخدمة وإخفاء عدد أيام الاشتراك
                 inventoryContainer.style.display = "block";
                 serviceDaysContainer.style.display = "none";
+                InBodyCountContainer.style.display = "none";
+                FeaturesContainer.style.display = "none";
             }
         }
 

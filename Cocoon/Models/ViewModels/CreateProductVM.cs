@@ -27,12 +27,13 @@ namespace G4Fit.Models.ViewModels
         public bool IsTimeBoundService { get; set; }
         //[Required(ErrorMessage = "عدد ايام الاشتراك بالخدمه مطلوب")]
         public int ServiceDays { get; set; } = 1;
+        public int InBodyCount { get; set; } = 1;
         //[Required(ErrorMessage = "الكميه مطلوبه")]
         public long Inventory { get; set; }
         [Required(ErrorMessage = "القسم مطلوب")]
         public long CategoryId { get; set; }
         public HttpPostedFileBase[] Images { get; set; }
-        public List<string> Colors { get; set; }
+        public List<string> Trainers { get; set; }
         public List<string> Sizes { get; set; }
     }
 }

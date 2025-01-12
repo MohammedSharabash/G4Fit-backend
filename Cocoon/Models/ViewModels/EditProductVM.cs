@@ -26,6 +26,7 @@ namespace G4Fit.Models.ViewModels
         public bool IsTimeBoundService { get; set; }
         //[Required(ErrorMessage = "عدد ايام الاشتراك بالخدمه مطلوب")]
         public int ServiceDays { get; set; }
+        public int InBodyCount { get; set; }
         //[Required(ErrorMessage = "الكميه مطلوبه")]
         public long Inventory { get; set; }
         [Required(ErrorMessage = "سعر الخدمه مطلوب")]
@@ -35,7 +36,7 @@ namespace G4Fit.Models.ViewModels
         public long CategoryId { get; set; }
         public List<HttpPostedFileBase> NewImages { get; set; }
         public List<ServiceImageVM> Images { get; set; } = new List<ServiceImageVM>();
-        public List<string> Colors { get; set; } = new List<string>();
+        public List<string> Trainers { get; set; } = new List<string>();
         public List<string> Sizes { get; set; } = new List<string>();
 
         public static EditServiceVM ToEditServiceVM(Service Service)
@@ -52,6 +53,7 @@ namespace G4Fit.Models.ViewModels
                 IsHidden = !Service.IsHidden,
                 IsTimeBoundService = Service.IsTimeBoundService,
                 ServiceDays = Service.ServiceDays,
+                InBodyCount = Service.InBodyCount,
                 Price = Service.OriginalPrice,
             };
 

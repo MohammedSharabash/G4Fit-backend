@@ -73,6 +73,7 @@ namespace G4Fit.Controllers.MVC
                             OriginalPrice = model.Price,
                             IsTimeBoundService = model.IsTimeBoundService,
                             Inventory = model.Inventory,
+                            InBodyCount = model.InBodyCount,
                             ServiceDays = model.ServiceDays,
                             SubCategoryId = model.CategoryId,
                             HardDelete = false,
@@ -82,11 +83,11 @@ namespace G4Fit.Controllers.MVC
 
                         db.Services.Add(Service);
 
-                        if (model.Colors != null && model.Colors.Count() > 0)
+                        if (model.Trainers != null && model.Trainers.Count() > 0)
                         {
-                            foreach (var color in model.Colors.Where(s => !string.IsNullOrEmpty(s)).Distinct())
+                            foreach (var color in model.Trainers.Where(s => !string.IsNullOrEmpty(s)).Distinct())
                             {
-                                db.ServiceColors.Add(new ServiceColor()
+                                db.ServiceTrainers.Add(new ServiceColor()
                                 {
                                     Color = color,
                                     ServiceId = Service.Id,
@@ -179,6 +180,7 @@ namespace G4Fit.Controllers.MVC
                         Service.OriginalPrice = model.Price;
                         Service.Inventory = model.Inventory;
                         Service.ServiceDays = model.ServiceDays;
+                        Service.InBodyCount = model.InBodyCount;
                         Service.SubCategoryId = model.CategoryId;
                         CRUD<Service>.Update(Service);
 
@@ -193,20 +195,20 @@ namespace G4Fit.Controllers.MVC
                             }
                         }
 
-                        if (model.Colors != null && model.Colors.Count() > 0)
+                        if (model.Trainers != null && model.Trainers.Count() > 0)
                         {
-                            foreach (var color in model.Colors.Where(s => !string.IsNullOrEmpty(s)).Distinct())
+                            foreach (var trainer in model.Trainers.Where(s => !string.IsNullOrEmpty(s)).Distinct())
                             {
-                                var ProdColor = Service.Colors.FirstOrDefault(s => s.Color == color);
-                                if (ProdColor != null)
+                                var Prodtrainer = Service.Colors.FirstOrDefault(s => s.Color == trainer);
+                                if (Prodtrainer != null)
                                 {
-                                    CRUD<ServiceColor>.Restore(ProdColor);
+                                    CRUD<ServiceColor>.Restore(Prodtrainer);
                                 }
                                 else
                                 {
-                                    db.ServiceColors.Add(new ServiceColor()
+                                    db.ServiceTrainers.Add(new ServiceColor()
                                     {
-                                        Color = color,
+                                        Color = trainer,
                                         ServiceId = Service.Id,
                                     });
                                 }
@@ -618,12 +620,12 @@ namespace G4Fit.Controllers.MVC
         [HttpGet]
         public JsonResult DeleteColor(long ColorId)
         {
-            var Color = db.ServiceColors.Find(ColorId);
-            if (Color == null)
+            var trainer = db.ServiceTrainers.Find(ColorId);
+            if (trainer == null)
                 return Json(new { Success = false }, JsonRequestBehavior.AllowGet);
             else
             {
-                CRUD<ServiceColor>.Delete(Color);
+                CRUD<ServiceColor>.Delete(trainer);
                 db.SaveChanges();
                 return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
             }

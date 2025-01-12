@@ -83,11 +83,11 @@ namespace G4Fit.Controllers.MVC
 
                         db.Services.Add(Service);
 
-                        if (model.Colors != null && model.Colors.Count() > 0)
+                        if (model.Trainers != null && model.Trainers.Count() > 0)
                         {
-                            foreach (var color in model.Colors.Where(s => !string.IsNullOrEmpty(s)).Distinct())
+                            foreach (var color in model.Trainers.Where(s => !string.IsNullOrEmpty(s)).Distinct())
                             {
-                                db.ServiceColors.Add(new ServiceColor()
+                                db.ServiceTrainers.Add(new ServiceColor()
                                 {
                                     Color = color,
                                     ServiceId = Service.Id,
@@ -194,9 +194,9 @@ namespace G4Fit.Controllers.MVC
                             }
                         }
 
-                        if (model.Colors != null && model.Colors.Count() > 0)
+                        if (model.Trainers != null && model.Trainers.Count() > 0)
                         {
-                            foreach (var color in model.Colors.Where(s => !string.IsNullOrEmpty(s)).Distinct())
+                            foreach (var color in model.Trainers.Where(s => !string.IsNullOrEmpty(s)).Distinct())
                             {
                                 var ProdColor = Service.Colors.FirstOrDefault(s => s.Color == color);
                                 if (ProdColor != null)
@@ -205,7 +205,7 @@ namespace G4Fit.Controllers.MVC
                                 }
                                 else
                                 {
-                                    db.ServiceColors.Add(new ServiceColor()
+                                    db.ServiceTrainers.Add(new ServiceColor()
                                     {
                                         Color = color,
                                         ServiceId = Service.Id,
@@ -425,7 +425,7 @@ namespace G4Fit.Controllers.MVC
         [HttpGet]
         public JsonResult DeleteColor(long ColorId)
         {
-            var Color = db.ServiceColors.Find(ColorId);
+            var Color = db.ServiceTrainers.Find(ColorId);
             if (Color == null)
                 return Json(new { Success = false }, JsonRequestBehavior.AllowGet);
             else

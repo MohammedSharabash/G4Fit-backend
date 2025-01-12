@@ -40,17 +40,16 @@
             <li><span class="text-blue">السعر: </span> @(Model.OriginalPrice) ريال سعودي</li>
             <li><span class="text-blue">القسم: </span> @Model.SubCategory.NameAr</li>
             <li><span class="text-blue">حاله الظهور: </span> @(Model.IsHidden == true ? "غير مرئى فى التطبيق" : "مرئى فى التطبيق ")</li>
-            @if (!Model.IsTimeBoundService)
+            @if (Model.IsTimeBoundService)
             {
-
-                @*<li>
-                    <span class="text-blue">الالوان: </span>
+                <li>
+                    <span class="text-blue">المدربات: </span>
                     @if (Model.Colors != null && Model.Colors.Count(s => s.IsDeleted == false) > 0)
                     {
                         <ol>
-                            @foreach (var color in Model.Colors.Where(s => s.IsDeleted == false))
+                            @foreach (var trainer in Model.Colors.Where(s => s.IsDeleted == false))
                             {
-                                <li style="background-color:@color.Color">@color.Color</li>
+                                <li>@trainer.Color</li>
                             }
                         </ol>
                     }
@@ -59,27 +58,34 @@
                         <span>لا يوجد</span>
                     }
                 </li>
-                <li>
-                    <span class="text-blue">الاحجام: </span>
-                    @if (Model.Sizes != null && Model.Sizes.Count(s => s.IsDeleted == false) > 0)
-                    {
-                        <ol>
-                            @foreach (var size in Model.Sizes.Where(s => s.IsDeleted == false))
-                            {
-                                <li>@size.Size</li>
-                            }
-                        </ol>
-                    }
-                    else
-                    {
-                        <span>لا يوجد</span>
-                    }
-                </li>*@
+            }
+            @if (!Model.IsTimeBoundService)
+            {
+
+
+                @*
+                    <li>
+                        <span class="text-blue">الاحجام: </span>
+                        @if (Model.Sizes != null && Model.Sizes.Count(s => s.IsDeleted == false) > 0)
+                        {
+                            <ol>
+                                @foreach (var size in Model.Sizes.Where(s => s.IsDeleted == false))
+                                {
+                                    <li>@size.Size</li>
+                                }
+                            </ol>
+                        }
+                        else
+                        {
+                            <span>لا يوجد</span>
+                        }
+                    </li>*@
                 <li><span class="text-blue">الكميه المتاحه: </span> @Model.Inventory</li>
                 <li><span class="text-blue">عدد مرات البيع: </span> @Model.SellCounter مره</li>
             }
             else
             {
+                <li><span class="text-blue">عدد InBodyCount : </span> @Model.InBodyCount يوم</li>
                 <li><span class="text-blue">عدد أيام الاشتراك: </span> @Model.ServiceDays يوم</li>
                 <li><span class="text-blue">عدد مرات الاشتراك: </span> @Model.SellCounter مره</li>
             }
