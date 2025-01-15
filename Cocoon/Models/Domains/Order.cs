@@ -15,6 +15,8 @@ namespace G4Fit.Models.Domains
         public PurposeOfSubscription? PurposeOfSubscription { get; set; }
         public string Code { get; set; }
         public string Address { get; set; }
+        public OrderUserType UserType { get; set; } = OrderUserType.Normal;
+        public string UserTypeImageUrl { get; set; }
         public long? CityId { get; set; }
         public virtual City City { get; set; }
         public decimal DeliveryFees { get; set; }

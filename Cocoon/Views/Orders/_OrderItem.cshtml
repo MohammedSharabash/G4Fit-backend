@@ -16,7 +16,7 @@
     {
         <br /><span>@Website.Size: @Model.Size.Size</span><br />
     }
-    @if (Model.ColorId.HasValue == true)
+    @*@if (Model.ColorId.HasValue == true)
     {
         <div>
             @Website.Color:
@@ -28,7 +28,7 @@
                 </div>
             </div>
         </div>
-    }
+    }*@
 </td>
 <td>@(Model.Service.OfferPrice.HasValue == true ? Model.Service.OfferPrice.Value : Model.Service.OriginalPrice) @Website.SAR</td>
 @if (Model.Service.IsTimeBoundService)

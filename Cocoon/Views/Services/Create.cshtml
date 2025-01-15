@@ -119,6 +119,18 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
+                                        <label for="SpecialPrice" class="col-sm-5 control-label required">سعر الخدمه الخاص بعروض [حماة وطن - طالبات - جامعة الملك خالد ]:</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                @Html.EditorFor(model => model.SpecialPrice, new { htmlAttributes = new { @class = "form-control valid", required = true } })
+                                                <span class="input-group-addon">ريال سعودي</span>
+                                            </div>
+                                            @Html.ValidationMessageFor(d => d.SpecialPrice, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
                                         <label for="Images" class="col-sm-5 control-label">صور الخدمه:</label>
                                         <div class="col-sm-7">
                                             <input class="form-control" type="file" multiple name="Images" id="Images" accept="image/*" />

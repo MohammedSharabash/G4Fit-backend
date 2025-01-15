@@ -32,6 +32,9 @@ namespace G4Fit.Models.ViewModels
         [Required(ErrorMessage = "سعر الخدمه مطلوب")]
         [DataType(DataType.Currency, ErrorMessage = "سعر الخدمه غير صحيح")]
         public decimal Price { get; set; }
+        [Required(ErrorMessage = "سعر الخدمه الخاص بعروض [حماة وطن - طالبات - جامعة الملك خالد ] مطلوب")]
+        [DataType(DataType.Currency, ErrorMessage = "سعر الخدمه الخاص بعروض [حماة وطن - طالبات - جامعة الملك خالد ] غير صحيح")]
+        public decimal SpecialPrice { get; set; }
         [Required(ErrorMessage = "القسم الرئيسى مطلوب")]
         public long CategoryId { get; set; }
         public List<HttpPostedFileBase> NewImages { get; set; }
@@ -55,6 +58,7 @@ namespace G4Fit.Models.ViewModels
                 ServiceDays = Service.ServiceDays,
                 InBodyCount = Service.InBodyCount,
                 Price = Service.OriginalPrice,
+                SpecialPrice = Service.SpecialPrice,
             };
 
             if (Service.Images != null && Service.Images.Count(s => s.IsDeleted == false) > 0)

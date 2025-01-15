@@ -466,6 +466,10 @@
     <Compile Include="Migrations\202501020807438_UserInBodyOperation.Designer.cs">
       <DependentUpon>202501020807438_UserInBodyOperation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202501121241251_orderEdit.cs" />
+    <Compile Include="Migrations\202501121241251_orderEdit.Designer.cs">
+      <DependentUpon>202501121241251_orderEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Data\ApplicationDbContext.cs" />
     <Compile Include="Models\Domains\ApplicationUser.cs" />
@@ -519,6 +523,7 @@
     <Compile Include="Models\DTOs\OrderDetailsItemDTO.cs" />
     <Compile Include="Models\DTOs\PaymentDTO.cs" />
     <Compile Include="Models\DTOs\PreviousOrderDTO.cs" />
+    <Compile Include="Models\DTOs\CheckOutDTO.cs" />
     <Compile Include="Models\DTOs\ServiceColorDTO.cs" />
     <Compile Include="Models\DTOs\ServiceDetailsDTO.cs" />
     <Compile Include="Models\DTOs\ServiceDTO.cs" />
@@ -531,6 +536,7 @@
     <Compile Include="Models\DTOs\UserDTO.cs" />
     <Compile Include="Models\DTOs\UserProfileDTO.cs" />
     <Compile Include="Models\Enums\Errors.cs" />
+    <Compile Include="Models\Enums\OrderUserType.cs" />
     <Compile Include="Models\Enums\SubAdminRole.cs" />
     <Compile Include="Models\Enums\PurposeOfSubscription.cs" />
     <Compile Include="Models\Enums\LoginType.cs" />
@@ -665,6 +671,18 @@
     <Content Include="Content\assets\imgs\message.png" />
     <Content Include="Content\assets\imgs\offer.png" />
     <Content Include="Content\assets\imgs\options.png" />
+    <Content Include="Content\assets\imgs\Parteners\IMG_3825.png" />
+    <Content Include="Content\assets\imgs\Parteners\IMG_3853.png" />
+    <Content Include="Content\assets\imgs\Parteners\Jbs.png" />
+    <Content Include="Content\assets\imgs\Parteners\Logo.png" />
+    <Content Include="Content\assets\imgs\Parteners\Saudi German Hospital.png" />
+    <Content Include="Content\assets\imgs\Parteners\اخاء.png" />
+    <Content Include="Content\assets\imgs\Parteners\الموارد البشرية .png" />
+    <Content Include="Content\assets\imgs\Parteners\شعار المستشفى السعودي الألماني  – SVG.svg" />
+    <Content Include="Content\assets\imgs\Parteners\شعار المؤسسة العامة للتدريب التقني والمهني SVG.svg" />
+    <Content Include="Content\assets\imgs\Parteners\شعار جامعة الملك خالد الجديد بدقة عالية  – SVG – png.svg" />
+    <Content Include="Content\assets\imgs\Parteners\شعار صيدلية النهدي بدقة عالية – SVG – PNG.svg" />
+    <Content Include="Content\assets\imgs\Parteners\شعار وزارة التعليم الجديد بدقة عالية  SVG – PNG.svg" />
     <Content Include="Content\assets\imgs\productreminder.png" />
     <Content Include="Content\assets\imgs\products.png" />
     <Content Include="Content\assets\imgs\promo.png" />
@@ -1552,6 +1570,7 @@
     <Content Include="Content\assets\plugins\Toaster\toastr.css" />
     <Content Include="Content\assets\plugins\Toaster\toastr.min.css" />
     <Content Include="Content\assets\plugins\Toaster\toastr.min.js" />
+    <Content Include="Content\style.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -1992,6 +2011,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202501020807438_UserInBodyOperation.resx">
       <DependentUpon>202501020807438_UserInBodyOperation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202501121241251_orderEdit.resx">
+      <DependentUpon>202501121241251_orderEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Website.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -21,6 +21,9 @@ namespace G4Fit.Models.ViewModels
         [Required(ErrorMessage = "سعر الخدمه مطلوب")]
         [DataType(DataType.Currency, ErrorMessage = "سعر الخدمه غير صحيح")]
         public decimal Price { get; set; }
+        [Required(ErrorMessage = "سعر الخدمه الخاص بعروض [حماة وطن - طالبات - جامعة الملك خالد ] مطلوب")]
+        [DataType(DataType.Currency, ErrorMessage = "سعر الخدمه الخاص بعروض [حماة وطن - طالبات - جامعة الملك خالد ] غير صحيح")]
+        public decimal SpecialPrice { get; set; }
         [Required(ErrorMessage = "الخدمه متاح؟")]
         public bool IsHidden { get; set; }
         //[Required(ErrorMessage = "هل الخدمة محددة بوقت؟")]

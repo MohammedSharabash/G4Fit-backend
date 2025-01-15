@@ -93,6 +93,17 @@
                                     @Html.Partial("_OrderFees", Model)
                                 <tbody />
 
+                                @if (Model.UserType == G4Fit.Models.Enums.OrderUserType.Normal)
+                                {
+                                    <tr>
+                                        <td style="background-color:white;" colspan="2" align="right">
+                                            <a class="btn btn-success btn-block" href="javascript:void(0)" onclick="showUpdateType()">
+                                                @(culture == "ar" ? "لو انت من حماة الوطن أو طالب او من جامعة الملك خالد اضغط نعم واستفاد من خصومات خاصة" : "If you are a protector of the nation, a student, or from King Khalid University, click Yes and benefit from special discounts")
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+
                                 <tr>
                                     @if (user.Address != null && (!Model.Items.Any(x => x.Service.IsTimeBoundService) || Model.PurposeOfSubscription != null))
                                     {
@@ -210,8 +221,56 @@
                 </div>
             </div>
         }
+
+        <div class="container mt-5" id="updateType" style="display: none;">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white text-center" style="font-size: 18px;">
+                            @(culture == "ar" ? "تحديث بيانات المستخدم" : "Update User Information")
+                        </div>
+                        <div class="card-body">
+                            @using (Ajax.BeginForm("UpdateUserType", "Orders", new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnSuccess = "OnSuccess", OnFailure = "OnFailure", LoadingElementId = "loader" }, new { enctype = "multipart/form-data" }))
+                            {
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="UserType" class="control-label required" style="font-weight: bold; display: flex;">
+                                                @(culture == "ar" ? "تحديد الهويه :" : "Who Are You:")
+                                            </label>
+                                            <select name="UserType" class="form-control" required>
+                                                <option value="Normal">@(culture == "ar" ? "مستخدم " : "User")</option>
+                                                <option value="Army">@(culture == "ar" ? "من حماة الوطن" : "Army")</option>
+                                                <option value="Student">@(culture == "ar" ? "طالب" : "Student")</option>
+                                                <option value="KingKhaledUniversity">@(culture == "ar" ? "من جامعة الملك خالد" : "King Khaled University")</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="Image" class="control-label required" style="font-weight: bold; display: flex;">@(culture == "ar" ? "صورة الاثبات:" : "Photo of proof:")</label>
+                                            <input name="Image" accept="image/*" required id="Image" type="file" class="form-control valid" />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="btn btn-success" style="font-size: 18px; padding: 10px 20px;">
+                                        @(culture == "ar" ? "تحديث البيانات" : "Update Information")
+                                        <i class="fa fa-spinner fa-spin" id="loader" style="display:none;"></i>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     }
-   
+
 
 </section>
 @section Scripts{
@@ -357,6 +416,18 @@
             }
             updateAddressDiv.style.display = 'block';
             updateAddressDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+    </script>
+    <script>
+        function showUpdateType() {
+            var updateTypeDiv = document.getElementById('updateType');
+            if (!updateTypeDiv) {
+                console.error("Element with ID 'updateType' not found.");
+                return; // Exit if the element is not found
+            }
+            updateTypeDiv.style.display = 'block';
+            updateTypeDiv.scrollIntoView({ behavior: 'smooth' });
         }
 
     </script>

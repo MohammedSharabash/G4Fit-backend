@@ -15,6 +15,7 @@ namespace G4Fit.Models.DTOs
         public PaymentMethod PaymentMethod { get; set; }
         public decimal Subtotal { get; set; }
         public decimal Total { get; set; }
+        public OrderUserType type { get; set; }
         public decimal Discount { get; set; }
         public bool IsHaveWalletDiscount { get; set; }
         public decimal WalletDiscount { get; set; }

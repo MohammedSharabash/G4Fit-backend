@@ -662,6 +662,74 @@ namespace G4Fit.Controllers.MVC
 
             return RedirectToAction("Cart");
         }
+        [HttpPost]
+        public ActionResult UpdateUserType(OrderUserType UserType, HttpPostedFileBase Image)
+        {
+            List<string> Errors = new List<string>();
+            if (Image != null)
+            {
+                bool IsImage = CheckFiles.IsImage(Image);
+                if (IsImage == false)
+                {
+                    Errors.Add("صورة الاثبات  غير صحيحه");
+                }
+            }
+            else if (Image == null && UserType != OrderUserType.Normal)
+            {
+                Errors.Add("صورة الاثبات مطلوبه");
+            }
+            if (Errors.Count() > 0)
+            {
+                TempData["CountryErrors"] = Errors;
+                return RedirectToAction("Index");
+            }
+            string Anonymous = null;
+            HttpCookie anonymousCooky = Request.Cookies["Anonymous"];
+            if (anonymousCooky != null)
+            {
+                Anonymous = anonymousCooky.Value;
+            }
+            else
+            {
+                Anonymous = Session.SessionID;
+                anonymousCooky = new HttpCookie("Anonymous");
+                anonymousCooky.Value = Anonymous;
+                anonymousCooky.Expires = DateTime.Now.AddYears(20);
+                Response.Cookies.Add(anonymousCooky);
+            }
+            var UserOrder = db.Orders.FirstOrDefault(x => ((x.UserId == CurrentUserId && x.UserId != null) || x.UnknownUserKeyIdentifier == Anonymous) && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
+            if (UserOrder == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            if (Image != null && UserType != OrderUserType.Normal)
+            {
+                UserOrder.UserType = UserType;
+                UserOrder.UserTypeImageUrl = MediaControl.Upload(FilePath.Other, Image);
+
+                db.SaveChanges();
+
+            }
+            foreach (var item in UserOrder.Items)
+            {
+                if (UserOrder.UserType == OrderUserType.Normal)
+                    item.Price = item.Service.OfferPrice.HasValue == true ? item.Service.OfferPrice.Value : item.Service.OriginalPrice;
+
+                else
+                    item.Price = item.Service.SpecialOfferPrice.HasValue == true ? item.Service.SpecialOfferPrice.Value : item.Service.SpecialPrice;
+
+                if (item.Service.IsTimeBoundService)
+                    item.SubTotal = item.Price;
+                else
+                    item.SubTotal = item.Price * item.Quantity;
+                db.SaveChanges();
+            }
+
+            OrderActions.CalculateOrderPrice(UserOrder);
+            db.SaveChanges();
+
+            return RedirectToAction("Cart");
+        }
 
         [AllowAnonymous]
         [HttpPost]
@@ -922,6 +990,16 @@ namespace G4Fit.Controllers.MVC
                     }
                     TempData["OrderPlaced"] = true;
                     TempData["Order"] = UserOrder;
+
+                    if (UserOrder.User.PhoneNumber.StartsWith("010") || UserOrder.User.PhoneNumber.StartsWith("011") || UserOrder.User.PhoneNumber.StartsWith("012") || UserOrder.User.PhoneNumber.StartsWith("015"))
+                    {
+                        // إرسال الرسالة إذا كان الرقم مصرياً
+                        await SMS.SendMessageAsync("20", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+                    }
+                    else
+                        await SMS.SendMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+
+
                     return RedirectToAction("Success");
                 }
             }
@@ -1281,6 +1359,14 @@ namespace G4Fit.Controllers.MVC
                 }
                 TempData["OrderPlaced"] = true;
                 TempData["Order"] = UserOrder;
+                if (UserOrder.User.PhoneNumber.StartsWith("010") || UserOrder.User.PhoneNumber.StartsWith("011") || UserOrder.User.PhoneNumber.StartsWith("012") || UserOrder.User.PhoneNumber.StartsWith("015"))
+                {
+                    // إرسال الرسالة إذا كان الرقم مصرياً
+                    await SMS.SendMessageAsync("20", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+                }
+                else
+                    await SMS.SendMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+
                 if (api)
                 {
                     return RedirectToAction("ApiSuccess");
@@ -1437,6 +1523,7 @@ namespace G4Fit.Controllers.MVC
                 db.SaveChanges();
                 TempData["OrderPlaced"] = true;
                 TempData["Order"] = UserOrder;
+
                 return RedirectToAction("ApiSuccess");
             }
             else

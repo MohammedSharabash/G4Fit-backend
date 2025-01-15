@@ -3,6 +3,7 @@ using G4Fit.Models.Data;
 using G4Fit.Models.Domains;
 using G4Fit.Models.DTOs;
 using G4Fit.Models.Enums;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -21,6 +22,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Windows.Controls;
 using System.Windows.Media.Media3D;
 using static G4Fit.Controllers.MVC.OrdersController;
 
@@ -640,8 +642,13 @@ namespace G4Fit.Controllers.API
         [AllowAnonymous]
         [HttpGet]
         [Route("checkout")]
-        public async Task<IHttpActionResult> CheckOut(string lang = "en")
+        public async Task<IHttpActionResult> CheckOut(CheckOutDTO model)
         {
+            if (model.type != OrderUserType.Normal && model.ImageBase64.IsNullOrWhiteSpace())
+            {
+                baseResponse.ErrorCode = Errors.FailedToUploadImage;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
+            }
             CurrentUserId = User.Identity.GetUserId();
             var Headers = HttpContext.Current.Request.Headers;
             string AnonymousKey = string.Empty;
@@ -690,7 +697,34 @@ namespace G4Fit.Controllers.API
                 baseResponse.ErrorCode = Errors.UserBasketIsEmpty;
                 return Content(HttpStatusCode.BadRequest, baseResponse);
             }
+            string ImageName = null;
+            if (!string.IsNullOrEmpty(model.ImageBase64))
+            {
+                var Image = Convert.FromBase64String(model.ImageBase64);
+                ImageName = MediaControl.Upload(FilePath.Other, Image, MediaType.Image);
+                UserOrder.UserTypeImageUrl = ImageName;
+            }
+            if (model.type != UserOrder.UserType)
+            {
+                UserOrder.UserType = model.type;
+                foreach (var item in UserOrder.Items)
+                {
+                    if (UserOrder.UserType == OrderUserType.Normal)
+                        item.Price = item.Service.OfferPrice.HasValue == true ? item.Service.OfferPrice.Value : item.Service.OriginalPrice;
 
+                    else
+                        item.Price = item.Service.SpecialOfferPrice.HasValue == true ? item.Service.SpecialOfferPrice.Value : item.Service.SpecialPrice;
+                    db.SaveChanges();
+                    if (item.Service.IsTimeBoundService)
+                        item.SubTotal = item.Price;
+                    else
+                        item.SubTotal = item.Price * item.Quantity;
+                    db.SaveChanges();
+                }
+
+                OrderActions.CalculateOrderPrice(UserOrder);
+                db.SaveChanges();
+            }
             var Package = db.UserPackages.FirstOrDefault(w => w.IsDeleted == false && w.IsActive == true && w.UserId == CurrentUserId && w.IsPaid == true);
             if (Package != null)
             {
@@ -736,11 +770,11 @@ namespace G4Fit.Controllers.API
                     ServiceDTO ServiceDTO = new ServiceDTO()
                     {
                         Id = Service.Id,
-                        Description = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? Service.DescriptionAr : Service.DescriptionEn,
-                        Name = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? Service.NameAr : Service.NameEn,
+                        Description = !string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? Service.DescriptionAr : Service.DescriptionEn,
+                        Name = !string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? Service.NameAr : Service.NameEn,
                         HasDiscount = Service.OfferPrice.HasValue == true ? true : false,
-                        Price = Service.OriginalPrice.ToString() + (!string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? " ريال سعودي" : "SAR"),
-                        PriceAfter = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value.ToString() + (!string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? " ريال سعودي" : "SAR") : null,
+                        Price = Service.OriginalPrice.ToString() + (!string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? " ريال سعودي" : "SAR"),
+                        PriceAfter = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value.ToString() + (!string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? " ريال سعودي" : "SAR") : null,
                         Image = Service.Images != null && Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null ? "/Content/Images/Services/" + Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl : null,
                         IsFavourite = Service.FavouriteUsers != null && Service.FavouriteUsers.Any(s => s.IsDeleted == false && s.UserId == CurrentUserId) == true ? true : false
                     };
@@ -1188,6 +1222,7 @@ namespace G4Fit.Controllers.API
                 PaymentMethod = Order.PaymentMethod,
                 Subtotal = Order.SubTotal,
                 Total = Order.Total,
+                type = Order.UserType,
                 DeliveryFees = Order.DeliveryFees,
                 Discount = Order.PackageDiscount + Order.PromoDiscount,
             };
@@ -1273,6 +1308,14 @@ namespace G4Fit.Controllers.API
                     PromoCodeActions.ExecutePromo(UserOrder, UserOrder.Promo);
                 }
                 db.SaveChanges();
+                if (UserOrder.User.PhoneNumber.StartsWith("010") || UserOrder.User.PhoneNumber.StartsWith("011") || UserOrder.User.PhoneNumber.StartsWith("012") || UserOrder.User.PhoneNumber.StartsWith("015"))
+                {
+                    // إرسال الرسالة إذا كان الرقم مصرياً
+                    await SMS.SendMessageAsync("20", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+                }
+                else
+                    await SMS.SendMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+
                 await Notifications.SendToAllSpecificAndroidUserDevices(UserOrder.UserId, "تم الدفع بنجاح", "تمت عمليه دفع الطلب بنجاح", NotificationType.CurrentOrders, UserOrder.Id, true);
                 await Notifications.SendToAllSpecificIOSUserDevices(UserOrder.UserId, "تم الدفع بنجاح", "تمت عمليه دفع الطلب بنجاح", NotificationType.CurrentOrders, UserOrder.Id, true);
                 await Notifications.SendToAllSpecificAndroidUserDevices(UserOrder.UserId, "تم استقبال طلبكم", "تم ارسال طلبكم بنجاح الى التطبيق", NotificationType.CurrentOrders, UserOrder.Id, true);

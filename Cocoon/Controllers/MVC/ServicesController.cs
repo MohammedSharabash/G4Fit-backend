@@ -71,6 +71,7 @@ namespace G4Fit.Controllers.MVC
                             NameAr = model.NameAr,
                             NameEn = model.NameEn,
                             OriginalPrice = model.Price,
+                            SpecialPrice = model.SpecialPrice,
                             IsTimeBoundService = model.IsTimeBoundService,
                             Inventory = model.Inventory,
                             InBodyCount = model.InBodyCount,
@@ -178,6 +179,7 @@ namespace G4Fit.Controllers.MVC
                         Service.NameEn = model.NameEn;
                         Service.IsTimeBoundService = model.IsTimeBoundService;
                         Service.OriginalPrice = model.Price;
+                        Service.SpecialPrice = model.SpecialPrice;
                         Service.Inventory = model.Inventory;
                         Service.ServiceDays = model.ServiceDays;
                         Service.InBodyCount = model.InBodyCount;

@@ -73,6 +73,32 @@
                                     @Model.User.Name
                                 </td>
                             </tr>
+                            @if (Model.UserType != OrderUserType.Normal)
+                            {
+                                <tr>
+                                    <td>
+                                        تصنيف الطلب
+                                    </td>
+                                    <td>
+                                        @if (Model.UserType == OrderUserType.Army)
+                                        {
+                                            <span>حماة وطن</span>
+                                        }
+                                        else if (Model.UserType == OrderUserType.Student)
+                                        {
+                                            <span>طالبات</span>
+                                        }
+                                        else if (Model.UserType == OrderUserType.KingFahdUniversity)
+                                        {
+                                            <span>جامعة الملك سلمان</span>
+                                        }
+                                        @if (Model.UserTypeImageUrl != null)
+                                        {
+                                            <a target="_blank" href="~/Content/Images/Other/@Model.UserTypeImageUrl"><img width="150" src="~/Content/Images/Other/@Model.UserTypeImageUrl"></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
                             <tr>
                                 <td>
                                     رقم العميل

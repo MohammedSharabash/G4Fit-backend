@@ -43,6 +43,22 @@
         <td>@(culture == "ar" ? $" {ViewBag.Address}" : $"{ViewBag.Address}")</td>
     </tr>
 }
+@if (Model.UserType != G4Fit.Models.Enums.OrderUserType.Normal)
+{
+    <tr>
+        <td>@(culture == "ar" ? "الهويه" : "Identity")</td>
+        <td>
+            @if (Model.UserType == OrderUserType.Army)
+            {@(culture == "ar" ? "من حماة الوطن" : "Army")}
+            else if (Model.UserType == OrderUserType.Student)
+            {@(culture == "ar" ? "طالب" : "Student")}
+            else if (Model.UserType == OrderUserType.KingKhaledUniversity)
+            {@(culture == "ar" ? "من جامعة الملك خالد" : "King Khaled University")}
+            else if (Model.UserType == OrderUserType.Normal)
+            {@(culture == "ar" ? "مستخدم " : "User")}
+        </td>
+    </tr>
+}
 @if (Model.PurposeOfSubscription != null)
 {
     <tr>

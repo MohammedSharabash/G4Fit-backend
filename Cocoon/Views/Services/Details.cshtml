@@ -38,6 +38,7 @@
                 }
             </li>
             <li><span class="text-blue">السعر: </span> @(Model.OriginalPrice) ريال سعودي</li>
+            <li><span class="text-blue">السعر الخاص بعروض [حماة وطن - طالبات - جامعة الملك خالد ]: </span> @(Model.SpecialPrice) ريال سعودي</li>
             <li><span class="text-blue">القسم: </span> @Model.SubCategory.NameAr</li>
             <li><span class="text-blue">حاله الظهور: </span> @(Model.IsHidden == true ? "غير مرئى فى التطبيق" : "مرئى فى التطبيق ")</li>
             @if (Model.IsTimeBoundService)
@@ -80,6 +81,7 @@
                             <span>لا يوجد</span>
                         }
                     </li>*@
+                <li><span class="text-blue">عدد InBodyCount : </span> @Model.InBodyCount يوم</li>
                 <li><span class="text-blue">الكميه المتاحه: </span> @Model.Inventory</li>
                 <li><span class="text-blue">عدد مرات البيع: </span> @Model.SellCounter مره</li>
             }
