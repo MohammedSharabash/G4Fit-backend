@@ -29,7 +29,7 @@ namespace G4Fit.Controllers.MVC
                 SubCategories = SubCategories.Where(w => /*w.SubCategoryId == CatId*/!w.HardDelete && true).OrderBy(x => x.SortingNumber).ToList();
             }
             ViewBag.SubCategories = SubCategories;
-            //ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
+            ViewBag.Categories = db.SubCategories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
             return View();
         }
 
@@ -58,7 +58,7 @@ namespace G4Fit.Controllers.MVC
                 return RedirectToAction("Index");
             }
             ViewBag.SubCategories = db.SubCategories.Where(x => !x.IsDeleted).ToList();
-            //ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
+            ViewBag.Categories = db.SubCategories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
             return View(subCategory);
         }
 
@@ -69,7 +69,7 @@ namespace G4Fit.Controllers.MVC
             SubCategory subCategory = db.SubCategories.Find(id);
             if (subCategory == null)
                 return RedirectToAction("Index");
-            //ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
+            ViewBag.Categories = db.SubCategories.Where(w => w.IsDeleted == false && w.Id != id).OrderBy(w => w.NameAr).ToList();
             return View(subCategory);
         }
 
@@ -84,6 +84,8 @@ namespace G4Fit.Controllers.MVC
                 {
                     ModelState.AddModelError("", "الصوره غير صحيحة");
                 }
+                if (subCategory.ConnectedToAnotherCategory && subCategory.ConnectedCategoryId == null)
+                    ModelState.AddModelError("", "يرجي اختيار القسم المربوط بيه القسم المضاف");
             }
             if (ModelState.IsValid)
             {
@@ -100,7 +102,7 @@ namespace G4Fit.Controllers.MVC
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            //ViewBag.Categories = db.Categories.Where(w => w.IsDeleted == false).OrderBy(w => w.NameAr).ToList();
+            ViewBag.Categories = db.SubCategories.Where(w => w.IsDeleted == false && w.Id != subCategory.Id).OrderBy(w => w.NameAr).ToList();
             return View(subCategory);
         }
 
@@ -177,7 +179,7 @@ namespace G4Fit.Controllers.MVC
                 cat.HardDelete = true;
                 db.SaveChanges();
             }
-           
+
             return RedirectToAction("Index");
         }
     }

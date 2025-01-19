@@ -62,6 +62,7 @@ namespace G4Fit.Models.Enums
         InvalidIDNumber,
         IDNumberAlreadyExists,
         CityNotFound,
-        InvalidRefreshToken
+        InvalidRefreshToken,
+        YouCannotCurrentlyPurchaseThisService
     }
 }

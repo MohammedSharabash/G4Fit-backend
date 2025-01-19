@@ -2,10 +2,29 @@
 @{
     ViewBag.Title = "اقسام التطبيق ";
     var SubCategories = ViewBag.SubCategories as List<G4Fit.Models.Domains.SubCategory>;
-    //var Categories = ViewBag.Categories as List<G4Fit.Models.Domains.Category>;
+    var Categories = ViewBag.Categories as List<G4Fit.Models.Domains.SubCategory>;
     Layout = "~/Views/Dashboard/Layout.cshtml";
 }
 
+<style>
+    .status-label {
+        padding: 5px 10px; /* padding لإنشاء مساحة داخلية */
+        font-size: 1.2rem; /* حجم الخط */
+        font-weight: bold; /* جعل النص غامق */
+        color: #ffffff; /* لون النص - يمكنك تغييره */
+        background-color: #007bff; /* لون الخلفية */
+        border: 2px solid #007bff; /* لون الإطار */
+        border-radius: 5px; /* جعل الحواف مدورة قليلاً */
+        transition: background-color 0.3s, border-color 0.3s; /* تأثير انتقال عند تغيير الخلفية */
+    }
+
+        /* تأثيرات عند التمرير */
+        .status-label:hover {
+            background-color: #0056b3; /* لون الخلفية عند التمرير */
+            border-color: #0056b3; /* لون الإطار عند التمرير */
+            cursor: pointer; /* تغيير شكل المؤشر عند التمرير */
+        }
+</style>
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title"><i class="fa fa-fw fa-reply"></i> @ViewBag.Title</h3>
@@ -64,13 +83,41 @@
                                             </div>
                                         </div>
                                     </div>*@
-                                <div class="col-lg-6">
+                                <div class="col-lg-8">
                                     <div class="form-group">
                                         <label for="Image" class="col-sm-5 control-label required">صوره القسم:</label>
                                         <div class="col-sm-7">
                                             <div class="input-group">
                                                 <input class="form-control" type="file" required name="Image" id="Image" accept="image/*" />
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:10px">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="ConnectedToAnotherCategory" class="col-sm-5 control-label ">هل القسم مربوط بقسم اخر ؟  <span title="تغيير القيمه" id="timeBoundLabel" class="status-label">لا</span></label>
+
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                @Html.CheckBoxFor(model => model.ConnectedToAnotherCategory, new { @class = "", @id = "ConnectedToAnotherCategory", onchange = "updateLabel()" })
+                                            </div>
+                                            @Html.ValidationMessageFor(d => d.ConnectedToAnotherCategory, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="ConnectedCategoryId" class="col-sm-5 control-label required">القسم المرتبط به :</label>
+                                        <div class="col-sm-7">
+                                            <select name="ConnectedCategoryId" id="CategoryId" class="select2 form-control">
+                                                @foreach (var category in Categories)
+                                                {
+                                                    <option value="@category.Id">@category.NameAr</option>
+                                                }
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -103,6 +150,7 @@
                         <th>اسم القسم</th>
                         @*<th>القسم الرئيسى</th>*@
                         <th>الصوره</th>
+                        <th>هل القسم مربوط بقسم اخر ؟</th>
                         <th>الخدمات</th>
                         <th>التحكم</th>
                     </tr>
@@ -128,6 +176,23 @@
                                 else
                                 {
                                     <span>---</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (item.ConnectedToAnotherCategory)
+                                {
+                                    <span class="badge bg-green">نعم</span><br />
+
+                                    if (Categories.Any(x => x.Id == item.ConnectedCategoryId))
+                                    {
+                                        <span>@Categories.FirstOrDefault(x => x.Id == item.ConnectedCategoryId).NameAr</span>
+                                    }
+                                    else
+                                    { <span>القسم المربوط غير متاح حالياً</span>}
+                                }
+                                else
+                                {
+                                    <span class="badge bg-red">لا</span>
                                 }
                             </td>
                             <td><a class="btn btn-info" href="@Url.Action("Dashboard", "Services", new { CatId = item.Id })">الخدمات</a></td>
@@ -179,5 +244,20 @@
                 })
             }
         }
+        function updateLabel() {
+            var checkbox = document.getElementById('ConnectedToAnotherCategory');
+            var label = document.getElementById('timeBoundLabel');
+
+            if (checkbox.checked) {
+                label.textContent = "نعم"; // إذا كانت القيمة true، اجعل النص "نعم"
+            } else {
+                label.textContent = "لا"; // إذا كانت القيمة false، اجعل النص "لا"
+            }
+        }
+
+        // استدعاء الدالة عند تحميل الصفحة للتأكد من أن النص صحيح
+        document.addEventListener('DOMContentLoaded', function () {
+            updateLabel();
+        });
     </script>
 }

@@ -470,6 +470,10 @@
     <Compile Include="Migrations\202501121241251_orderEdit.Designer.cs">
       <DependentUpon>202501121241251_orderEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202501191323187_ConnectedCategoryId.cs" />
+    <Compile Include="Migrations\202501191323187_ConnectedCategoryId.Designer.cs">
+      <DependentUpon>202501191323187_ConnectedCategoryId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Data\ApplicationDbContext.cs" />
     <Compile Include="Models\Domains\ApplicationUser.cs" />
@@ -2014,6 +2018,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202501121241251_orderEdit.resx">
       <DependentUpon>202501121241251_orderEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202501191323187_ConnectedCategoryId.resx">
+      <DependentUpon>202501191323187_ConnectedCategoryId.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Website.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

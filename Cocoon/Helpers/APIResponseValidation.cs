@@ -112,6 +112,8 @@ namespace G4Fit.Helpers
                     return culture == "ar" ? "لم تصل الى الحد الادنى المطلوب من سعر الطلب لتفعيل الكوبون" : "Order price doesn't meet the coupon minimum value";
                 case Errors.UserIsBlocked:
                     return culture == "ar" ? "عفواً ، هذا الحساب قد تم حظره" : "This account has been blocked";
+                case Errors.YouCannotCurrentlyPurchaseThisService:
+                    return culture == "ar" ? "عفواً ،لا يمكنك شراء هذه الخدمه حاليا" : "You cannot currently purchase this service";
                 default:
                     break;
             }

@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.Services.Description;
 using System.Windows.Controls;
 using System.Windows.Media.Media3D;
 using static G4Fit.Controllers.MVC.OrdersController;
@@ -1512,6 +1513,22 @@ namespace G4Fit.Controllers.API
                 }
             }
 
+            var cat = db.SubCategories.FirstOrDefault(d => d.Id == Service.SubCategoryId && d.IsDeleted == false);
+            if (cat.ConnectedToAnotherCategory)
+            {
+                //هنشوف الطلبات السابقه والحاليه بتوع اليوزر هل موجود عنده خدمه علي الاقل من القسم ده ولا لا 
+
+                var Orders = db.Orders.Where(d => d.UserId == CurrentUserId && (d.OrderStatus == OrderStatus.Placed || d.OrderStatus == OrderStatus.Delivered) && d.IsDeleted == false).OrderByDescending(s => s.CreatedOn).ToList();
+                var check = db.Orders.Any(d => d.UserId == CurrentUserId
+                && (d.OrderStatus == OrderStatus.Placed || d.OrderStatus == OrderStatus.Delivered)
+                && d.Items.Any(a => a.Service.SubCategoryId == cat.ConnectedCategoryId)
+                && d.IsDeleted == false);
+
+                if (!check)
+                {
+                    return Errors.YouCannotCurrentlyPurchaseThisService;
+                }
+            }
             return Errors.Success;
         }
         private Errors ValidateAddTimeBoundServiceItemToBasket(AddTimeBoundServiceItemToBasketDTO model, string CurrentUserId)
@@ -1534,7 +1551,22 @@ namespace G4Fit.Controllers.API
                 return Errors.InvalidStartDate;
 
             }
+            var cat = db.SubCategories.FirstOrDefault(d => d.Id == Service.SubCategoryId && d.IsDeleted == false);
+            if (cat.ConnectedToAnotherCategory)
+            {
+                //هنشوف الطلبات السابقه والحاليه بتوع اليوزر هل موجود عنده خدمه علي الاقل من القسم ده ولا لا 
 
+                var Orders = db.Orders.Where(d => d.UserId == CurrentUserId && (d.OrderStatus == OrderStatus.Placed || d.OrderStatus == OrderStatus.Delivered) && d.IsDeleted == false).OrderByDescending(s => s.CreatedOn).ToList();
+                var check = db.Orders.Any(d => d.UserId == CurrentUserId
+                && (d.OrderStatus == OrderStatus.Placed || d.OrderStatus == OrderStatus.Delivered)
+                && d.Items.Any(a => a.Service.SubCategoryId == cat.ConnectedCategoryId)
+                && d.IsDeleted == false);
+
+                if (!check)
+                {
+                    return Errors.YouCannotCurrentlyPurchaseThisService;
+                }
+            }
             return Errors.Success;
         }
 
