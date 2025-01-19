@@ -50,7 +50,7 @@ namespace G4Fit.Helpers
                 case Errors.UserNotFound:
                     return culture == "ar" ? "لا يوجد حساب مسجل بهذه البيانات" : "User not found";
                 case Errors.WrongPasswordProvided:
-                    return culture == "ar" ? "كلمه السر غير صحيحة" : "Wrong password";
+                    return culture == "ar" ? "كلمة مرور خاطئة برجاء ادخال كلمة السر مره اخري" : "Wrong password";
                 case Errors.UserNotVerified:
                     return culture == "ar" ? "الحساب لم يتم تفعيله بعد" : "User is not verified";
                 case Errors.VerificationCodeFieldIsRequired:

@@ -70,7 +70,7 @@ namespace G4Fit.Controllers.MVC
                     await SMS.SendMessageAsync("20", user.PhoneNumber, $"كود تأكيد تنفيذ InBody الخاص بك  هو  [{code}]");
                 }
                 else
-                    await SMS.SendMessageAsync("966", user.PhoneNumber, $"كود تأكيد تنفيذ InBody الخاص بك  هو  [{code}]");
+                    await SMS.SendMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"كود تأكيد تنفيذ InBody الخاص بك  هو  [{code}]");
 
 
                 db.UserInBodyOperations.Add(UserInBodyOperation);

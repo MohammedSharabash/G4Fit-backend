@@ -217,7 +217,7 @@ namespace G4Fit.Controllers.API
                             await SMS.SendMessageAsync("20", phoneNumber, $"رمز التحقق هو [{Vcode}]");
                         }
                         else
-                            await SMS.SendMessageAsync("966", user.PhoneNumber, $"رمز التحقق هو [{Vcode}]");
+                            await SMS.SendMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"رمز التحقق هو [{Vcode}]");
                         return Ok(baseResponse);
                     }
                     else
@@ -408,7 +408,7 @@ namespace G4Fit.Controllers.API
                 await SMS.SendMessageAsync("20", user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
             }
             else
-                await SMS.SendMessageAsync("966", user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
+                await SMS.SendMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
             return Ok(baseResponse);
         }
 
@@ -617,7 +617,7 @@ namespace G4Fit.Controllers.API
                         await SMS.SendMessageAsync("20", user.PhoneNumber, $"كلمه السر المؤقته هى [{RandomPassword}]");
                     }
                     else
-                        await SMS.SendMessageAsync("966", user.PhoneNumber, $"كلمه السر المؤقته هى [{RandomPassword}]");
+                        await SMS.SendMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"كلمه السر المؤقته هى [{RandomPassword}]");
 
 
                     baseResponse.Data = new { Phone = user.PhoneNumber, Password = RandomPassword };
