@@ -2,6 +2,7 @@
 @{
     Layout = "~/Views/Dashboard/Layout.cshtml";
     ViewBag.Title = "محفظه " + Model.Name;
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
 }
 <div class="panel panel-primary">
     <div class="panel-heading">

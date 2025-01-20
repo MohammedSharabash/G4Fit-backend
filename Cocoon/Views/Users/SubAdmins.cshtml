@@ -98,7 +98,9 @@
                                 <span dir="auto">@CreatedOn.ToString("hh:mm tt")</span>
                             </td>
                             <td>
-                                @Html.ActionLink(item.IsDeleted == true ? "فك الحظر" : "حظر", "ToggleBlock", new { Id = item.Id })
+                                @Html.ActionLink(item.IsDeleted == true ? "فك الحظر" : "حظر", "ToggleBlock", new { Id = item.Id }) |
+                                @Html.ActionLink("تغيير كلمه المرور", "ChangePassword", new { Id = item.Id }) |
+
                             </td>
                         </tr>
                     }

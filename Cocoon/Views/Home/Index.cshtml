@@ -200,7 +200,7 @@
     {
         List<G4Fit.Models.Domains.Service> Services = new List<G4Fit.Models.Domains.Service>();
 
-        Services.AddRange(category.Services.Where(s => s.IsDeleted == false && (s.Inventory > 0 || s.IsTimeBoundService) && s.IsHidden == false).Take(4));
+        Services.AddRange(category.Services.Where(s => s.IsDeleted == false && (s.Inventory > 0 || s.IsTimeBoundService) && s.IsHidden == false).OrderBy(x => x.SortingNumber)/*.Take(4)*/);
 
         if (Services.Any() == true)
         {

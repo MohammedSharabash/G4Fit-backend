@@ -19,6 +19,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Transactions;
 using G4Fit.Helper;
+using System.Web.UI.WebControls;
 
 namespace G4Fit.Controllers.MVC
 {
@@ -364,6 +365,46 @@ namespace G4Fit.Controllers.MVC
             TempData["Success"] = true;
             TempData["SubmitSuccess"] = true;
             return RedirectToAction("Wallet", new { Id = UserId });
+        }
+        [HttpGet]
+        public ActionResult ChangePassword(string Id)
+        {
+            if (string.IsNullOrEmpty(Id) == false)
+            {
+                var user = db.Users.Find(Id);
+                if (user != null)
+                {
+                    ViewBag.UserId = Id;
+                    return View();
+                }
+            }
+
+            return RedirectToAction("Clients");
+        }
+
+        [HttpPost]
+        public ActionResult ChangePassword(ChangePasswordVM model)
+        {
+            if (ModelState.ContainsKey("CurrentPassword"))
+            {
+                ModelState["CurrentPassword"].Errors.Clear();
+            }
+
+            if (ModelState.IsValid == true)
+            {
+                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+                var user = db.Users.Find(model.UserId);
+                if (user != null)
+                {
+                    user.PasswordHash = UserManager.PasswordHasher.HashPassword(model.Password);
+                    db.SaveChanges();
+                    TempData["Success"] = true;
+                    return RedirectToAction("Clients");
+                }
+            }
+
+            ViewBag.UserId = model.UserId;
+            return View(model);
         }
 
     }

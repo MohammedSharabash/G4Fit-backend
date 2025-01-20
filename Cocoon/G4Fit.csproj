@@ -552,6 +552,7 @@
     <Compile Include="Models\Enums\PeriodType.cs" />
     <Compile Include="Models\Enums\SupplierType.cs" />
     <Compile Include="Models\Enums\TransactionType.cs" />
+    <Compile Include="Models\ViewModels\ChangePasswordVM.cs" />
     <Compile Include="Models\ViewModels\CreateSubAdminVM.cs" />
     <Compile Include="Models\ViewModels\ProductsVM.cs" />
     <Compile Include="Models\ViewModels\CheckoutVM.cs" />
@@ -1950,6 +1951,7 @@
     <Content Include="Views\Users\SubAdmins.cshtml" />
     <Content Include="Views\Users\CreateSubAdmin.cshtml" />
     <Content Include="Views\UserInBodyOperations\Index.cshtml" />
+    <Content Include="Views\Users\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

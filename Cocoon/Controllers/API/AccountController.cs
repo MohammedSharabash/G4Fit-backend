@@ -166,7 +166,7 @@ namespace G4Fit.Controllers.API
                     }
 
                     int Vcode = RandomGenerator.GenerateNumber(1000, 9999);
-                    Vcode = 1111;
+                    //Vcode = 1111;
                     var City = db.Cities.Find(registerDTO.CountryId);
                     var Country = db.Countries.Find(City.CountryId);
                     var user = new ApplicationUser() { LoginType = LoginType.G4FitRegisteration, VerificationCode = Vcode, UserName = Email, Email = Email, Address = registerDTO.Address, IDNumber = registerDTO.IDNumber, Name = registerDTO.Name, PhoneNumber = registerDTO.PhoneNumber, PhoneNumberCountryCode = Country.PhoneCode, CityId = registerDTO.CountryId, CountryId = City.CountryId };
@@ -354,7 +354,7 @@ namespace G4Fit.Controllers.API
                 }
             }
 
-        MainProcess: if (user.VerificationCode == Vcode || Vcode == 1111)
+        MainProcess: if (user.VerificationCode == Vcode /*|| Vcode == 1111*/)
             {
                 user.PhoneNumberConfirmed = true;
                 await db.SaveChangesAsync();

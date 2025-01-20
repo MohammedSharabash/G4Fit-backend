@@ -218,7 +218,7 @@ namespace G4Fit.Controllers.MVC
 
             try
             {
-                if (user.VerificationCode == int.Parse(Vcode) || Vcode == 1111.ToString())
+                if (user.VerificationCode == int.Parse(Vcode) /*|| Vcode == 1111.ToString()*/)
                 {
                     user.PhoneNumberConfirmed = true;
                     await UserManager.UpdateAsync(user);
