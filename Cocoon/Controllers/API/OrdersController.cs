@@ -16,6 +16,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -951,6 +952,12 @@ namespace G4Fit.Controllers.API
                             db.SaveChanges();
                             //
                         }
+
+
+                        // هنبعت ميل 
+                        #region send mail
+                        SendMail(userData, UserOrder.Code, UserOrder.Id.ToString());
+                        #endregion
                     }
                     Transaction.Commit();
                     await Notifications.SendToAllSpecificAndroidUserDevices(UserOrder.UserId, "تم استقبال طلبكم", "تم ارسال طلبكم بنجاح الى التطبيق", NotificationType.CurrentOrders, UserOrder.Id, true);
@@ -1309,13 +1316,22 @@ namespace G4Fit.Controllers.API
                     PromoCodeActions.ExecutePromo(UserOrder, UserOrder.Promo);
                 }
                 db.SaveChanges();
-                if (UserOrder.User.PhoneNumber.StartsWith("010") || UserOrder.User.PhoneNumber.StartsWith("011") || UserOrder.User.PhoneNumber.StartsWith("012") || UserOrder.User.PhoneNumber.StartsWith("015"))
-                {
-                    // إرسال الرسالة إذا كان الرقم مصرياً
-                    await SMS.SendMessageAsync("20", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
-                }
-                else
-                    await SMS.SendMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+                //if (UserOrder.User.PhoneNumber.StartsWith("010") || UserOrder.User.PhoneNumber.StartsWith("011") || UserOrder.User.PhoneNumber.StartsWith("012") || UserOrder.User.PhoneNumber.StartsWith("015"))
+                //{
+                //    // إرسال الرسالة إذا كان الرقم مصرياً
+                //    await SMS.SendTaqnyatMessageAsync("2", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+                //    //await SMS.SendMessageAsync("2", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+                //}
+                //else
+                    await SMS.SendTaqnyatMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+                    //await SMS.SendMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+
+
+                // هنبعت ميل 
+                #region send mail
+                var userData = db.Users.Find(UserOrder.UserId);
+                await SendMail(userData, UserOrder.Code, UserOrder.Id.ToString());
+                #endregion
 
                 await Notifications.SendToAllSpecificAndroidUserDevices(UserOrder.UserId, "تم الدفع بنجاح", "تمت عمليه دفع الطلب بنجاح", NotificationType.CurrentOrders, UserOrder.Id, true);
                 await Notifications.SendToAllSpecificIOSUserDevices(UserOrder.UserId, "تم الدفع بنجاح", "تمت عمليه دفع الطلب بنجاح", NotificationType.CurrentOrders, UserOrder.Id, true);
@@ -1605,6 +1621,105 @@ namespace G4Fit.Controllers.API
             }
             baseResponse.ErrorMessage = "No Order Find";
             return BadRequest(baseResponse.ErrorMessage);
+        }
+
+        private async Task<bool> SendMail(ApplicationUser user, string code, string orderId)
+        {
+            try
+            {
+                string invoiceLink = $"https://g4fit.net/Orders/Invoice?OrderId={orderId}";
+                string emailBody = $@"
+<!DOCTYPE html>
+<html lang='ar' dir='rtl'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }}
+        .container {{
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }}
+        .header {{
+            font-size: 24px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }}
+        .content {{
+            font-size: 16px;
+            line-height: 1.6;
+        }}
+        .button {{
+            display: inline-block;
+            padding: 10px 20px;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }}
+        .footer {{
+            margin-top: 30px;
+            font-size: 14px;
+            color: #777;
+        }}
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>تم تنفيذ طلبك بنجاح! 🎉</div>
+        <div class='content'>
+            <p>عزيزي {user.Name}،</p>
+            <p>✅ تم تنفيذ طلبك بنجاح!</p>
+            <p>🔹 <strong>كود الطلب:</strong> {code}</p>
+            <p>يمكنك عرض الفاتورة الخاصة بطلبك من خلال الرابط التالي:</p>
+            <a href='{invoiceLink}' class='button'>عرض الفاتورة</a>
+        </div>
+        <div class='footer'>
+            نشكرك على ثقتك بنا، ونتمنى لك تجربة رائعة! 😊<br>
+            — فريق G4Fit
+        </div>
+    </div>
+</body>
+</html>
+";
+
+
+                var fromAddress = new MailAddress("infratrics1@gmail.com", "G4Fit");
+                var toAddress = new MailAddress(user.Email, user.Name);
+                //var toAddress = new MailAddress("ashrafkotb1512@gmail.com", "ashraf");
+                const string fromPassword = "gfdhjnrirgcvpqse";
+                string subject = "تفاصيل طلبك من G4Fit - كود الطلب: " + code;
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                };
+
+                using (var message = new MailMessage(fromAddress, toAddress))
+                {
+                    message.Subject = subject;
+                    message.Body = emailBody;
+                    message.IsBodyHtml = true; // تمكين دعم HTML للبريد الإلكتروني
+                    smtp.Send(message);
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
         }
 
     }

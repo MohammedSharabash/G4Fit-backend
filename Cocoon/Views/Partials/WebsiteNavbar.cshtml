@@ -40,10 +40,10 @@
                 <ul class="list-unstyled d-none d-lg-block">
                     <li data-id="Home"><a href="@Url.Action("Index", "Home")?#Home">@Website.Home</a></li>
                     <li data-id="Cats"><a href="@Url.Action("Index", "Home")?#Cats">@Website.Categories</a></li>
-                    @foreach (var cat in Model.Categories)
+                    @*@foreach (var cat in Model.Categories)
                     {
                         <li><a href="@Url.Action("View", "SubCategories", new { CatId = cat.Id })">@(culture=="ar"? cat.NameAr: cat.NameEn)</a></li>
-                    }
+                    }*@
                     @*<li data-id="New"><a href="@Url.Action("Index", "Home")?#New">@Website.Latest</a></li>*@
                     @*<li data-id="Sell"><a href="@Url.Action("Index", "Home")?#Sell">@Website.MostSold</a></li>*@
                     @*<li data-id="Offer"><a href="@Url.Action("Index", "Home")?#Offer">@Website.Offers</a></li>*@

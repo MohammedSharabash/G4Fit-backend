@@ -1,4 +1,5 @@
-﻿using G4Fit.Models.ViewModels;
+﻿using G4Fit.Models.Domains;
+using G4Fit.Models.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -6,6 +7,8 @@ using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -56,7 +59,7 @@ namespace G4Fit.Controllers.MVC
         }
 
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public async Task<ActionResult> Login(string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -68,7 +71,6 @@ namespace G4Fit.Controllers.MVC
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult> Login(cpLoginViewModel model, string returnUrl)

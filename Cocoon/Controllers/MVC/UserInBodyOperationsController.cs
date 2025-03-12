@@ -65,12 +65,14 @@ namespace G4Fit.Controllers.MVC
                     UserInBodyOperation.ConfirmationCode = new Random().Next(1000, 9999).ToString();
                     code = UserInBodyOperation.ConfirmationCode;
                 }
-                if (user.PhoneNumber.StartsWith("010") || user.PhoneNumber.StartsWith("011") || user.PhoneNumber.StartsWith("012") || user.PhoneNumber.StartsWith("015"))
-                {
-                    await SMS.SendMessageAsync("20", user.PhoneNumber, $"كود تأكيد تنفيذ InBody الخاص بك  هو  [{code}]");
-                }
-                else
-                    await SMS.SendMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"كود تأكيد تنفيذ InBody الخاص بك  هو  [{code}]");
+                //if (user.PhoneNumber.StartsWith("010") || user.PhoneNumber.StartsWith("011") || user.PhoneNumber.StartsWith("012") || user.PhoneNumber.StartsWith("015"))
+                //{
+                //    await SMS.SendTaqnyatMessageAsync("2", user.PhoneNumber, $"كود تأكيد تنفيذ InBody الخاص بك  هو  [{code}]");
+                //    //await SMS.SendMessageAsync("2", user.PhoneNumber, $"كود تأكيد تنفيذ InBody الخاص بك  هو  [{code}]");
+                //}
+                //else
+                    await SMS.SendTaqnyatMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"كود تأكيد تنفيذ InBody الخاص بك  هو  [{code}]");
+                //await SMS.SendMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"كود تأكيد تنفيذ InBody الخاص بك  هو  [{code}]");
 
 
                 db.UserInBodyOperations.Add(UserInBodyOperation);

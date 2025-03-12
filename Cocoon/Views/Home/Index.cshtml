@@ -40,6 +40,7 @@
 
     .Tools {
         font-size: initial;
+        text-align: center;
     }
 
     .Size {
@@ -206,7 +207,11 @@
         {
             <section class="Sports" id="Sport">
                 <div class="container mt-5">
-                    <h2 class="h3 @(culture == "ar" ? "text-right" : "") wow fadeInDown"><span>@(culture == "ar" ? category.NameAr : category.NameEn)</span></h2>
+                    <h2 class="h3 @(culture == "ar" ? "text-right" : "") wow fadeInDown">
+                        <a href="@Url.Action("View", "SubCategories", new { CatId = category.Id })">
+                            <span>@(culture == "ar" ? category.NameAr : category.NameEn)</span>
+                        </a>
+                    </h2>
                     <div class="" dir=@(culture == "ar" ? "rtl" : "ltr")>
                         <div id="my-keen-slider-cat-@category.Id" class="keen-slider">
                             @foreach (var Service in Services)
@@ -220,19 +225,22 @@
                                     <a href="@Url.Action("View", "Services", new { Id = Service.Id })"><img class="img-slider" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100%" height="400"></a>
                                     <div class="Tools">
                                         <div class="main_info">
-                                            <h6><a class="text-black" href="@Url.Action("View", "Services", new { Id = Service.Id })">@(culture == "ar" ? Service.NameAr : Service.NameEn)</a></h6>
+                                            <h6><a style="color: #a0bb3a!important;" class="text-black" href="@Url.Action("View", "Services", new { Id = Service.Id })">@(culture == "ar" ? Service.NameAr : Service.NameEn)</a></h6>
                                         </div>
-                                        <div class="sub_info">
+                                        @*<div class="sub_info">*@
+                                        <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                                             @if (Service.OfferPrice.HasValue)
                                             {
-                                                <span style="text-decoration: line-through !important;">@Service.OriginalPrice @Website.SAR</span><span style="color: #a0bb3a!important;">@Service.OfferPrice.Value @Website.SAR</span>
+                                                <span style="text-decoration: line-through !important;">@Service.OriginalPrice @Website.SAR</span>
+                                                <span style="color: #a0bb3a !important; font-weight: bold;">@Service.OfferPrice.Value @Website.SAR</span>
                                             }
-
                                             else
                                             {
-                                                <span>@Service.OriginalPrice @Website.SAR</span>
+                                                <span style="font-weight: bold;">@Service.OriginalPrice @Website.SAR</span>
                                             }
                                         </div>
+
+                                        @*</div>*@
                                         <div class="clearfix"></div>
 
                                     </div>
@@ -506,6 +514,27 @@
                     },
                 },
             });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var slider = new KeenSlider("#partners-slider", {
+                loop: true,
+                slides: { perView: 4, spacing: 10 },
+                duration: 2000, // سرعة الانتقال
+                autoplay: {
+                    delay: 2000, // التغيير كل 2 ثانية
+                    disableOnInteraction: false // استمرار التشغيل بعد التفاعل
+                }
+            });
+
+            // وظيفة لتشغيل الحركة التلقائية يدويًا
+            function startAutoPlay() {
+                setInterval(() => {
+                    slider.next();
+                }, 2000);
+            }
+            startAutoPlay();
         });
     </script>
 }

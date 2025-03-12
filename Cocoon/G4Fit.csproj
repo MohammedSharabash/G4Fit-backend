@@ -1970,6 +1970,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202410070936105_first.resx">
       <DependentUpon>202410070936105_first.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202410071249000_edit.resx">
       <DependentUpon>202410071249000_edit.cs</DependentUpon>

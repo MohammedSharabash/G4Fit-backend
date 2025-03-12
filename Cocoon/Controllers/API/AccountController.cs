@@ -210,14 +210,16 @@ namespace G4Fit.Controllers.API
                         }
                         string phoneNumber = user.PhoneNumber;
 
-                        // التحقق مما إذا كان الرقم يبدأ بمقدمة أرقام الهواتف المصرية
-                        if (phoneNumber.StartsWith("010") || phoneNumber.StartsWith("011") || phoneNumber.StartsWith("012") || phoneNumber.StartsWith("015"))
-                        {
-                            // إرسال الرسالة إذا كان الرقم مصرياً
-                            await SMS.SendMessageAsync("20", phoneNumber, $"رمز التحقق هو [{Vcode}]");
-                        }
-                        else
-                            await SMS.SendMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"رمز التحقق هو [{Vcode}]");
+                        //// التحقق مما إذا كان الرقم يبدأ بمقدمة أرقام الهواتف المصرية
+                        //if (phoneNumber.StartsWith("010") || phoneNumber.StartsWith("011") || phoneNumber.StartsWith("012") || phoneNumber.StartsWith("015"))
+                        //{
+                        //    // إرسال الرسالة إذا كان الرقم مصرياً
+                        //    //await SMS.SendMessageAsync("2", phoneNumber, $"رمز التحقق هو [{Vcode}]");
+                        //    await SMS.SendTaqnyatMessageAsync("2", phoneNumber, $"رمز التحقق هو [{Vcode}]");
+                        //}
+                        //else
+                            //await SMS.SendMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"رمز التحقق هو [{Vcode}]");
+                            await SMS.SendTaqnyatMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"رمز التحقق هو [{Vcode}]");
                         return Ok(baseResponse);
                     }
                     else
@@ -400,15 +402,17 @@ namespace G4Fit.Controllers.API
                 return Content(HttpStatusCode.BadRequest, baseResponse);
             }
             ////SMS.SendMessageAsync("966", user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
-            //SMS.SendMessageAsync("20", user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
-            // التحقق مما إذا كان الرقم يبدأ بمقدمة أرقام الهواتف المصرية
-            if (user.PhoneNumber.StartsWith("010") || user.PhoneNumber.StartsWith("011") || user.PhoneNumber.StartsWith("012") || user.PhoneNumber.StartsWith("015"))
-            {
-                // إرسال الرسالة إذا كان الرقم مصرياً
-                await SMS.SendMessageAsync("20", user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
-            }
-            else
-                await SMS.SendMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
+            //SMS.SendMessageAsync("2", user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
+            //// التحقق مما إذا كان الرقم يبدأ بمقدمة أرقام الهواتف المصرية
+            //if (user.PhoneNumber.StartsWith("010") || user.PhoneNumber.StartsWith("011") || user.PhoneNumber.StartsWith("012") || user.PhoneNumber.StartsWith("015"))
+            //{
+            //    // إرسال الرسالة إذا كان الرقم مصرياً
+            //    await SMS.SendTaqnyatMessageAsync("2", user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
+            //    //await SMS.SendMessageAsync("2", user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
+            //}
+            //else
+                await SMS.SendTaqnyatMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
+                //await SMS.SendMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"رمز التحقق هو [{user.VerificationCode}]");
             return Ok(baseResponse);
         }
 
@@ -610,14 +614,16 @@ namespace G4Fit.Controllers.API
                     }
                     db.SaveChanges();
                     Transaction.Commit();
-                    // التحقق مما إذا كان الرقم يبدأ بمقدمة أرقام الهواتف المصرية
-                    if (user.PhoneNumber.StartsWith("010") || user.PhoneNumber.StartsWith("011") || user.PhoneNumber.StartsWith("012") || user.PhoneNumber.StartsWith("015"))
-                    {
-                        // إرسال الرسالة إذا كان الرقم مصرياً
-                        await SMS.SendMessageAsync("20", user.PhoneNumber, $"كلمه السر المؤقته هى [{RandomPassword}]");
-                    }
-                    else
-                        await SMS.SendMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"كلمه السر المؤقته هى [{RandomPassword}]");
+                    //// التحقق مما إذا كان الرقم يبدأ بمقدمة أرقام الهواتف المصرية
+                    //if (user.PhoneNumber.StartsWith("010") || user.PhoneNumber.StartsWith("011") || user.PhoneNumber.StartsWith("012") || user.PhoneNumber.StartsWith("015"))
+                    //{
+                    //    // إرسال الرسالة إذا كان الرقم مصرياً
+                    //    await SMS.SendTaqnyatMessageAsync("2", user.PhoneNumber, $"كلمه السر المؤقته هى [{RandomPassword}]");
+                    //    //await SMS.SendMessageAsync("2", user.PhoneNumber, $"كلمه السر المؤقته هى [{RandomPassword}]");
+                    //}
+                    //else
+                        await SMS.SendTaqnyatMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"كلمه السر المؤقته هى [{RandomPassword}]");
+                        //await SMS.SendMessageAsync("966", user.PhoneNumber.StartsWith("0") ? user.PhoneNumber.Substring(1) : user.PhoneNumber, $"كلمه السر المؤقته هى [{RandomPassword}]");
 
 
                     baseResponse.Data = new { Phone = user.PhoneNumber, Password = RandomPassword };

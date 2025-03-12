@@ -8,6 +8,7 @@
 
 
 }
+<link href="~/Content/style.css" rel="stylesheet" />
 <style>
     .swiper-slide {
         height: 305px !important;
@@ -81,7 +82,7 @@
                     </div>
                 </div>
                 <div class="pt-3 pt-xl-0 pt-md-0 pt-sm-0 col-sm-12 col-md-8 col-lg-10">
-                    <div class="card wow fadeInDown" style="background-color: #292929;" >
+                    <div class="card wow fadeInDown" style="background-color: #292929;">
                         <div class="card-header">
                             <h2 class="h5 @(culture == "ar" ? "text-right" : "")">
                                 <span>
@@ -93,7 +94,7 @@
                         </div>
                         <div class="card-body">
                             <div class="swiper-container">
-                                <div class="swiper-wrapper">
+                                <div id="my-keen-slider-cat" class="keen-slider">
                                     @if (Services == null || Services.Any() == false)
                                     {
                                         <div class="my-5 py-5 text-center m-auto">
@@ -102,20 +103,33 @@
                                     }
                                     else
                                     {
-                                        foreach (var Service in Services.Where(s => s.IsDeleted == false && s.IsHidden == false).OrderByDescending(s => s.SellCounter))
+                                        foreach (var Service in Services.Where(s => s.IsDeleted == false && s.IsHidden == false).OrderBy(x => x.SortingNumber))
                                         {
                                             string ServiceImage = null;
                                             if (Service.Images != null && Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
                                             {
                                                 ServiceImage = Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
                                             }
-                                            <div class="swiper-slide hvr-underline-from-center">
-                                                <a href="@Url.Action("View", "Services", new { Id = Service.Id })"><img src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100%" height="400"></a>
-                                                <div class="Tools">
+                                            <div class="keen-slider__slide slide-content number-slide">
+                                                <a href="@Url.Action("View", "Services", new { Id = Service.Id })"><img class="img-slider" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100%" height="400"></a>
+                                                <div class="Tools" style=" text-align: center;">
                                                     <div class="main_info">
-                                                        <h6><a class="text-black" href="@Url.Action("View", "Services", new { Id = Service.Id })">@(culture == "ar" ? Service.NameAr : Service.NameEn)</a></h6>
+                                                        <h6><a style="color: #a0bb3a!important;" class="text-black" href="@Url.Action("View", "Services", new { Id = Service.Id })">@(culture == "ar" ? Service.NameAr : Service.NameEn)</a></h6>
                                                     </div>
-                                                    <div class="sub_info"><span>@(Service.OfferPrice.HasValue ? Service.OfferPrice.Value : Service.OriginalPrice) @Website.SAR</span>@*<i class="fas fa-cart-plus fa-lg hvr-pulse-grow" onclick="AddToCart(this,'@Service.Id', 1)"></i>*@</div>
+                                                    @*<div class="sub_info">*@
+                                                    <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                                                        @if (Service.OfferPrice.HasValue)
+                                                        {
+                                                            <span style="text-decoration: line-through !important;">@Service.OriginalPrice @Website.SAR</span>
+                                                            <span style="color: #a0bb3a !important; font-weight: bold;">@Service.OfferPrice.Value @Website.SAR</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span style="font-weight: bold;">@Service.OriginalPrice @Website.SAR</span>
+                                                        }
+                                                    </div>
+
+                                                    @*</div>*@
                                                     <div class="clearfix"></div>
 
                                                 </div>
@@ -131,3 +145,54 @@
         </div>
     </section>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/keen-slider@6.8.5/keen-slider.min.js"></script>
+
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+         // تحديد إذا كانت اللغة RTL بناءً على المتغير culture
+      var isRTL = @Html.Raw(@Newtonsoft.Json.JsonConvert.SerializeObject(@culture == "ar"));
+
+            var sliderElement = document.querySelector("#my-keen-slider-cat");
+
+            // التحقق من وجود العنصر في DOM
+            if (sliderElement) {
+                new KeenSlider(sliderElement, {
+                    slides: {
+                        perView: 3, // عدد الشرائح الافتراضي
+                        spacing: 20, // المسافة بين الشرائح
+                    },
+                    breakpoints: {
+                        "(max-width: 768px)": { // للأجهزة المحمولة
+                            slides: {
+                                perView: "auto",
+                                spacing: 15,
+                            },
+                        },
+                        "(max-width: 1024px)": { // للأجهزة اللوحية
+                            slides: {
+                                perView: "auto",
+                                spacing: 15,
+                            },
+                        },
+                        "(min-width: 1025px)": { // للشاشات الأكبر
+                            slides: {
+                                perView: "auto",
+                                spacing: 20,
+                            },
+                        },
+                    },
+                    loop: true, // التمرير المستمر
+                    rtl: isRTL, // الاتجاه من اليمين لليسار
+                });
+            }
+            else {
+                console.warn("Element #my-keen-slider-cat-" + id + " not found in DOM.");
+            }
+
+    });
+
+    </script>
+}
