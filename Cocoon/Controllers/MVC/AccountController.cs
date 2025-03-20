@@ -289,6 +289,8 @@ namespace G4Fit.Controllers.MVC
                     Email = user.Email,
                     ImageUrl = user.ImageUrl,
                     CountryId = user.CountryId,
+                    weight = user.weight,
+                    length = user.length,
                 };
                 ViewBag.Countries = db.Cities.Where(s => s.IsDeleted == false).ToList();
                 return View(vm);
