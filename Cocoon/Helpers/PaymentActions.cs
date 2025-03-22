@@ -19,9 +19,11 @@ namespace G4Fit.Helpers
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
         public static string TerminalId = "g4fit";
-        public static string TerminalPassword = "URWAY@123";
-        public static string Secret = "eaffe62bff4872f25c228d19fd600f9401c1c0c949e33f72718760497a9794d5";
-        public static string Url = "https://payments-dev.urway-tech.com/URWAYPGService/transaction/jsonProcess/JSONrequest";
+        public static string TerminalPassword = "g4fit@URWAY_3280";
+        //public static string Secret = "eaffe62bff4872f25c228d19fd600f9401c1c0c949e33f72718760497a9794d5";
+        public static string Secret = "b2235a4c95acefa16e5e587aa32ae58a3cd6d963329a7dc46d4f1184b9cbb250";
+        //public static string Url = "https://payments-dev.urway-tech.com/URWAYPGService/transaction/jsonProcess/JSONrequest";
+        public static string Url = "https://payments.urway-tech.com/URWAYPGService/transaction/jsonProcess/JSONrequest";
 
         //public static string SHA256_HASH(string value)
         //{

@@ -913,6 +913,32 @@ namespace G4Fit.Controllers.API
                         }
                     }
 
+                    else if (model.PaymentMethod == PaymentMethod.Tamara)
+                    {
+
+                        var jsonResponse = await GetTamaraCheckoutUrl(UserOrder);
+                        var responseObject = JObject.Parse(jsonResponse);
+                        var url = (string)responseObject["checkout_url"];
+
+                        if (url != null)
+                        {
+                            ////save Payment Id 
+                            //var reference_id = (string)responseObject["id"];
+                            //UserOrder.Tabby_reference_id = reference_id;
+
+                            ////save reference_id
+                            //var paymentId = (string)responseObject["payment"]["id"];
+                            //UserOrder.Tabby_PaymentId = paymentId;
+                            //db.SaveChanges();
+                            baseResponse.Data = url;
+                            return Ok(baseResponse);
+                        }
+                        else
+                        {
+                            baseResponse.ErrorCode = Errors.SomethingIsWrong;
+                            return Content(HttpStatusCode.BadRequest, baseResponse);
+                        }
+                    }
                     else if (model.PaymentMethod == PaymentMethod.Cash)
                     {
                         UserOrder.CreatedOn = DateTime.Now.ToUniversalTime();
@@ -993,7 +1019,7 @@ namespace G4Fit.Controllers.API
                     foreach (var item in order.Items)
                     {
                         var Service = db.Services.FirstOrDefault(w => w.Id == item.ServiceId);
-                        var image = db.ServiceImages.FirstOrDefault(w => w.ServiceId == item.ServiceId);
+                        var image = db.ServiceImages.FirstOrDefault(w => w.ServiceId == item.ServiceId && !w.IsDeleted);
                         var category = db.SubCategories.FirstOrDefault(w => w.Id == Service.SubCategoryId);
                         var size = db.ServiceSizes.FirstOrDefault(w => w.Id == item.SizeId);
 
@@ -1001,12 +1027,12 @@ namespace G4Fit.Controllers.API
                         var orderItem = new TabbyOrderItem
                         {
                             title = Service.NameEn,
-                            description = Service.DescriptionEn,
+                            description = string.IsNullOrWhiteSpace(Service.DescriptionEn) ? "-" : Service.DescriptionEn,
                             quantity = item.Quantity,
                             unit_price = item.Price.ToString(),
                             discount_amount = "0.00",
                             reference_id = item.ServiceId.ToString(),
-                            image_url = domain + MediaControl.GetPath(FilePath.Service) + image.ImageUrl,
+                            image_url = image != null ? domain + MediaControl.GetPath(FilePath.Service) + image.ImageUrl : "",
                             Service_url = "",
                             category = category.NameEn,
                             size = size != null ? size.Size : null,
@@ -1026,8 +1052,10 @@ namespace G4Fit.Controllers.API
                             description = "description",
                             buyer = new
                             {
-                                phone = user.PhoneNumber,
-                                email = user.Email,
+                                //phone = user.PhoneNumber,
+                                //email = user.Email,
+                                phone = "+966500000001",
+                                email = "otp.success@tabby.ai",
                                 name = user.Name,
                                 //dob = "2019-08-24"
                             },
@@ -1076,9 +1104,9 @@ namespace G4Fit.Controllers.API
                         merchant_code = merchant_code, // Replace with your merchant code
                         merchant_urls = new
                         {
-                            success = domain + "/Orders/TabbyconfrimPayment?id=" + order.Id + "&api=true",
-                            cancel = domain + "/Orders/Failed",
-                            failure = domain + "/Orders/Failed"
+                            success = domain + "/Orders/TabbyconfirmPayment?id=" + order.Id + "&confirm=true", // تأكيد الدفع
+                            cancel = domain + "/Orders/TabbyconfirmPayment?id=" + order.Id + "&confirm=false", // إلغاء الدفع
+                            failure = domain + "/Orders/TabbyconfirmPayment?id=" + order.Id + "&confirm=false", // إلغاء الدفع
                         }
                     };
 
@@ -1133,6 +1161,155 @@ namespace G4Fit.Controllers.API
                 return null;
             }
         }
+
+        private async Task<string> GetTamaraCheckoutUrl(Order order)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var domain = Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+                    var apiUrl = "https://api-sandbox.tamara.co/checkout";
+                    var apiToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhY2NvdW50SWQiOiIwNTk3OWZiOS1lNWIxLTQxNmEtYmM4ZC1hNTQxYzVmODM5NTMiLCJ0eXBlIjoibWVyY2hhbnQiLCJzYWx0IjoiODMxMGMxMzM3MGMyNDM0YTI0MzdlMjFjNDdjODRkMDQiLCJyb2xlcyI6WyJST0xFX01FUkNIQU5UIl0sImlhdCI6MTczNDI4MTQzMSwiaXNzIjoiVGFtYXJhIn0.ZOD80Iore_pPV937iNN6UOQwUBubz3SiCZd65YPGr0vvCR6OpAAwMHqGGhP2RymZAvX42zz3jPJoneLvV2u708mtQKAVZb2RDOH2St5o4gPTOU0XDLoAS4Rhaz0Loi_VHdOtsa-tfyGBmdb92bU0QHu9JBSOlc167hV-iwtxGMY6rWhURPvXiRhAR21vf2HImQCY51GU1yQaNsBt5aSwL8a-DEinIERAuyV4XAZhYuRu3rD5qUl11Ugbu5WVOyN87Aboyb95zPD71Lr3-cDP6VtdgnbHzBp1QR4axepH3bjjczr8TwM_3yk9VGhM0Us1fX8NFGTo2VdpKs9NVa6eJQ"; // Replace with your Tamara API token
+
+                    var user = order.User;
+                    var address = user.Address;
+
+                    // Prepare order items
+                    var orderItems = order.Items.Select(item =>
+                    {
+                        var service = db.Services.FirstOrDefault(w => w.Id == item.ServiceId);
+                        var image = db.ServiceImages.FirstOrDefault(w => w.ServiceId == item.ServiceId && !w.IsDeleted);
+                        var category = db.SubCategories.FirstOrDefault(w => w.Id == service.SubCategoryId);
+                        var size = db.ServiceSizes.FirstOrDefault(w => w.Id == item.SizeId);
+
+                        return new
+                        {
+                            reference_id = item.ServiceId.ToString(),
+                            type = "physical", // أو "digital" إذا كان المنتج رقميًا
+                            name = service.NameEn,
+                            sku = item.ServiceId.ToString(),
+                            quantity = item.Quantity,
+                            unit_price = new
+                            {
+                                amount = item.Price.ToString("0.00"),
+                                currency = "SAR"
+                            },
+                            total_amount = new
+                            {
+                                amount = (item.Price * item.Quantity).ToString("0.00"),
+                                currency = "SAR"
+                            },
+                            image_url = image != null ? domain + MediaControl.GetPath(FilePath.Service) + image.ImageUrl : "",
+                            item_url = domain + "/Service/Details/" + item.ServiceId, // رابط المنتج
+                            category = category.NameEn,
+                            size = size != null ? size.Size : null
+                        };
+                    }).ToList();
+
+                    var discount = order.PackageDiscount + order.PromoDiscount + order.WalletDiscount;
+
+                    // Prepare request data
+                    var requestData = new
+                    {
+                        order_reference_id = order.Id.ToString(),
+                        order_number = order.Code, // رقم الطلب
+                        total_amount = new
+                        {
+                            amount = order.Total.ToString("0.00"),
+                            currency = "SAR"
+                        },
+                        description = "Order payment for " + order.Code, // وصف الطلب
+                        country_code = "SA", // رمز الدولة
+                        payment_type = "PAY_BY_INSTALMENTS", // نوع الدفع
+                        locale = "ar_SA", // اللغة
+                        consumer = new // تم تغيير buyer إلى consumer
+                        {
+                            first_name = user.Name,
+                            last_name = user.Name,
+                            phone_number = user.PhoneNumber,
+                            email = user.Email
+                        },
+                        shipping_address = new
+                        {
+                            first_name = user.Name,
+                            last_name = user.Name,
+                            line1 = address,
+                            city = user.City.NameEn,
+                            country_code = "SA"
+                        },
+                        tax_amount = new
+                        {
+                            amount = "0.00", // الضرائب (إذا كانت موجودة)
+                            currency = "SAR"
+                        },
+                        shipping_amount = new
+                        {
+                            amount = order.DeliveryFees.ToString("0.00"), // تكلفة الشحن
+                            currency = "SAR"
+                        },
+                        discount = new
+                        {
+                            name = "",
+                            amount = new
+                            {
+                                amount = discount.ToString("0.00"), // الخصم
+                                currency = "SAR"
+                            }
+                        },
+                        items = orderItems, // العناصر
+                        merchant_url = new
+                        {
+                            success = domain + "/Orders/TamaraConfirmPayment?id=" + order.Id + "&confirm=true" + "&api=true", // تأكيد الدفع
+                            cancel = domain + "/Orders/TamaraConfirmPayment?id=" + order.Id + "&confirm=false" + "&api=true", // إلغاء الدفع
+                            failure = domain + "/Orders/TamaraConfirmPayment?id=" + order.Id + "&confirm=false" + "&api=true",  // فشل الدفع
+                            notification = domain + "/TamaraWebhook" // رابط Webhook
+                        },
+                        instalments = 3, // عدد الأقساط
+                        platform = "YourPlatformName", // اسم المنصة
+                        is_mobile = false, // هل الطلب من جهاز محمول؟
+                        risk_assessment = new { }, // تقييم المخاطر (اختياري)
+                        additional_data = new { } // بيانات إضافية (اختياري)
+                    };
+
+                    // Set authorization header
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiToken);
+
+                    // Convert request data to JSON
+                    var jsonRequestData = JsonConvert.SerializeObject(requestData);
+                    var content = new StringContent(jsonRequestData, Encoding.UTF8, "application/json");
+
+                    // Send request to Tamara API
+                    var response = await client.PostAsync(apiUrl, content);
+
+                    // Read response
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseObject = JObject.Parse(jsonResponse);
+
+                        // Extract checkout URL
+                        var checkoutUrl = (string)responseObject["checkout_url"];
+                        if (!string.IsNullOrEmpty(checkoutUrl))
+                        {
+                            return jsonResponse;
+                        }
+                    }
+
+                    // Log error if request failed
+                    Console.WriteLine("Error: Unable to get Tamara checkout URL. Response: " + jsonResponse);
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                Console.WriteLine("Error: " + ex.Message);
+                return null;
+            }
+        }
+
 
         [HttpGet]
         [Route("currentorders")]
@@ -1323,8 +1500,8 @@ namespace G4Fit.Controllers.API
                 //    //await SMS.SendMessageAsync("2", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
                 //}
                 //else
-                    await SMS.SendTaqnyatMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
-                    //await SMS.SendMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+                await SMS.SendTaqnyatMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+                //await SMS.SendMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
 
 
                 // هنبعت ميل 

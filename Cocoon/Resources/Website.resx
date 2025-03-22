@@ -357,4 +357,7 @@
   <data name="RoleFieldIsRequired" xml:space="preserve">
     <value>Role is required</value>
   </data>
+  <data name="Tamara" xml:space="preserve">
+    <value>Tamara</value>
+  </data>
 </root>

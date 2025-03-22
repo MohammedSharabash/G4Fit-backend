@@ -691,6 +691,15 @@ namespace Cocoon.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tamara.
+        /// </summary>
+        public static string Tamara {
+            get {
+                return ResourceManager.GetString("Tamara", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total.
         /// </summary>
         public static string Total {

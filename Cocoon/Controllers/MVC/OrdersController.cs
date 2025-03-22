@@ -953,6 +953,26 @@ namespace G4Fit.Controllers.MVC
                         return View(model);
                     }
                 }
+                else if (model.PaymentMethod == PaymentMethod.Tamara)
+                {
+                    var url = await GetTamaraCheckoutUrl(UserOrder);
+                    if (url != null)
+                    {
+                        // Save Tamara reference ID and payment ID if needed
+                        UserOrder.Tamara_reference_id = UserOrder.Id.ToString(); // Adjust as needed
+                        db.SaveChanges();
+
+                        return Redirect(url);
+                    }
+                    else
+                    {
+                        TempData["PaymentError"] = true;
+                        ViewBag.Countries = db.Countries.Where(s => s.IsDeleted == false).ToList();
+                        ViewBag.Cities = db.Cities.Where(s => s.IsDeleted == false && s.Country.IsDeleted == false).ToList();
+                        return View(model);
+                    }
+                }
+
                 else
                 {
                     UserOrder.OrderStatus = OrderStatus.Placed;
@@ -999,8 +1019,8 @@ namespace G4Fit.Controllers.MVC
                     //    //await SMS.SendMessageAsync("2", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
                     //}
                     //else
-                        await SMS.SendTaqnyatMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
-                        //await SMS.SendMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+                    await SMS.SendTaqnyatMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+                    //await SMS.SendMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
 
 
                     // هنبعت ميل 
@@ -1015,6 +1035,78 @@ namespace G4Fit.Controllers.MVC
             else
             {
                 return RedirectToAction("Cart");
+            }
+        }
+        [HttpPost]
+        public async Task<ActionResult> TamaraWebhook(string tamaraToken)
+        {
+            try
+            {
+                // Verify the tamaraToken
+                var notificationToken = "3a2e0f16-dd2f-4f18-8de8-3e561c0087c6"; // Replace with your notification token
+                if (tamaraToken != notificationToken)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                }
+
+                // Read the request body
+                using (var reader = new StreamReader(Request.InputStream))
+                {
+                    var json = await reader.ReadToEndAsync();
+                    var notification = JObject.Parse(json);
+
+                    // Extract the order reference ID and status
+                    var orderReferenceId = (string)notification["order_reference_id"];
+                    var status = (string)notification["status"];
+
+                    // Find the order in the database
+                    var order = db.Orders.FirstOrDefault(o => o.Id.ToString() == orderReferenceId);
+                    if (order != null)
+                    {
+                        // Update the order status based on the notification
+                        switch (status)
+                        {
+                            case "approved":
+                                order.CreatedOn = DateTime.Now.ToUniversalTime();
+                                order.IsPaid = true;
+                                order.OrderStatus = OrderStatus.Placed;
+                                if (order.PackageId.HasValue == true)
+                                {
+                                    order.Package.NumberOfTimesUsed += 1;
+                                }
+                                foreach (var item in order.Items.Where(d => d.IsDeleted == false))
+                                {
+                                    item.Service.SellCounter += 1;
+                                }
+                                if (order.PromoId.HasValue == true)
+                                {
+                                    PromoCodeActions.ExecutePromo(order, order.Promo);
+                                }
+                                db.SaveChanges();
+
+                                // هنبعت ميل 
+                                #region send mail
+                                var userData = db.Users.Find(order.UserId);
+                                await SendMail(userData, order.Code, order.Id.ToString());
+                                #endregion
+                                TempData["OrderPlaced"] = true;
+                                TempData["Order"] = order;
+                                return RedirectToAction("Success");
+
+                        }
+
+                        db.SaveChanges();
+                        return RedirectToAction("Cart");
+                    }
+
+                    return new HttpStatusCodeResult(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                Console.WriteLine("Error processing Tamara webhook: " + ex.Message);
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -1116,169 +1208,6 @@ namespace G4Fit.Controllers.MVC
             }
             return true;
         }
-
-        private async Task<string> GetTabbyCheckoutUrl(Order order)
-        {
-            try
-            {
-                using (var client = new HttpClient()) // Create an instance of HttpClient
-                {
-                    //var domain = Request.RequestUri.GetLeftPart(UriPartial.Authority);
-                    var domain = Request.Url.GetLeftPart(UriPartial.Authority);
-
-                    var publicKey = "pk_test_0b12d816-6187-4ce2-b5bb-a4bd1e29dfb6"; // Replace with your public key
-                    var secret_key = "sk_test_e65f1167-311a-496c-94de-acb067614827"; // Replace with your Secret key
-                    var merchant_code = "g4fitonline";
-                    var user = order.User;
-                    //var tax = (order.SubTotal * order.StoreOrdersTaxs) / 100;
-                    var Address = user.Address;
-                    //var Address = db.UserAddresses.FirstOrDefault(s => s.Id == order.UserAddressId);
-                    List<TabbyOrderItem> orderItems = new List<TabbyOrderItem>();
-
-                    foreach (var item in order.Items)
-                    {
-                        var Service = db.Services.FirstOrDefault(w => w.Id == item.ServiceId);
-                        var image = db.ServiceImages.FirstOrDefault(w => w.ServiceId == item.ServiceId);
-                        var category = db.SubCategories.FirstOrDefault(w => w.Id == Service.SubCategoryId);
-                        var size = db.ServiceSizes.FirstOrDefault(w => w.Id == item.SizeId);
-
-                        // Create an anonymous object for each item
-                        var orderItem = new TabbyOrderItem
-                        {
-                            title = Service.NameEn,
-                            description = Service.DescriptionEn,
-                            quantity = item.Quantity,
-                            unit_price = item.Price.ToString(),
-                            discount_amount = "0.00",
-                            reference_id = item.ServiceId.ToString(),
-                            image_url = domain + MediaControl.GetPath(FilePath.Service) + image.ImageUrl,
-                            Service_url = "",
-                            category = category.NameEn,
-                            size = size != null ? size.Size : null,
-                        };
-
-                        // Add the item to the list
-                        orderItems.Add(orderItem);
-                    }
-                    var discount = order.PackageDiscount + order.PromoDiscount + order.WalletDiscount;
-                    // Define your request data
-                    var requestData = new
-                    {
-                        payment = new
-                        {
-                            amount = order.Total,
-                            currency = "SAR",
-                            description = "description",
-                            buyer = new
-                            {
-                                phone = user.PhoneNumber,
-                                email = user.Email,
-                                name = user.Name,
-                                //dob = "2019-08-24"
-                            },
-                            buyer_history = new
-                            {
-                                //registered_since = "2019-08-24T14:15:22Z",
-                                registered_since = user.CreatedOn.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                                loyalty_level = 0,
-                                wishlist_count = 0,
-                                is_social_networks_connected = true,
-                                is_phone_number_verified = true,
-                                is_email_verified = true
-                            },
-                            order = new
-                            {
-                                tax_amount = 0,
-                                shipping_amount = order.DeliveryFees,
-                                discount_amount = discount,
-                                reference_id = order.Id.ToString(),
-                                items = orderItems.ToArray() // Convert the list to an array
-                            },
-                            shipping_address = new
-                            {
-                                //city = Address.Name,
-                                city = user.City.NameEn,
-                                address = Address,
-                                zip = "-"
-                            },
-                            order_history = new[] // Add order history
-                            {
-                    new
-                    {
-                        purchased_at = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                        amount = order.Total,
-                        status = "new",
-                    }
-                },
-                            meta = new
-                            {
-                                order_id = order.Id.ToString(),
-                                customer = user.Id.ToString()
-                            }
-
-                        },
-                        lang = "ar",
-                        merchant_code = merchant_code, // Replace with your merchant code
-                        merchant_urls = new
-                        {
-                            success = domain + "/Orders/TabbyconfrimPayment?id=" + order.Id,
-                            cancel = domain + "/Orders/Failed",
-                            failure = domain + "/Orders/Failed"
-                        }
-                    };
-
-
-                    // Set the Authorization header
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", publicKey);
-
-                    // Convert request data to JSON
-                    var jsonRequestData = JsonConvert.SerializeObject(requestData);
-                    var content = new StringContent(jsonRequestData, Encoding.UTF8, "application/json");
-
-                    // Make the API call
-                    var response = await client.PostAsync("https://api.tabby.ai/api/v2/checkout", content);
-
-
-                    // Check if the response is successful
-                    if (response.IsSuccessStatusCode)
-                    {
-                        // Read the response content
-                        var jsonResponse = await response.Content.ReadAsStringAsync();
-                        var responseObject = JObject.Parse(jsonResponse);
-
-                        // Extract the URL from the response
-                        if (responseObject["configuration"] != null &&
-                            responseObject["configuration"]["available_products"] != null &&
-                            responseObject["configuration"]["available_products"]["installments"] != null)
-                        {
-                            var installments = (JArray)responseObject["configuration"]["available_products"]["installments"];
-                            var webUrl = (string)installments[0]["web_url"]; // Assuming there's only one installment
-
-                            return jsonResponse; // If you need the entire JSON response for further processing or logging
-                        }
-                        else
-                        {
-                            Console.WriteLine("Error: Installments data not found in the response.");
-                            return null;
-                        }
-                    }
-                    else
-                    {
-                        // Handle unsuccessful response
-                        Console.WriteLine("Error: " + response.ReasonPhrase);
-                        return null;
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions
-                Console.WriteLine("Error: " + ex.Message);
-                return null;
-            }
-        }
-
         [AllowAnonymous]
         public PartialViewResult _OrderFees()
         {
@@ -1442,10 +1371,384 @@ namespace G4Fit.Controllers.MVC
         //    }
         //}
 
-        #region confirm Payment
+        #region Tamara
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult> TabbyconfrimPayment(long id, bool api = false, bool confirm = true)
+        public async Task<ActionResult> TamaraConfirmPayment(long id, bool api = false, bool confirm = true)
+        {
+            if (confirm)
+            {
+                var UserOrder = db.Orders
+                    .FirstOrDefault(w => w.Id == id && w.OrderStatus == OrderStatus.Initialized && !w.IsDeleted);
+
+                if (UserOrder == null)
+                {
+                    TempData["PaymentFailed"] = "Order not found.";
+                    return RedirectToAction("Failed");
+                }
+
+                UserOrder.CreatedOn = DateTime.Now.ToUniversalTime();
+                UserOrder.IsPaid = true;
+                UserOrder.OrderStatus = OrderStatus.Placed;
+
+                if (UserOrder.PackageId.HasValue == true)
+                {
+                    UserOrder.Package.NumberOfTimesUsed += 1;
+                }
+
+                var Items = db.OrderItems.Where(d => !d.IsDeleted && d.OrderId == UserOrder.Id).ToList();
+                foreach (var item in Items)
+                {
+                    item.Service.SellCounter += 1;
+                }
+
+                if (UserOrder.PromoId.HasValue == true)
+                {
+                    PromoCodeActions.ExecutePromo(UserOrder, UserOrder.Promo);
+                }
+
+                db.SaveChanges();
+
+                
+                TempData["OrderPlaced"] = true;
+                TempData["Order"] = UserOrder;
+
+                // إرسال رسالة تأكيد للعميل
+                await SMS.SendTaqnyatMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+
+                if (api)
+                {
+                    return RedirectToAction("ApiSuccess");
+                }
+                return RedirectToAction("Success");
+            }
+
+            TempData["PaymentFailed"] = PaymentActions.HandleResponseStatusCode(culture, "Payment Failed");
+            string err = PaymentActions.HandleResponseStatusCode(culture, "Payment Failed");
+
+            if (api)
+            {
+                return RedirectToAction("Failed", new { error = err });
+            }
+            return RedirectToAction("Checkout");
+        }
+        private async Task<string> GetTamaraCheckoutUrl(Order order)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var domain = Request.Url.GetLeftPart(UriPartial.Authority);
+
+                    var apiUrl = "https://api-sandbox.tamara.co/checkout";
+                    var apiToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhY2NvdW50SWQiOiIwNTk3OWZiOS1lNWIxLTQxNmEtYmM4ZC1hNTQxYzVmODM5NTMiLCJ0eXBlIjoibWVyY2hhbnQiLCJzYWx0IjoiODMxMGMxMzM3MGMyNDM0YTI0MzdlMjFjNDdjODRkMDQiLCJyb2xlcyI6WyJST0xFX01FUkNIQU5UIl0sImlhdCI6MTczNDI4MTQzMSwiaXNzIjoiVGFtYXJhIn0.ZOD80Iore_pPV937iNN6UOQwUBubz3SiCZd65YPGr0vvCR6OpAAwMHqGGhP2RymZAvX42zz3jPJoneLvV2u708mtQKAVZb2RDOH2St5o4gPTOU0XDLoAS4Rhaz0Loi_VHdOtsa-tfyGBmdb92bU0QHu9JBSOlc167hV-iwtxGMY6rWhURPvXiRhAR21vf2HImQCY51GU1yQaNsBt5aSwL8a-DEinIERAuyV4XAZhYuRu3rD5qUl11Ugbu5WVOyN87Aboyb95zPD71Lr3-cDP6VtdgnbHzBp1QR4axepH3bjjczr8TwM_3yk9VGhM0Us1fX8NFGTo2VdpKs9NVa6eJQ"; // Replace with your Tamara API token
+
+                    var user = order.User;
+                    var address = user.Address;
+
+                    // Prepare order items
+                    var orderItems = order.Items.Select(item =>
+                    {
+                        var service = db.Services.FirstOrDefault(w => w.Id == item.ServiceId);
+                        var image = db.ServiceImages.FirstOrDefault(w => w.ServiceId == item.ServiceId && !w.IsDeleted);
+                        var category = db.SubCategories.FirstOrDefault(w => w.Id == service.SubCategoryId);
+                        var size = db.ServiceSizes.FirstOrDefault(w => w.Id == item.SizeId);
+
+                        return new
+                        {
+                            reference_id = item.ServiceId.ToString(),
+                            type = "physical", // أو "digital" إذا كان المنتج رقميًا
+                            name = service.NameEn,
+                            sku = item.ServiceId.ToString(),
+                            quantity = item.Quantity,
+                            unit_price = new
+                            {
+                                amount = item.Price.ToString("0.00"),
+                                currency = "SAR"
+                            },
+                            total_amount = new
+                            {
+                                amount = (item.Price * item.Quantity).ToString("0.00"),
+                                currency = "SAR"
+                            },
+                            image_url = image != null ? domain + MediaControl.GetPath(FilePath.Service) + image.ImageUrl : "",
+                            item_url = domain + "/Service/Details/" + item.ServiceId, // رابط المنتج
+                            category = category.NameEn,
+                            size = size != null ? size.Size : null
+                        };
+                    }).ToList();
+
+                    var discount = order.PackageDiscount + order.PromoDiscount + order.WalletDiscount;
+
+                    // Prepare request data
+                    var requestData = new
+                    {
+                        order_reference_id = order.Id.ToString(),
+                        order_number = order.Code, // رقم الطلب
+                        total_amount = new
+                        {
+                            amount = order.Total.ToString("0.00"),
+                            currency = "SAR"
+                        },
+                        description = "Order payment for " + order.Code, // وصف الطلب
+                        country_code = "SA", // رمز الدولة
+                        payment_type = "PAY_BY_INSTALMENTS", // نوع الدفع
+                        locale = "ar_SA", // اللغة
+                        consumer = new // تم تغيير buyer إلى consumer
+                        {
+                            first_name = user.Name,
+                            last_name = user.Name,
+                            phone_number = user.PhoneNumber,
+                            email = user.Email
+                        },
+                        shipping_address = new
+                        {
+                            first_name = user.Name,
+                            last_name = user.Name,
+                            line1 = address,
+                            city = user.City.NameEn,
+                            country_code = "SA"
+                        },
+                        tax_amount = new
+                        {
+                            amount = "0.00", // الضرائب (إذا كانت موجودة)
+                            currency = "SAR"
+                        },
+                        shipping_amount = new
+                        {
+                            amount = order.DeliveryFees.ToString("0.00"), // تكلفة الشحن
+                            currency = "SAR"
+                        },
+                        discount = new
+                        {
+                            name = "",
+                            amount = new
+                            {
+                                amount = discount.ToString("0.00"), // الخصم
+                                currency = "SAR"
+                            }
+                        },
+                        items = orderItems, // العناصر
+                        merchant_url = new
+                        {
+                            success = domain + "/Orders/TamaraConfirmPayment?id=" + order.Id + "&confirm=true", // تأكيد الدفع
+                            cancel = domain + "/Orders/TamaraConfirmPayment?id=" + order.Id + "&confirm=false", // إلغاء الدفع
+                            failure = domain + "/Orders/TamaraConfirmPayment?id=" + order.Id + "&confirm=false",  // فشل الدفع
+                            notification = domain + "/TamaraWebhook" // رابط Webhook
+                        },
+                        instalments = 3, // عدد الأقساط
+                        platform = "YourPlatformName", // اسم المنصة
+                        is_mobile = false, // هل الطلب من جهاز محمول؟
+                        risk_assessment = new { }, // تقييم المخاطر (اختياري)
+                        additional_data = new { } // بيانات إضافية (اختياري)
+                    };
+
+                    // Set authorization header
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiToken);
+
+                    // Convert request data to JSON
+                    var jsonRequestData = JsonConvert.SerializeObject(requestData);
+                    var content = new StringContent(jsonRequestData, Encoding.UTF8, "application/json");
+
+                    // Send request to Tamara API
+                    var response = await client.PostAsync(apiUrl, content);
+
+                    // Read response
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseObject = JObject.Parse(jsonResponse);
+
+                        // Extract checkout URL
+                        var checkoutUrl = (string)responseObject["checkout_url"];
+                        if (!string.IsNullOrEmpty(checkoutUrl))
+                        {
+                            return checkoutUrl;
+                        }
+                    }
+
+                    // Log error if request failed
+                    Console.WriteLine("Error: Unable to get Tamara checkout URL. Response: " + jsonResponse);
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                Console.WriteLine("Error: " + ex.Message);
+                return null;
+            }
+        }
+         #endregion
+
+
+        #region Tabby
+        private async Task<string> GetTabbyCheckoutUrl(Order order)
+        {
+            try
+            {
+                using (var client = new HttpClient()) // Create an instance of HttpClient
+                {
+                    //var domain = Request.RequestUri.GetLeftPart(UriPartial.Authority);
+                    var domain = Request.Url.GetLeftPart(UriPartial.Authority);
+
+                    var publicKey = "pk_test_0b12d816-6187-4ce2-b5bb-a4bd1e29dfb6"; // Replace with your public key
+                    var secret_key = "sk_test_e65f1167-311a-496c-94de-acb067614827"; // Replace with your Secret key
+                    var merchant_code = "g4fitonline";
+                    var user = order.User;
+                    //var tax = (order.SubTotal * order.StoreOrdersTaxs) / 100;
+                    var Address = user.Address;
+                    //var Address = db.UserAddresses.FirstOrDefault(s => s.Id == order.UserAddressId);
+                    List<TabbyOrderItem> orderItems = new List<TabbyOrderItem>();
+
+                    foreach (var item in order.Items)
+                    {
+                        var Service = db.Services.FirstOrDefault(w => w.Id == item.ServiceId);
+                        var image = db.ServiceImages.FirstOrDefault(w => w.ServiceId == item.ServiceId && !w.IsDeleted);
+                        var category = db.SubCategories.FirstOrDefault(w => w.Id == Service.SubCategoryId);
+                        var size = db.ServiceSizes.FirstOrDefault(w => w.Id == item.SizeId);
+
+                        // Create an anonymous object for each item
+                        var orderItem = new TabbyOrderItem
+                        {
+                            title = Service.NameEn,
+                            description = string.IsNullOrWhiteSpace(Service.DescriptionEn) ? "-" : Service.DescriptionEn,
+                            quantity = item.Quantity,
+                            unit_price = item.Price.ToString(),
+                            discount_amount = "0.00",
+                            reference_id = item.ServiceId.ToString(),
+                            image_url = image != null ? domain + MediaControl.GetPath(FilePath.Service) + image.ImageUrl : "",
+                            Service_url = "",
+                            category = category.NameEn,
+                            size = size != null ? size.Size : null,
+                        };
+
+                        // Add the item to the list
+                        orderItems.Add(orderItem);
+                    }
+                    var discount = order.PackageDiscount + order.PromoDiscount + order.WalletDiscount;
+                    // Define your request data
+                    var requestData = new
+                    {
+                        payment = new
+                        {
+                            amount = order.Total,
+                            currency = "SAR",
+                            description = "description",
+                            buyer = new
+                            {
+                                //phone = user.PhoneNumber,
+                                //  email = user.Email,
+                                phone = "+966500000001",
+                                email = "otp.success@tabby.ai",
+                                name = user.Name,
+                                //dob = "2019-08-24"
+                            },
+                            buyer_history = new
+                            {
+                                //registered_since = "2019-08-24T14:15:22Z",
+                                registered_since = user.CreatedOn.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                                loyalty_level = 0,
+                                wishlist_count = 0,
+                                is_social_networks_connected = true,
+                                is_phone_number_verified = true,
+                                is_email_verified = true
+                            },
+                            order = new
+                            {
+                                tax_amount = 0,
+                                shipping_amount = order.DeliveryFees,
+                                discount_amount = discount,
+                                reference_id = order.Id.ToString(),
+                                items = orderItems.ToArray() // Convert the list to an array
+                            },
+                            shipping_address = new
+                            {
+                                //city = Address.Name,
+                                city = user.City.NameEn,
+                                address = Address,
+                                zip = "-"
+                            },
+                            order_history = new[] // Add order history
+                            {
+                        new
+                        {
+                            purchased_at = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                            amount = order.Total,
+                            status = "new",
+                        }
+                    },
+                            meta = new
+                            {
+                                order_id = order.Id.ToString(),
+                                customer = user.Id.ToString()
+                            }
+
+                        },
+                        lang = "ar",
+                        merchant_code = merchant_code, // Replace with your merchant code
+                        merchant_urls = new
+                        {
+                            success = domain + "/Orders/TabbyconfirmPayment?id=" + order.Id + "&confirm=true", // تأكيد الدفع
+                            cancel = domain + "/Orders/TabbyconfirmPayment?id=" + order.Id + "&confirm=false", // إلغاء الدفع
+                            failure = domain + "/Orders/TabbyconfirmPayment?id=" + order.Id + "&confirm=false", // إلغاء الدفع
+                        }
+                    };
+
+
+                    // Set the Authorization header
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", publicKey);
+
+                    // Convert request data to JSON
+                    var jsonRequestData = JsonConvert.SerializeObject(requestData);
+                    var content = new StringContent(jsonRequestData, Encoding.UTF8, "application/json");
+
+                    // Make the API call
+                    var response = await client.PostAsync("https://api.tabby.ai/api/v2/checkout", content);
+
+
+                    // Check if the response is successful
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Read the response content
+                        var jsonResponse = await response.Content.ReadAsStringAsync();
+                        var responseObject = JObject.Parse(jsonResponse);
+
+                        // Extract the URL from the response
+                        if (responseObject["configuration"] != null &&
+                            responseObject["configuration"]["available_products"] != null &&
+                            responseObject["configuration"]["available_products"]["installments"] != null)
+                        {
+                            var installments = (JArray)responseObject["configuration"]["available_products"]["installments"];
+                            var webUrl = (string)installments[0]["web_url"]; // Assuming there's only one installment
+
+                            return jsonResponse; // If you need the entire JSON response for further processing or logging
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error: Installments data not found in the response.");
+                            return null;
+                        }
+                    }
+                    else
+                    {
+                        // Handle unsuccessful response
+                        Console.WriteLine("Error: " + response.ReasonPhrase);
+                        return null;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                Console.WriteLine("Error: " + ex.Message);
+                return null;
+            }
+        }
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult> TabbyconfirmPayment(long id, bool api = false, bool confirm = true)
         {
             if (confirm)
             {
@@ -1481,8 +1784,8 @@ namespace G4Fit.Controllers.MVC
                 //    //await SMS.SendMessageAsync("2", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
                 //}
                 //else
-                    await SMS.SendTaqnyatMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
-                    //await SMS.SendMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+                await SMS.SendTaqnyatMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
+                //await SMS.SendMessageAsync("966", UserOrder.User.PhoneNumber, $"تم إتمام عمليه تنفيذ الطلب رقم  [{UserOrder.Code}]");
 
                 if (api)
                 {
@@ -1500,8 +1803,6 @@ namespace G4Fit.Controllers.MVC
             return RedirectToAction("Checkout");
 
         }
-        #endregion
-
         private async Task<bool> TabbyCapturepayment(Order order, HttpRequestBase request)
         {
             try
@@ -1521,7 +1822,7 @@ namespace G4Fit.Controllers.MVC
                 foreach (var item in order.Items)
                 {
                     var Service = db.Services.FirstOrDefault(w => w.Id == item.ServiceId);
-                    var image = db.ServiceImages.FirstOrDefault(w => w.ServiceId == item.ServiceId);
+                    var image = db.ServiceImages.FirstOrDefault(w => w.ServiceId == item.ServiceId && !w.IsDeleted);
                     var category = db.SubCategories.FirstOrDefault(w => w.Id == Service.SubCategoryId);
                     var size = db.ServiceSizes.FirstOrDefault(w => w.Id == item.SizeId);
 
@@ -1529,12 +1830,12 @@ namespace G4Fit.Controllers.MVC
                     var orderItem = new TabbyOrderItem
                     {
                         title = Service.NameEn,
-                        description = Service.DescriptionEn,
+                        description = string.IsNullOrWhiteSpace(Service.DescriptionEn) ? "-" : Service.DescriptionEn,
                         quantity = item.Quantity,
                         unit_price = item.Price.ToString(),
                         discount_amount = "0.00",
                         reference_id = item.ServiceId.ToString(),
-                        image_url = domain + MediaControl.GetPath(FilePath.Service) + image.ImageUrl,
+                        image_url = image != null ? domain + MediaControl.GetPath(FilePath.Service) + image.ImageUrl : "",
                         Service_url = "",
                         category = category.NameEn,
                         size = size != null ? size.Size : null,
@@ -1605,6 +1906,8 @@ namespace G4Fit.Controllers.MVC
             }
         }
 
+
+        #endregion
 
         public ActionResult ResultApi(long Id, string PaymentId, string TranId, string ECI, string Result, string TrackId, string ResponseCode, string AuthCode, string RRN, string responseHash, string amount, string cardBrand)
         {

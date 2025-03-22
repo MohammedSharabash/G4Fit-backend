@@ -42,6 +42,7 @@
                                             <option selected value="@G4Fit.Models.Enums.PaymentMethod.Cash">@(culture == "ar" ? "كاش" : "Cash")</option>
                                             <option value="@G4Fit.Models.Enums.PaymentMethod.UrWay">@(culture == "ar" ? "اونلاين - يور واي" : "Online- UrWay")</option>
                                             <option value="@G4Fit.Models.Enums.PaymentMethod.Tabby">@(culture == "ar" ? "تابي" : "Tabby")</option>
+                                            <option value="@G4Fit.Models.Enums.PaymentMethod.Tamara">@(culture == "ar" ? "تمارا" : "Tamara")</option>
                                         </select>
                                         @*@Html.EnumDropDownListFor(s => s.PaymentMethod, new { @class = "form-control text-center" })*@
                                         @Html.ValidationMessageFor(s => s.PaymentMethod, "", new { @class = "text-danger" })
@@ -87,7 +88,7 @@
 </section>
 
 @section Scripts{
-    <script>
+    @*<script>
         $("#CountryId").change(function () {
             var Id = $(this).val();
             var culture = '@culture';
@@ -119,7 +120,7 @@
         })
 
         $("#CountryId").trigger("change");
-    </script>
+    </script>*@
     @if (TempData["PaymentFailed"] != null)
     {
         <script>

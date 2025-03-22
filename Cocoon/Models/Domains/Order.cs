@@ -27,6 +27,8 @@ namespace G4Fit.Models.Domains
         public decimal Total { get; set; }
         public string Tabby_PaymentId { get; set; } = "-1";
         public string Tabby_reference_id { get; set; } = "-1";
+        public string TamaraPaymentId { get; set; } = "-1";
+        public string Tamara_reference_id { get; set; } = "-1";
         public virtual ICollection<OrderItem> Items { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public int InBodyCount { get; set; } = 0;

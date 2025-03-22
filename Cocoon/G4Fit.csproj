@@ -474,6 +474,10 @@
     <Compile Include="Migrations\202501191323187_ConnectedCategoryId.Designer.cs">
       <DependentUpon>202501191323187_ConnectedCategoryId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202503210854337_tamara.cs" />
+    <Compile Include="Migrations\202503210854337_tamara.Designer.cs">
+      <DependentUpon>202503210854337_tamara.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Data\ApplicationDbContext.cs" />
     <Compile Include="Models\Domains\ApplicationUser.cs" />
@@ -2024,6 +2028,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202501191323187_ConnectedCategoryId.resx">
       <DependentUpon>202501191323187_ConnectedCategoryId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202503210854337_tamara.resx">
+      <DependentUpon>202503210854337_tamara.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Website.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

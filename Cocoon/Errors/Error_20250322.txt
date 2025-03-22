@@ -1,0 +1,78 @@
+
+PGLog 22/03/2025 06:47:56 ص
+Start sending GetResponse()
+
+
+2025-03-22 06:47:57
+finish sending GetResponse()
+
+
+2025-03-22 06:48:00
+GetResponseStream is done
+
+
+2025-03-22 06:48:01
+sr is done
+
+
+2025-03-22 06:48:04
+content is done
+
+
+2025-03-22 06:48:21
+dvresponse is done {
+  "tranid": "",
+  "result": "UnSuccessful",
+  "reason": "Request authentication failed.",
+  "authCode": "",
+  "trackid": "",
+  "terminalid": "",
+  "udf1": "",
+  "cardBrand": "",
+  "udf2": "",
+  "responseCode": "659",
+  "rrn": ""
+}
+
+
+2025-03-22 06:48:21
+يتعذر إجراء ربط في وقت التشغيل على مرجع فارغ
+
+2025-03-22 06:51:09
+Start sending GetResponse()
+
+
+2025-03-22 06:51:10
+finish sending GetResponse()
+
+
+2025-03-22 06:51:19
+GetResponseStream is done
+
+
+2025-03-22 06:51:20
+sr is done
+
+
+2025-03-22 06:51:28
+content is done
+
+
+2025-03-22 06:51:28
+dvresponse is done {
+  "tranid": "",
+  "result": "UnSuccessful",
+  "reason": "Request authentication failed.",
+  "authCode": "",
+  "trackid": "",
+  "terminalid": "",
+  "udf1": "",
+  "cardBrand": "",
+  "udf2": "",
+  "responseCode": "659",
+  "rrn": ""
+}
+
+
+2025-03-22 06:51:28
+يتعذر إجراء ربط في وقت التشغيل على مرجع فارغ

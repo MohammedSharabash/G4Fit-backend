@@ -32,7 +32,7 @@
                             <td>
                                 @if (Service.Images.Count > 0)
                                 {
-                                    <img src="@Url.Content(Service.Images.First().ImageUrl != null ? ("~/Content/Images/Services/"+ Service.Images.First().ImageUrl) : "~/Content/assets/imgs/unnamed.jpg")" width="150" height="50" />
+                                    <img src="@Url.Content(Service.Images.Where(s => s.IsDeleted == false).First().ImageUrl != null ? ("~/Content/Images/Services/"+ Service.Images.Where(s => s.IsDeleted == false).First().ImageUrl) : "~/Content/assets/imgs/unnamed.jpg")" width="150" height="50" />
 
                                 }
                                 else

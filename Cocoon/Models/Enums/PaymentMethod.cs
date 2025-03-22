@@ -14,6 +14,8 @@ namespace G4Fit.Models.Enums
         [Display(Name = "Online", ResourceType = typeof(Website))]
         UrWay,
         [Display(Name = "Tabby", ResourceType = typeof(Website))]
-        Tabby
+        Tabby,
+        [Display(Name = "Tamara", ResourceType = typeof(Website))]
+        Tamara
     }
 }

@@ -357,4 +357,7 @@
   <data name="RoleFieldIsRequired" xml:space="preserve">
     <value>اختيار الصلاحيه مطلوب</value>
   </data>
+  <data name="Tamara" xml:space="preserve">
+    <value>تمارا</value>
+  </data>
 </root>
