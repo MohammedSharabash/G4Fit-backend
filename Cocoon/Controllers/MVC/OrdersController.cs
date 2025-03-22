@@ -1177,30 +1177,33 @@ namespace G4Fit.Controllers.MVC
 </html>
 ";
 
+                string Email = ConfigurationManager.AppSettings["Email"];
+                string Password = ConfigurationManager.AppSettings["Password"];
+                string Host = ConfigurationManager.AppSettings["Host"];
+                int Port = Convert.ToInt32(ConfigurationManager.AppSettings["Port"]);
 
-                var fromAddress = new MailAddress("infratrics1@gmail.com", "G4Fit");
-                var toAddress = new MailAddress(user.Email, user.Name);
-                //var toAddress = new MailAddress("ashrafkotb1512@gmail.com", "ashraf");
-                const string fromPassword = "gfdhjnrirgcvpqse";
                 string subject = "تفاصيل طلبك من G4Fit - كود الطلب: " + code;
 
-                var smtp = new SmtpClient
+                MailMessage message = new MailMessage();
+                message.From = new MailAddress(Email, "G4Fit");
+                message.To.Add(new MailAddress(user.Email, user.Name));
+
+                message.Subject = subject;
+                message.Body = emailBody;
+                message.IsBodyHtml = true;
+
+                SmtpClient smtp = new SmtpClient()
                 {
-                    Host = "smtp.gmail.com",
-                    Port = 587,
+                    Port = Port,
+                    Host = Host,
                     EnableSsl = true,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
                     UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+
+                    Credentials = new NetworkCredential(Email, Password),
+                    DeliveryMethod = SmtpDeliveryMethod.Network
                 };
 
-                using (var message = new MailMessage(fromAddress, toAddress))
-                {
-                    message.Subject = subject;
-                    message.Body = emailBody;
-                    message.IsBodyHtml = true; // تمكين دعم HTML للبريد الإلكتروني
-                    smtp.Send(message);
-                }
+                smtp.Send(message);
             }
             catch (Exception)
             {
@@ -1409,7 +1412,7 @@ namespace G4Fit.Controllers.MVC
 
                 db.SaveChanges();
 
-                
+
                 TempData["OrderPlaced"] = true;
                 TempData["Order"] = UserOrder;
 
@@ -1579,7 +1582,7 @@ namespace G4Fit.Controllers.MVC
                 return null;
             }
         }
-         #endregion
+        #endregion
 
 
         #region Tabby
