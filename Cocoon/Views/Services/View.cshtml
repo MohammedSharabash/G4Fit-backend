@@ -61,11 +61,11 @@
         <div class="col-xs-12 col-md-12 text-center m-auto">
             <hr style="margin:40px 0px" />
             <div class="mb-3 pb-3">
-                <div class="Service-details__hot">
-                    <h4>
-                        <strong><i class="fa fa-star" style="color:gold"></i> @(culture == "ar" ? "اختيار المدرب  " : "Choose Trainer") <i class="fa fa-star" style="color:gold"></i></strong>
-                    </h4>
-                </div>
+                @*<div class="Service-details__hot">
+                        <h4>
+                            <strong><i class="fa fa-star" style="color:gold"></i> @(culture == "ar" ? "اختيار المدرب  " : "Choose Trainer") <i class="fa fa-star" style="color:gold"></i></strong>
+                        </h4>
+                    </div>*@
                 <div class="col-lg-12 col-md-12 text-center m-auto">
                     <div class="Services-details-desc">
 
@@ -92,7 +92,7 @@
                             <strong>@Website.Quantity</strong>
                             <div class="input-counter">
                                 <span class="minus-btn"><i class='fa fa-minus'></i></span>
-                                <input type="text" value="1" min="1" max="@Model.Inventory">
+                                <input type="number" value="1" min="1" max="@Model.Inventory">
                                 <span class="plus-btn"><i class='fa fa-plus'></i></span>
                             </div>
                             <br />
@@ -173,7 +173,7 @@
                         <div class="Services-add-to-cart">
                             <strong>@Website.StartDate</strong>
                             <div class="Start-input-counter">
-                                <input type="date" id="dateInput" min="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                <input type="date" id="dateInput" min="@DateTime.Now.ToString("yyyy-MM-dd")" style="text-align: left;" value="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")">
                             </div>
                             <br />
                             <br />
@@ -222,7 +222,7 @@
         });
         $('.input-counter').each(function () {
             var spinner = jQuery(this),
-                input = spinner.find('input[type="text"]'),
+                input = spinner.find('input[type="number"]'),
                 btnUp = spinner.find('.plus-btn'),
                 btnDown = spinner.find('.minus-btn'),
                 min = input.attr('min'),

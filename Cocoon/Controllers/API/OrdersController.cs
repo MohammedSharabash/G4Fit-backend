@@ -795,6 +795,161 @@ namespace G4Fit.Controllers.API
             baseResponse.Data = basketDetailsDTO;
             return Ok(baseResponse);
         }
+        
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("Beforecheckout")]
+        public async Task<IHttpActionResult> BeforeCheckOut(CheckOutDTO model)
+        {
+            if (model.type != OrderUserType.Normal && model.ImageBase64.IsNullOrWhiteSpace())
+            {
+                baseResponse.ErrorCode = Errors.FailedToUploadImage;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
+            }
+            CurrentUserId = User.Identity.GetUserId();
+            var Headers = HttpContext.Current.Request.Headers;
+            string AnonymousKey = string.Empty;
+            try
+            {
+                if (Headers.AllKeys.Contains("AnonymousKey") && Headers.GetValues("AnonymousKey").Any())
+                    AnonymousKey = Headers.GetValues("AnonymousKey").FirstOrDefault();
+            }
+            catch (Exception)
+            {
+            }
+
+            if (string.IsNullOrEmpty(CurrentUserId) && User.Identity.IsAuthenticated == false /*&& string.IsNullOrEmpty(AnonymousKey)*/)
+            {
+                baseResponse.ErrorCode = Errors.OrderNotFound;
+                return Content(HttpStatusCode.NotFound, baseResponse);
+            }
+
+            ApplicationUser user = null;
+            if (!string.IsNullOrEmpty(CurrentUserId))
+            {
+                user = UserManager.FindById(CurrentUserId);
+                if (user == null)
+                {
+                    baseResponse.ErrorCode = Errors.UserNotAuthorized;
+                    return Content(HttpStatusCode.BadRequest, baseResponse);
+                }
+            }
+
+            if (user != null && (user.CountryId.HasValue == false || user.PhoneNumber == null))
+            {
+                baseResponse.ErrorCode = Errors.UserDoesNotHaveCountry;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
+            }
+
+            if (user != null && user.PhoneNumberConfirmed == false)
+            {
+                baseResponse.ErrorCode = Errors.UserNotVerified;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
+            }
+
+            var UserOrder = db.Orders.FirstOrDefault(x => ((x.UserId == CurrentUserId && x.UserId != null) /*|| x.UnknownUserKeyIdentifier == AnonymousKey*/) && x.OrderStatus == OrderStatus.Initialized && !x.IsDeleted);
+
+            if (UserOrder == null)
+            {
+                baseResponse.ErrorCode = Errors.UserBasketIsEmpty;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
+            }
+            string ImageName = null;
+            if (!string.IsNullOrEmpty(model.ImageBase64))
+            {
+                var Image = Convert.FromBase64String(model.ImageBase64);
+                ImageName = MediaControl.Upload(FilePath.Other, Image, MediaType.Image);
+                UserOrder.UserTypeImageUrl = ImageName;
+            }
+            if (model.type != UserOrder.UserType)
+            {
+                UserOrder.UserType = model.type;
+                foreach (var item in UserOrder.Items)
+                {
+                    if (UserOrder.UserType == OrderUserType.Normal)
+                        item.Price = item.Service.OfferPrice.HasValue == true ? item.Service.OfferPrice.Value : item.Service.OriginalPrice;
+
+                    else
+                        item.Price = item.Service.SpecialOfferPrice.HasValue == true ? item.Service.SpecialOfferPrice.Value : item.Service.SpecialPrice;
+                    db.SaveChanges();
+                    if (item.Service.IsTimeBoundService)
+                        item.SubTotal = item.Price;
+                    else
+                        item.SubTotal = item.Price * item.Quantity;
+                    db.SaveChanges();
+                }
+
+                OrderActions.CalculateOrderPrice(UserOrder);
+                db.SaveChanges();
+            }
+            var Package = db.UserPackages.FirstOrDefault(w => w.IsDeleted == false && w.IsActive == true && w.UserId == CurrentUserId && w.IsPaid == true);
+            if (Package != null)
+            {
+                UserOrder.PackageId = Package.Id;
+                UserOrder.Package = Package;
+                OrderActions.CalculateOrderPrice(UserOrder);
+                db.SaveChanges();
+            }
+            CheckOutPageDataDTO basketDetailsDTO = new CheckOutPageDataDTO()
+            {
+                DeliveryFees = UserOrder.DeliveryFees,
+                Discount = UserOrder.PackageDiscount + UserOrder.PromoDiscount,
+                SubTotal = UserOrder.SubTotal,
+                Total = UserOrder.Total,
+            };
+
+            if (UserOrder.PackageId.HasValue == true)
+            {
+                basketDetailsDTO.IsHavePackageDiscount = true;
+                basketDetailsDTO.PackageDiscount = UserOrder.PackageDiscount;
+            }
+
+            if (UserOrder.PromoId.HasValue == true)
+            {
+                basketDetailsDTO.IsHavePromoDiscount = true;
+                basketDetailsDTO.PromoDiscount = UserOrder.PromoDiscount;
+                basketDetailsDTO.PromoText = UserOrder.Promo.Text;
+            }
+
+            if (UserOrder.WalletDiscount > 0)
+            {
+                basketDetailsDTO.IsHaveWalletDiscount = true;
+                basketDetailsDTO.WalletDiscount = UserOrder.WalletDiscount;
+            }
+
+            if (UserOrder.Items != null && UserOrder.Items.Count(s => s.IsDeleted == false) > 0)
+            {
+                //long CategoryId = UserOrder.Items.FirstOrDefault(w => w.IsDeleted == false).Service.SubCategory.SubCategoryId;
+                long CategoryId = UserOrder.Items.FirstOrDefault(w => w.IsDeleted == false).Service.SubCategoryId;
+                var SimilarServices = db.Services.Where(s => s.IsDeleted == false && s.IsHidden == false && (s.Inventory > 0 || s.IsTimeBoundService) && s.SubCategoryId == CategoryId).OrderByDescending(s => s.SellCounter).Take(6).ToList();
+                foreach (var Service in SimilarServices)
+                {
+                    ServiceDTO ServiceDTO = new ServiceDTO()
+                    {
+                        Id = Service.Id,
+                        Description = !string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? Service.DescriptionAr : Service.DescriptionEn,
+                        Name = !string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? Service.NameAr : Service.NameEn,
+                        HasDiscount = Service.OfferPrice.HasValue == true ? true : false,
+                        Price = Service.OriginalPrice.ToString() + (!string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? " ريال سعودي" : "SAR"),
+                        PriceAfter = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value.ToString() + (!string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? " ريال سعودي" : "SAR") : null,
+                        Image = Service.Images != null && Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null ? "/Content/Images/Services/" + Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl : null,
+                        IsFavourite = Service.FavouriteUsers != null && Service.FavouriteUsers.Any(s => s.IsDeleted == false && s.UserId == CurrentUserId) == true ? true : false
+                    };
+                    if (Service.Offers != null)
+                    {
+                        var Offer = Service.Offers.FirstOrDefault(s => s.IsDeleted == false && s.IsFinished == false);
+                        if (Offer != null)
+                        {
+                            ServiceDTO.DiscountPercentage = Offer.Percentage;
+                        }
+                    }
+                    basketDetailsDTO.SimilarServices.Add(ServiceDTO);
+                }
+            }
+
+            baseResponse.Data = basketDetailsDTO;
+            return Ok(baseResponse);
+        }
 
         [HttpPost]
         [Route("checkout")]

@@ -1975,7 +1975,7 @@ namespace G4Fit.Controllers.MVC
         }
         public ActionResult Invoice(long? OrderId)
         {
-            var Order = db.Orders.FirstOrDefault(s => s.Id == OrderId && s.OrderStatus == OrderStatus.Placed && s.UserId == CurrentUserId);
+            var Order = db.Orders.FirstOrDefault(s => s.Id == OrderId && s.OrderStatus == OrderStatus.Placed /*&& s.UserId == CurrentUserId*/);
             if (Order == null)
             {
                 return RedirectToAction("Index", "Home");
