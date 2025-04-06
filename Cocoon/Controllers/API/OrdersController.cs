@@ -101,7 +101,9 @@ namespace G4Fit.Controllers.API
 
             var city = db.Cities.FirstOrDefault(s => s.IsDeleted == false && s.Id == user.CityId);
             var DeliveryFees = city?.DeliveryFees;
-            if (UserOrder == null)
+            bool CheckEmpty = UserOrder == null ? true : !db.OrderItems.Any(x => !x.IsDeleted);
+
+            if (CheckEmpty)
             {
                 using (var Transaction = db.Database.BeginTransaction())
                 {
@@ -153,54 +155,60 @@ namespace G4Fit.Controllers.API
                     }
                 }
             }
+
             else
             {
-                using (var Transaction = db.Database.BeginTransaction())
-                {
-                    try
-                    {
-                        var OrderItem = db.OrderItems.FirstOrDefault(x => x.OrderId == UserOrder.Id && x.ServiceId == model.ServiceId && !x.IsDeleted && x.SizeId == model.SizeId && x.ColorId == model.ColorId);
-                        if (OrderItem == null)
-                        {
-                            OrderItem orderItem = new OrderItem()
-                            {
-                                OrderId = UserOrder.Id,
-                                Price = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value : Service.OriginalPrice,
-                                ServiceId = model.ServiceId,
-                                Quantity = model.Quantity,
-                                SubTotal = Service.OfferPrice.HasValue == true ? model.Quantity * Service.OfferPrice.Value : model.Quantity * Service.OriginalPrice,
-                            };
-                            if (model.SizeId.HasValue && model.SizeId.Value > 0)
-                            {
-                                orderItem.SizeId = model.SizeId;
-                            }
-                            if (model.ColorId.HasValue && model.ColorId.Value > 0)
-                            {
-                                orderItem.ColorId = model.ColorId;
-                            }
-                            UserOrder.Items.Add(orderItem);
-                        }
-                        else
-                        {
-                            OrderItem.Quantity += model.Quantity;
-                            OrderItem.SubTotal = OrderItem.Price * OrderItem.Quantity;
-                            CRUD<OrderItem>.Update(OrderItem);
-                        }
-
-                        UserOrder.InBodyCount = (Service.InBodyCount > UserOrder.InBodyCount) ? Service.InBodyCount : UserOrder.InBodyCount;
-                        CRUD<Order>.Update(UserOrder);
-                        OrderActions.CalculateOrderPrice(UserOrder);
-                        db.SaveChanges();
-                        Transaction.Commit();
-                    }
-                    catch (Exception ex)
-                    {
-                        Transaction.Rollback();
-                        baseResponse.ErrorCode = Errors.SomethingIsWrong;
-                        return Content(HttpStatusCode.InternalServerError, baseResponse);
-                    }
-                }
+                baseResponse.ErrorCode = Errors.BasketAlreadyHaveItem;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
             }
+            //else
+            //{
+            //    using (var Transaction = db.Database.BeginTransaction())
+            //    {
+            //        try
+            //        {
+            //            var OrderItem = db.OrderItems.FirstOrDefault(x => x.OrderId == UserOrder.Id && x.ServiceId == model.ServiceId && !x.IsDeleted && x.SizeId == model.SizeId && x.ColorId == model.ColorId);
+            //            if (OrderItem == null)
+            //            {
+            //                OrderItem orderItem = new OrderItem()
+            //                {
+            //                    OrderId = UserOrder.Id,
+            //                    Price = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value : Service.OriginalPrice,
+            //                    ServiceId = model.ServiceId,
+            //                    Quantity = model.Quantity,
+            //                    SubTotal = Service.OfferPrice.HasValue == true ? model.Quantity * Service.OfferPrice.Value : model.Quantity * Service.OriginalPrice,
+            //                };
+            //                if (model.SizeId.HasValue && model.SizeId.Value > 0)
+            //                {
+            //                    orderItem.SizeId = model.SizeId;
+            //                }
+            //                if (model.ColorId.HasValue && model.ColorId.Value > 0)
+            //                {
+            //                    orderItem.ColorId = model.ColorId;
+            //                }
+            //                UserOrder.Items.Add(orderItem);
+            //            }
+            //            else
+            //            {
+            //                OrderItem.Quantity += model.Quantity;
+            //                OrderItem.SubTotal = OrderItem.Price * OrderItem.Quantity;
+            //                CRUD<OrderItem>.Update(OrderItem);
+            //            }
+
+            //            UserOrder.InBodyCount = (Service.InBodyCount > UserOrder.InBodyCount) ? Service.InBodyCount : UserOrder.InBodyCount;
+            //            CRUD<Order>.Update(UserOrder);
+            //            OrderActions.CalculateOrderPrice(UserOrder);
+            //            db.SaveChanges();
+            //            Transaction.Commit();
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            Transaction.Rollback();
+            //            baseResponse.ErrorCode = Errors.SomethingIsWrong;
+            //            return Content(HttpStatusCode.InternalServerError, baseResponse);
+            //        }
+            //    }
+            //}
             return Ok(baseResponse);
         }
 
@@ -260,7 +268,9 @@ namespace G4Fit.Controllers.API
 
             var city = db.Cities.FirstOrDefault(s => s.IsDeleted == false && s.Id == user.CityId);
             var DeliveryFees = city?.DeliveryFees;
-            if (UserOrder == null)
+            bool CheckEmpty = UserOrder == null ? true : !db.OrderItems.Any(x => !x.IsDeleted);
+
+            if (CheckEmpty)
             {
                 using (var Transaction = db.Database.BeginTransaction())
                 {
@@ -287,6 +297,11 @@ namespace G4Fit.Controllers.API
                             ServiceId = model.ServiceId,
                             ColorId = model.trainerId,
                             Quantity = Service.ServiceDays,
+                            RemainServiceDays = Service.ServiceDays,
+                            FreezingDays = Service.ServiceFreezingDays,
+                            RemainFreezingDays = Service.ServiceFreezingDays,
+                            FreezingTimes = Service.ServiceFreezingTimes,
+                            RemainFreezingTimes = Service.ServiceFreezingTimes,
                             StartDate = model.StartDate,
                             SubTotal = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value : Service.OriginalPrice,
                         };
@@ -307,40 +322,45 @@ namespace G4Fit.Controllers.API
             }
             else
             {
-                using (var Transaction = db.Database.BeginTransaction())
-                {
-                    try
-                    {
-                        var OrderItem = db.OrderItems.FirstOrDefault(x => x.OrderId == UserOrder.Id && x.ServiceId == model.ServiceId && !x.IsDeleted);
-                        if (OrderItem == null)
-                        {
-                            OrderItem orderItem = new OrderItem()
-                            {
-                                OrderId = UserOrder.Id,
-                                Price = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value : Service.OriginalPrice,
-                                ServiceId = model.ServiceId,
-                                ColorId = model.trainerId,
-                                Quantity = Service.ServiceDays,
-                                StartDate = model.StartDate,
-                                SubTotal = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value : Service.OriginalPrice,
-                            };
-
-                            UserOrder.Items.Add(orderItem);
-                        }
-
-                        CRUD<Order>.Update(UserOrder);
-                        OrderActions.CalculateOrderPrice(UserOrder);
-                        db.SaveChanges();
-                        Transaction.Commit();
-                    }
-                    catch (Exception ex)
-                    {
-                        Transaction.Rollback();
-                        baseResponse.ErrorCode = Errors.SomethingIsWrong;
-                        return Content(HttpStatusCode.InternalServerError, baseResponse);
-                    }
-                }
+                baseResponse.ErrorCode = Errors.BasketAlreadyHaveItem;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
             }
+            //else
+            //{
+            //    using (var Transaction = db.Database.BeginTransaction())
+            //    {
+            //        try
+            //        {
+            //            var OrderItem = db.OrderItems.FirstOrDefault(x => x.OrderId == UserOrder.Id && x.ServiceId == model.ServiceId && !x.IsDeleted);
+            //            if (OrderItem == null)
+            //            {
+            //                OrderItem orderItem = new OrderItem()
+            //                {
+            //                    OrderId = UserOrder.Id,
+            //                    Price = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value : Service.OriginalPrice,
+            //                    ServiceId = model.ServiceId,
+            //                    ColorId = model.trainerId,
+            //                    Quantity = Service.ServiceDays,
+            //                    StartDate = model.StartDate,
+            //                    SubTotal = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value : Service.OriginalPrice,
+            //                };
+
+            //                UserOrder.Items.Add(orderItem);
+            //            }
+
+            //            CRUD<Order>.Update(UserOrder);
+            //            OrderActions.CalculateOrderPrice(UserOrder);
+            //            db.SaveChanges();
+            //            Transaction.Commit();
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            Transaction.Rollback();
+            //            baseResponse.ErrorCode = Errors.SomethingIsWrong;
+            //            return Content(HttpStatusCode.InternalServerError, baseResponse);
+            //        }
+            //    }
+            //}
             return Ok(baseResponse);
         }
 
@@ -775,6 +795,9 @@ namespace G4Fit.Controllers.API
                         Description = !string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? Service.DescriptionAr : Service.DescriptionEn,
                         Name = !string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? Service.NameAr : Service.NameEn,
                         HasDiscount = Service.OfferPrice.HasValue == true ? true : false,
+                        ServiceDays = Service.ServiceDays,
+                        ServiceFreezingDays = Service.ServiceFreezingDays,
+                        ServiceFreezingTimes = Service.ServiceFreezingTimes,
                         Price = Service.OriginalPrice.ToString() + (!string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? " ريال سعودي" : "SAR"),
                         PriceAfter = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value.ToString() + (!string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? " ريال سعودي" : "SAR") : null,
                         Image = Service.Images != null && Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null ? "/Content/Images/Services/" + Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl : null,
@@ -795,7 +818,7 @@ namespace G4Fit.Controllers.API
             baseResponse.Data = basketDetailsDTO;
             return Ok(baseResponse);
         }
-        
+
         [AllowAnonymous]
         [HttpPost]
         [Route("Beforecheckout")]
@@ -930,6 +953,9 @@ namespace G4Fit.Controllers.API
                         Description = !string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? Service.DescriptionAr : Service.DescriptionEn,
                         Name = !string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? Service.NameAr : Service.NameEn,
                         HasDiscount = Service.OfferPrice.HasValue == true ? true : false,
+                        ServiceDays = Service.ServiceDays,
+                        ServiceFreezingDays = Service.ServiceFreezingDays,
+                        ServiceFreezingTimes = Service.ServiceFreezingTimes,
                         Price = Service.OriginalPrice.ToString() + (!string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? " ريال سعودي" : "SAR"),
                         PriceAfter = Service.OfferPrice.HasValue == true ? Service.OfferPrice.Value.ToString() + (!string.IsNullOrEmpty(model.lang) && model.lang.ToLower() == "ar" ? " ريال سعودي" : "SAR") : null,
                         Image = Service.Images != null && Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null ? "/Content/Images/Services/" + Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl : null,
@@ -1609,6 +1635,104 @@ namespace G4Fit.Controllers.API
                         Image = item.Service.Images != null && item.Service.Images.FirstOrDefault(d => d.IsDeleted == false) != null ? "/Content/Images/Services/" + item.Service.Images.FirstOrDefault(d => d.IsDeleted == false).ImageUrl : null,
                         Price = item.Price,
                         Quantity = item.Quantity,
+                        RemainServiceDays = item.RemainServiceDays,
+                        FreezingDays = item.FreezingDays,
+                        FreezingTimes = item.FreezingTimes,
+                        RemainFreezingTimes = item.RemainFreezingTimes,
+                        RemainFreezingDays = item.RemainFreezingDays,
+                    });
+                }
+            }
+            baseResponse.Data = detailsDTO;
+            return Ok(baseResponse);
+        }
+        [HttpGet]
+        [Route("ToggleOrderFreeze")]
+        public IHttpActionResult ToggleOrderFreeze(long OrderId, string lang = "en")
+        {
+            var order = db.Orders.Find(OrderId);
+            if (order == null || order.IsDeleted == true)
+            {
+                baseResponse.ErrorCode = Errors.OrderNotFound;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
+            }
+            var Orderitem = db.OrderItems.FirstOrDefault(x => !x.IsDeleted && x.OrderId == OrderId);
+            if (Orderitem.RemainFreezingTimes > 0 && Orderitem.RemainFreezingDays > 0)
+            {
+
+                var Frezzed = !order.Frezzed;
+                order.Frezzed = Frezzed;
+                CRUD<Order>.Update(order);
+                db.SaveChanges();
+            }
+            else
+            {
+                baseResponse.ErrorCode = Errors.YouUsedAllFreezingTimesOrDays;
+                return Content(HttpStatusCode.BadRequest, baseResponse);
+            }
+            var CreatedOn = TimeZoneInfo.ConvertTimeFromUtc(order.CreatedOn, TimeZoneInfo.FindSystemTimeZoneById("Arab Standard Time"));
+
+            OrderDetailsDTO detailsDTO = new OrderDetailsDTO()
+            {
+                PhoneNumber = order.User.PhoneNumber,
+                Code = order.Code,
+                Date = CreatedOn.ToString("dd MMMM yyyy"),
+                PaymentMethod = order.PaymentMethod,
+                Subtotal = order.SubTotal,
+                Total = order.Total,
+                type = order.UserType,
+                Frezzed = order.Frezzed,
+                DeliveryFees = order.DeliveryFees,
+                Discount = order.PackageDiscount + order.PromoDiscount,
+            };
+
+            if (order.PackageId.HasValue == true)
+            {
+                detailsDTO.IsHavePackageDiscount = true;
+                detailsDTO.PackageDiscount = order.PackageDiscount;
+            }
+
+            if (order.PromoId.HasValue == true)
+            {
+                detailsDTO.IsHavePromoDiscount = true;
+                detailsDTO.PromoDiscount = order.PromoDiscount;
+                detailsDTO.PromoText = order.Promo.Text;
+            }
+
+            if (order.WalletDiscount > 0)
+            {
+                detailsDTO.IsHaveWalletDiscount = true;
+                detailsDTO.WalletDiscount = order.WalletDiscount;
+            }
+
+            switch (order.OrderStatus)
+            {
+                case OrderStatus.Placed:
+                    detailsDTO.OrderStatus = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? "جديد" : "New";
+                    break;
+                case OrderStatus.Delivered:
+                    detailsDTO.OrderStatus = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? "تم التوصيل" : "Deliverd";
+                    break;
+                default:
+                    break;
+            }
+
+            if (order.Items != null)
+            {
+                foreach (var item in order.Items.Where(d => d.IsDeleted == false))
+                {
+                    detailsDTO.Items.Add(new OrderDetailsItemDTO()
+                    {
+                        Description = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? item.Service.DescriptionAr : item.Service.DescriptionEn,
+                        Name = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? item.Service.NameAr : item.Service.NameEn,
+                        Image = item.Service.Images != null && item.Service.Images.FirstOrDefault(d => d.IsDeleted == false) != null ? "/Content/Images/Services/" + item.Service.Images.FirstOrDefault(d => d.IsDeleted == false).ImageUrl : null,
+                        Price = item.Price,
+                        Quantity = item.Quantity,
+                        RemainServiceDays = item.RemainServiceDays,
+                        FreezingDays = item.FreezingDays,
+                        FreezingTimes = item.FreezingTimes,
+                        RemainFreezingTimes = item.RemainFreezingTimes,
+                        RemainFreezingDays = item.RemainFreezingDays,
                     });
                 }
             }

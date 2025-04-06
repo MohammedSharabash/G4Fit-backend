@@ -20,6 +20,7 @@ namespace G4Fit
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             OrdersJob.RunProgram().GetAwaiter().GetResult();
+            TimeBoundOrdersJob.RunProgram().GetAwaiter().GetResult();
             PackagesJob.RunProgram().GetAwaiter().GetResult();
             PromoCodesJob.RunProgram().GetAwaiter().GetResult();
         }

@@ -30,6 +30,8 @@ namespace G4Fit.Models.ViewModels
         public bool IsTimeBoundService { get; set; }
         //[Required(ErrorMessage = "عدد ايام الاشتراك بالخدمه مطلوب")]
         public int ServiceDays { get; set; } = 1;
+        public int ServiceFreezingDays { get; set; } = 1;
+        public int ServiceFreezingTimes { get; set; } = 1;
         public int InBodyCount { get; set; } = 1;
         //[Required(ErrorMessage = "الكميه مطلوبه")]
         public long Inventory { get; set; }

@@ -13,6 +13,8 @@ namespace G4Fit.Models.DTOs
         public bool HasDiscount { get; set; }
         public bool IsTimeBoundService { get; set; }
         public int ServiceDays { get; set; }
+        public int ServiceFreezingDays { get; set; } = 0;
+        public int ServiceFreezingTimes { get; set; } = 0;
         public string Price { get; set; }
         public string PriceAfter { get; set; }
         public double? DiscountPercentage { get; set; }

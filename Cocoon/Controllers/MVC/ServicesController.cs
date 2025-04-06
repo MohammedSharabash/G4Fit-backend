@@ -76,6 +76,8 @@ namespace G4Fit.Controllers.MVC
                             Inventory = model.Inventory,
                             InBodyCount = model.InBodyCount,
                             ServiceDays = model.ServiceDays,
+                            ServiceFreezingTimes = model.ServiceFreezingTimes,
+                            ServiceFreezingDays = model.ServiceFreezingDays,
                             SubCategoryId = model.CategoryId,
                             HardDelete = false,
                             IsHidden = false,
@@ -182,6 +184,8 @@ namespace G4Fit.Controllers.MVC
                         Service.SpecialPrice = model.SpecialPrice;
                         Service.Inventory = model.Inventory;
                         Service.ServiceDays = model.ServiceDays;
+                        Service.ServiceFreezingTimes = model.ServiceFreezingTimes;
+                        Service.ServiceFreezingDays = model.ServiceFreezingDays;
                         Service.InBodyCount = model.InBodyCount;
                         Service.SubCategoryId = model.CategoryId;
                         CRUD<Service>.Update(Service);

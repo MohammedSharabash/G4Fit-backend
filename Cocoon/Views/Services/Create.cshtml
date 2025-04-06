@@ -177,6 +177,28 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-lg-6" id="Freezing-days-container" style="display:none;">
+                                    <div class="form-group">
+                                        <label for="ServiceFreezingDays" class="col-sm-5 control-label required">عدد أيام التجميد بالخدمة:</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(model => model.ServiceFreezingDays, new { @class = "form-control valid", type = "number", required = true, @id = "ServiceFreezingDays" })
+                                            </div>
+                                            @Html.ValidationMessageFor(d => d.ServiceFreezingDays, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6" id="Freezing-Times-container" style="display:none;">
+                                    <div class="form-group">
+                                        <label for="ServiceFreezingTimes" class="col-sm-5 control-label required">عدد مرات التجميد بالخدمة:</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(model => model.ServiceFreezingTimes, new { @class = "form-control valid", type = "number", required = true, @id = "ServiceFreezingTimes" })
+                                            </div>
+                                            @Html.ValidationMessageFor(d => d.ServiceFreezingTimes, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-lg-6" id="InBodyCount-container" @*style="display:none;"*@>
                                     <div class="form-group">
                                         <label for="InBodyCount" class="col-sm-5 control-label required">عدد InBodyCount بالخدمة:</label>
@@ -315,8 +337,12 @@
         var FeaturesContainer = document.getElementById("Features-container");
         var inventoryInput = document.getElementById("Inventory");
         var ServiceDaysInput = document.getElementById("ServiceDays");
+        var ServiceFreezingTimesInput = document.getElementById("ServiceFreezingTimes");
+        var ServiceFreezingDaysInput = document.getElementById("ServiceFreezingDays");
         //var InBodyCountInput = document.getElementById("InBodyCount");
         var serviceDaysContainer = document.getElementById("service-days-container");
+        var FreezingDaysContainer = document.getElementById("Freezing-days-container");
+        var FreezingTimesContainer = document.getElementById("Freezing-Times-container");
         var InBodyCountContainer = document.getElementById("InBodyCount-container");
 
         // Function to toggle fields based on checkbox status
@@ -324,20 +350,28 @@
             if (isTimeBoundServiceCheckbox.checked) {
                 // Show ServiceDays, hide Inventory and set its value to 1
                 serviceDaysContainer.style.display = "block";
+                FreezingDaysContainer.style.display = "block";
+                FreezingTimesContainer.style.display = "block";
                 //InBodyCountContainer.style.display = "block";
                 inventoryContainer.style.display = "none";
                 FeaturesContainer.style.display = "block";
                 inventoryInput.value = 1;
                 ServiceDaysInput.value = 1;
+                ServiceFreezingTimesInput.value = 1;
+                ServiceFreezingDaysInput.value = 1;
                 InBodyCountInput.value = 1;
             } else {
                 // Hide ServiceDays, show Inventory and clear value
                 serviceDaysContainer.style.display = "none";
+                FreezingDaysContainer.style.display = "none";
+                FreezingTimesContainer.style.display = "none";
                 //InBodyCountContainer.style.display = "none";
                 inventoryContainer.style.display = "block";
                 FeaturesContainer.style.display = "none";
                 inventoryInput.value = '1'; // Clear the value of Inventory
                 ServiceDaysInput.value = '1'; // Clear the value of ServiceDays
+                ServiceFreezingTimesInput.value = '1'; // Clear the value of ServiceFreezingTimes
+                ServiceFreezingDaysInput.value = '1'; // Clear the value of ServiceFreezingDays
                 InBodyCountInput.value = '1'; // Clear the value of InBodyCount
             }
         }

@@ -114,6 +114,8 @@ namespace G4Fit.Helpers
                     return culture == "ar" ? "عفواً ، هذا الحساب قد تم حظره" : "This account has been blocked";
                 case Errors.YouCannotCurrentlyPurchaseThisService:
                     return culture == "ar" ? "عفواً ،لا يمكنك شراء هذه الخدمه حاليا" : "You cannot currently purchase this service";
+                case Errors.BasketAlreadyHaveItem:
+                    return culture == "ar" ? "لا يمكنك إضافة عنصر آخر، يجب إتمام الطلب السابق أولاً." : "You cannot add another item, you must complete the previous order first.";
                 default:
                     break;
             }

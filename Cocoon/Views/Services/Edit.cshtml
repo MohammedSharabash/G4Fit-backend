@@ -178,6 +178,28 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-lg-6" id="Freezing-days-container" style="display:none;">
+                                    <div class="form-group">
+                                        <label for="ServiceFreezingDays" class="col-sm-5 control-label required">عدد أيام التجميد بالخدمة:</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(model => model.ServiceFreezingDays, new { @class = "form-control valid", type = "number", required = true, @id = "ServiceFreezingDays" })
+                                            </div>
+                                            @Html.ValidationMessageFor(d => d.ServiceFreezingDays, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6" id="Freezing-Times-container" style="display:none;">
+                                    <div class="form-group">
+                                        <label for="ServiceFreezingTimes" class="col-sm-5 control-label required">عدد مرات التجميد بالخدمة:</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(model => model.ServiceFreezingTimes, new { @class = "form-control valid", type = "number", required = true, @id = "ServiceFreezingTimes" })
+                                            </div>
+                                            @Html.ValidationMessageFor(d => d.ServiceFreezingTimes, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-lg-6" id="InBodyCount-container" style="display:none;">
                                     <div class="form-group">
                                         <label for="InBodyCount" class="col-sm-5 control-label required">عدد InBodyCount  بالخدمة:</label>
@@ -430,19 +452,25 @@
             var timeBoundService = document.getElementById("IsTimeBoundService").checked;
             var inventoryContainer = document.getElementById("inventory-container");
             var serviceDaysContainer = document.getElementById("service-days-container");
-            var InBodyCountContainer = document.getElementById("InBodyCount-container");
+            var FreezingDaysContainer = document.getElementById("Freezing-days-container");
+            var FreezingTimesContainer = document.getElementById("Freezing-Times-container");
+          var InBodyCountContainer = document.getElementById("InBodyCount-container");
             var FeaturesContainer = document.getElementById("Features-container");
 
             if (timeBoundService) {
                 // إذا كانت الخدمة محددة بوقت، إخفاء كمية الخدمة وإظهار عدد أيام الاشتراك
                 inventoryContainer.style.display = "none";
                 serviceDaysContainer.style.display = "block";
+                FreezingDaysContainer.style.display = "block";
+                FreezingTimesContainer.style.display = "block";
                 InBodyCountContainer.style.display = "block";
                 FeaturesContainer.style.display = "block";
             } else {
                 // إذا لم تكن الخدمة محددة بوقت، إظهار كمية الخدمة وإخفاء عدد أيام الاشتراك
                 inventoryContainer.style.display = "block";
                 serviceDaysContainer.style.display = "none";
+                FreezingDaysContainer.style.display = "none";
+                FreezingTimesContainer.style.display = "none";
                 InBodyCountContainer.style.display = "none";
                 FeaturesContainer.style.display = "none";
             }

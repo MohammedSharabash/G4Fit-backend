@@ -3,205 +3,650 @@
 @{
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
 }
+
 <link href="~/Content/web/css/invoice/Start-input.css" rel="stylesheet" />
-<div class="container mt-3 pt-3">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+<style>
+    /* أنماط عامة */
+    :root {
+        --primary-color: #a0bb3a;
+        --primary-dark: #8ca832;
+        --dark-bg: #1e1e1e;
+        --card-bg: #292929;
+        --text-light: #f8f9fa;
+        --text-muted: #adb5bd;
+        --border-radius: 10px;
+        --box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        --transition: all 0.3s ease;
+    }
+
+    body {
+        background-color: var(--dark-bg);
+        color: var(--text-light);
+    }
+
+    .container {
+        max-width: 1200px;
+    }
+
+    /* تحسينات للخبز الزنجيلي */
+    .breadcrumb {
+        background-color: transparent;
+        padding: 0.75rem 0;
+        font-size: 0.9rem;
+    }
+
+    .breadcrumb-item a {
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+        .breadcrumb-item a:hover {
+            color: var(--primary-color);
+        }
+
+    .breadcrumb-item.active a {
+        color: var(--primary-color);
+        font-weight: 500;
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        color: var(--text-muted);
+    }
+
+    /* عنوان الصفحة */
+    .page-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin: 1.5rem 0;
+        color: var(--text-light);
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+        .page-title span {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin: 0 10px;
+            color: var(--primary-color);
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+            border-radius: 3px;
+        }
+
+    /* سعر الخدمة */
+    .price-section {
+        background: rgba(160, 187, 58, 0.1);
+        padding: 15px 20px;
+        border-radius: var(--border-radius);
+        margin: 20px 0;
+        border-left: 3px solid var(--primary-color);
+    }
+
+    .original-price {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .offer-price {
+        font-size: 1.2rem;
+        color: var(--text-light);
+        font-weight: 600;
+    }
+
+    .old-price {
+        font-size: 1rem;
+        text-decoration: line-through;
+        color: var(--text-muted);
+        margin-left: 10px;
+    }
+
+    /* سلايدر الصور */
+    .main_carousel {
+        margin: 30px 0;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--box-shadow);
+    }
+
+    .carousel-item img {
+        max-height: 400px;
+        width: auto;
+        margin: 0 auto;
+        border-radius: var(--border-radius);
+    }
+
+    .carousel-control-prev, .carousel-control-next {
+        width: 5%;
+        opacity: 0.8;
+    }
+
+        .carousel-control-prev:hover, .carousel-control-next:hover {
+            opacity: 1;
+        }
+
+    /* وصف الخدمة */
+    .service-description {
+        background: var(--card-bg);
+        padding: 25px;
+        border-radius: var(--border-radius);
+        margin: 25px 0;
+        box-shadow: var(--box-shadow);
+        line-height: 1.8;
+    }
+
+    /* ميزات الاشتراك */
+    .subscription-features {
+        background: var(--card-bg);
+        padding: 25px;
+        border-radius: var(--border-radius);
+        margin: 30px 0;
+        box-shadow: var(--box-shadow);
+    }
+
+    .features-title {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+        color: var(--text-light);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .features-title i {
+            margin: 0 10px;
+            color: var(--primary-color);
+        }
+
+    .feature-box {
+        text-align: center;
+        padding: 20px;
+        background: rgba(255,255,255,0.05);
+        border-radius: var(--border-radius);
+        height: 100%;
+        transition: var(--transition);
+        margin: 10px 0;
+    }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            background: rgba(160, 187, 58, 0.1);
+        }
+
+        .feature-box i {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .feature-box h5 {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .feature-box p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+    /* قسم الإضافة إلى السلة */
+    .add-to-cart-section {
+        background: var(--card-bg);
+        padding: 30px;
+        border-radius: var(--border-radius);
+        margin: 30px 0;
+        box-shadow: var(--box-shadow);
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        margin-bottom: 25px;
+        color: var(--text-light);
+        font-weight: 600;
+        text-align: center;
+        position: relative;
+    }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+            border-radius: 3px;
+        }
+
+    /* عداد الكمية */
+    .input-counter {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 30px;
+        overflow: hidden;
+        margin: 0 10px;
+    }
+
+        .input-counter span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(160, 187, 58, 0.2);
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+            .input-counter span:hover {
+                background: rgba(160, 187, 58, 0.4);
+            }
+
+        .input-counter input {
+            width: 60px;
+            height: 40px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+    /* تاريخ البدء */
+    .Start-input-counter input {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text-light);
+        padding: 10px 15px;
+        border-radius: var(--border-radius);
+        width: 100%;
+        max-width: 300px;
+    }
+
+    /* المدربين والأحجام */
+    .selection-wrapper {
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    .selection-title {
+        font-size: 1rem;
+        margin-bottom: 10px;
+        color: var(--text-muted);
+    }
+
+    .selection-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        .selection-options li {
+            list-style: none;
+        }
+
+            .selection-options li a {
+                display: block;
+                padding: 8px 15px;
+                background: rgba(255,255,255,0.05);
+                border: 1px solid rgba(255,255,255,0.1);
+                border-radius: 30px;
+                color: var(--text-light);
+                text-decoration: none;
+                transition: var(--transition);
+                font-size: 0.9rem;
+            }
+
+                .selection-options li.active a,
+                .selection-options li a:hover {
+                    background: var(--primary-color);
+                    color: #000;
+                    border-color: var(--primary-color);
+                }
+
+    /* السعر الإجمالي */
+    .total-price {
+        font-size: 1.3rem;
+        margin: 20px 0;
+        text-align: center;
+    }
+
+        .total-price span {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+    /* زر الإضافة إلى السلة */
+    .add-to-cart-btn {
+        background: var(--primary-color);
+        color: #000;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        box-shadow: 0 4px 15px rgba(160, 187, 58, 0.3);
+    }
+
+        .add-to-cart-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(160, 187, 58, 0.4);
+            color: #000;
+        }
+
+        .add-to-cart-btn i {
+            margin-right: 8px;
+        }
+
+        .add-to-cart-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+    /* رسالة عدم التوفر */
+    .out-of-stock {
+        color: #dc3545;
+        font-weight: 500;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    /* خطوط أفقية */
+    .custom-hr {
+        border: none;
+        height: 1px;
+        background: rgba(255,255,255,0.1);
+        margin: 40px 0;
+    }
+
+    /* التأثيرات المتحركة */
+    .wow {
+        visibility: hidden;
+    }
+
+    /* التكيف مع اللغة العربية */
+    .text-right[dir="rtl"],
+    [dir="rtl"] .text-right {
+        text-align: right !important;
+    }
+
+    .text-left[dir="rtl"],
+    [dir="rtl"] .text-left {
+        text-align: left !important;
+    }
+
+    [dir="rtl"] .page-title::after {
+        left: auto;
+        right: 0;
+    }
+
+    [dir="rtl"] .section-title::after {
+        left: auto;
+        right: 50%;
+        transform: translateX(50%);
+    }
+
+    [dir="rtl"] .add-to-cart-btn i {
+        margin-right: 0;
+        margin-left: 8px;
+    }
+</style>
+
+<div class="container mt-3 pt-3" dir="@(culture == "ar" ? "rtl" : "ltr")">
+    <!-- مسار التنقل (خبز زنجيلي) -->
     <nav aria-label="breadcrumb" dir="auto">
-        <ol class="breadcrumb">
+        <ol class="breadcrumb animate__animated animate__fadeIn">
             <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i>@(culture == "ar" ? "الصفحة الرئيسية" : "Home")</a></li>
             <li class="breadcrumb-item"><a href="@Url.Action("View", "SubCategories", new { CatId = Model.SubCategoryId })">@(culture == "ar" ? Model.SubCategory.NameAr : Model.SubCategory.NameEn)</a></li>
-            @*<li class="breadcrumb-item"><a href="@Url.Action("View", "SubCategories", new { CatId = Model.SubCategoryId, SubId = Model.SubCategoryId })">@(culture == "ar" ? Model.SubCategory.NameAr : Model.SubCategory.NameEn)</a></li>*@
             <li class="breadcrumb-item active" aria-current="page"><a href="@Request.Url">@(culture == "ar" ? Model.NameAr : Model.NameEn)</a></li>
         </ol>
     </nav>
-    <h2 class="h5 @(culture == "ar" ? "text-right" : "") wow fadeInDown"><span><i class="fas fa-star"></i>@(culture == "ar" ? Model.NameAr : Model.NameEn) <i class="fas fa-tag"></i></span></h2>
-    <div class="mt-4 text-@(culture == "ar" ? "right" : "left")">
+
+    <!-- عنوان الخدمة -->
+    <h2 class="page-title wow animate__animated animate__fadeInDown @(culture == "ar" ? "text-right" : "")" >
+        <span>
+            <i class="fas fa-star"></i>
+            @(culture == "ar" ? Model.NameAr : Model.NameEn)
+            <i class="fas fa-tag"></i>
+        </span>
+    </h2>
+
+    <!-- سعر الخدمة -->
+    <div class="price-section wow animate__animated animate__fadeIn">
         @if (Model.OfferPrice.HasValue == true)
         {
-            <h5><strong>@Website.Price:</strong> @Model.OfferPrice @Website.SAR <span style="text-decoration:line-through;font-size:0.8em">@Model.OriginalPrice @Website.SAR</span></h5>
+            <div class="d-flex align-items-center justify-content-center">
+                <span class="offer-price">@Model.OfferPrice @Website.SAR</span>
+                <span class="old-price">@Model.OriginalPrice @Website.SAR</span>
+            </div>
         }
         else
         {
-            <h5><strong>@Website.Price:</strong> @Model.OriginalPrice @Website.SAR</h5>
+            <div class="text-center">
+                <span class="original-price">@Model.OriginalPrice @Website.SAR</span>
+            </div>
         }
     </div>
+
+    <!-- سلايدر صور الخدمة -->
     @if (Model.Images != null && Model.Images.Count(s => s.IsDeleted == false) > 0)
     {
-        <section class="main_carousel">
-            <div class="carousel slide text-center" id="main_slider" data-ride="carousel">
+        <section class="main_carousel wow animate__animated animate__fadeIn">
+            <div class="carousel slide" id="main_slider" data-ride="carousel">
                 <div class="carousel-inner">
                     @foreach (var image in Model.Images.Where(s => s.IsDeleted == false))
                     {
-                        <div class="carousel-item"><img style="object-fit:contain" src="~/Content/Images/Services/@image.ImageUrl" width="75%" height="75%"></div>
+                        <div class="carousel-item @(image == Model.Images.First() ? "active" : "")">
+                            <img class="d-block w-100" src="~/Content/Images/Services/@image.ImageUrl" alt="@(culture == "ar" ? Model.NameAr : Model.NameEn)">
+                        </div>
                     }
-                </div><a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#main_slider" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">next</span></a>
+                </div>
+                <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
         </section>
     }
-    @if (culture == "ar")
-    {
-        if (!string.IsNullOrEmpty(Model.DescriptionAr))
+
+    <!-- وصف الخدمة -->
+    <div class="service-description wow animate__animated animate__fadeIn @(culture == "ar" ? "text-right" : "")">
+        @if (culture == "ar" && !string.IsNullOrEmpty(Model.DescriptionAr))
         {
-            <div dir="rtl" style="text-align: right;">
+            <div dir="@(culture == "ar" ? "rtl" : "ltr")">
                 @Html.Raw(Model.DescriptionAr.Replace("\r\n", "<br />"))
             </div>
         }
-    }
-    else
-    {
-        if (!string.IsNullOrEmpty(Model.DescriptionEn))
+        else if (!string.IsNullOrEmpty(Model.DescriptionEn))
         {
-            <div dir="ltr" style="text-align: left;">
+            <div dir="@(culture == "ar" ? "rtl" : "ltr")">
                 @Html.Raw(Model.DescriptionEn.Replace("\r\n", "<br />"))
             </div>
         }
-    }
+    </div>
 
-    @if (!Model.IsTimeBoundService)
+    <!-- ميزات الاشتراك (للخدمات المحددة بوقت) -->
+    @if (Model.IsTimeBoundService)
     {
-        <div class="col-xs-12 col-md-12 text-center m-auto">
-            <hr style="margin:40px 0px" />
-            <div class="mb-3 pb-3">
-                @*<div class="Service-details__hot">
-                        <h4>
-                            <strong><i class="fa fa-star" style="color:gold"></i> @(culture == "ar" ? "اختيار المدرب  " : "Choose Trainer") <i class="fa fa-star" style="color:gold"></i></strong>
-                        </h4>
-                    </div>*@
-                <div class="col-lg-12 col-md-12 text-center m-auto">
-                    <div class="Services-details-desc">
+        <div class="subscription-features wow animate__animated animate__fadeInUp">
+            <h4 class="features-title">
+                <i class="fas fa-calendar-alt"></i>
+                @(culture == "ar" ? "ميزات الاشتراك" : "Subscription Features")
+                <i class="fas fa-info-circle"></i>
+            </h4>
 
-                        <br />
-                        @*
-                            <div class="Services-size-wrapper">
-                                <span>@Website.Size</span>
-                                @if (Model.Sizes.Any(s => s.IsDeleted == false))
-                                {
-                                    <ul>
-                                        @foreach (var size in Model.Sizes.Where(s => s.IsDeleted == false))
-                                        {
-                                            <li data-size="@size.Id" class="@(size.Id == Model.Sizes.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")"><a href="javascript:void(0)">@size.Size</a></li>
-                                        }
-                                    </ul>
-                                }
-                                else
-                                {
-                                    <p><strong>@(culture == "ar" ? "لا توجد احجام متاحه لهذا الخدمه" : "No sizes available for this Service")</strong></p>
-                                }
-                            </div>
-                            <br />*@
-                        <div class="Services-add-to-cart">
-                            <strong>@Website.Quantity</strong>
-                            <div class="input-counter">
-                                <span class="minus-btn"><i class='fa fa-minus'></i></span>
-                                <input type="number" value="1" min="1" max="@Model.Inventory">
-                                <span class="plus-btn"><i class='fa fa-plus'></i></span>
-                            </div>
-                            <br />
-                            <br />
-                            <strong>@Website.Total</strong> <span id="Service-price">@(Model.OfferPrice.HasValue == true ? Model.OfferPrice.Value : Model.OriginalPrice) </span>@Website.SAR
-                            <br />
-                            <br />
-                            @if (Model.Inventory > 0)
-                            {
-                                <button type="button" onclick="Add()" class="btn btn-success">
-                                    <i class="fa fa-shopping-cart"></i> @Website.AddToCart
-                                </button>
-                            }
-                            else
-                            {
-                                <p><strong>@(culture == "ar" ? "الخدمه غير متوفر حاليا" : "Service not in stock")</strong></p>
-                                <button type="button" class="btn btn-secondary" disabled>
-                                    <i class="fa fa-shopping-cart"></i> @Website.AddToCart
-                                </button>
-                            }
-
-
-
-                        </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <i class="fas fa-clock"></i>
+                        <h5>@(culture == "ar" ? "مدة الاشتراك" : "Subscription Period")</h5>
+                        <p>@Model.ServiceDays @(culture == "ar" ? "يوم" : "Days")</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <i class="fas fa-snowflake"></i>
+                        <h5>@(culture == "ar" ? "أيام التجميد" : "Freezing Days")</h5>
+                        <p>@Model.ServiceFreezingDays @(culture == "ar" ? "يوم" : "Days")</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <i class="fas fa-retweet"></i>
+                        <h5>@(culture == "ar" ? "مرات التجميد" : "Freezing Times")</h5>
+                        <p>@Model.ServiceFreezingTimes @(culture == "ar" ? "مرة" : "Times")</p>
                     </div>
                 </div>
             </div>
         </div>
     }
-    else
-    {
-        <div class="col-xs-12 col-md-12 text-center m-auto">
-            <hr style="margin:40px 0px" />
-            <div class="mb-3 pb-3">
-                <div class="Service-details__hot">
-                    <h4>
-                        <strong><i class="fa fa-star" style="color:gold"></i> @(culture == "ar" ? "اختيار تاريخ بدء الاشتراك" : "Choose the subscription start date") <i class="fa fa-star" style="color:gold"></i></strong>
-                    </h4>
-                </div>
-                <div class="col-lg-12 col-md-12 text-center m-auto">
-                    <div class="Services-details-desc">
-                        @*<div class="Services-color-switch">
-                                <span><strong> @(culture == "ar" ? "المدرب" : "Trainer")</strong></span>
-                                @if (Model.Colors.Any(s => s.IsDeleted == false))
-                                {
-                                    <ul>
-                                        @foreach (var trainer in Model.Colors.Where(s => s.IsDeleted == false))
-                                        {
-                                            <li data-color="@trainer.Id" class="@(trainer.Id == Model.Colors.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")"><a href="javascript:void(0)"></a>@trainer.Color"</li>
-                                        }
-                                    </ul>
-                                }
-                                else
-                                {
-                                    <p><strong>@(culture == "ar" ? "لا توجد مدربين متاحين لهذه الخدمه" : "No Trainers available for this Service")</strong></p>
-                                }
-                            </div>*@
-                        <br />
 
-                        <div class="Services-size-wrapper">
-                            <span>@(culture == "ar" ? "المدرب" : "Trainer")</span>
-                            @if (Model.Colors.Any(s => s.IsDeleted == false))
-                            {
-                                <ul>
-                                    @foreach (var size in Model.Colors.Where(s => s.IsDeleted == false))
-                                    {
-                                        <li data-size="@size.Id" class="@(size.Id == Model.Colors.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")"><a href="javascript:void(0)">@size.Color</a></li>
-                                    }
-                                </ul>
-                            }
-                            else
-                            {
-                                <p><strong>@(culture == "ar" ? "لا توجد مدربين متاحين لهذه الخدمه" : "No Trainers available for this Service")</strong></p>
-                            }
-                        </div>
-                        <br />
-                        <br />
-                        <div class="Services-add-to-cart">
-                            <strong>@Website.StartDate</strong>
-                            <div class="Start-input-counter">
-                                <input type="date" id="dateInput" min="@DateTime.Now.ToString("yyyy-MM-dd")" style="text-align: left;" value="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")">
-                            </div>
-                            <br />
-                            <br />
-                            <strong>@Website.Total</strong> <span id="Service-price">@(Model.OfferPrice.HasValue == true ? Model.OfferPrice.Value : Model.OriginalPrice) </span>@Website.SAR
-                            <br />
-                            <br />
-                            @if (Model.ServiceDays > 0)
-                            {
-                                <button type="button" onclick="AddTimeBoundService()" class="btn btn-success">
-                                    <i class="fa fa-shopping-cart"></i> @Website.AddToCart
-                                </button>
-                            }
-                            else
-                            {
-                                <p><strong>@(culture == "ar" ? "الخدمه غير متوفره حاليا" : "Service not in stock")</strong></p>
-                                <button type="button" class="btn btn-secondary" disabled>
-                                    <i class="fa fa-shopping-cart"></i> @Website.AddToCart
-                                </button>
-                            }
-                        </div>
+    <!-- قسم الإضافة إلى السلة -->
+    <div class="add-to-cart-section wow animate__animated animate__fadeInUp">
+        @if (!Model.IsTimeBoundService)
+        {
+            <!-- للخدمات العادية -->
+            <h3 class="section-title">@Website.AddToCart</h3>
+
+            <div class="Services-details-desc">
+                <div class="selection-wrapper text-center">
+                    <div class="input-counter mx-auto">
+                        <span class="minus-btn"><i class='fa fa-minus'></i></span>
+                        <input type="number" value="1" min="1" max="@Model.Inventory">
+                        <span class="plus-btn"><i class='fa fa-plus'></i></span>
                     </div>
                 </div>
+
+                <div class="total-price">
+                    <strong>@Website.Total:</strong>
+                    <span id="Service-price">@(Model.OfferPrice.HasValue == true ? Model.OfferPrice.Value : Model.OriginalPrice)</span> @Website.SAR
+                </div>
+
+                @if (Model.Inventory > 0)
+                {
+                    <div class="text-center">
+                        <button type="button" onclick="Add()" class="add-to-cart-btn">
+                            <i class="fa fa-shopping-cart"></i> @Website.AddToCart
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <p class="out-of-stock">
+                        @(culture == "ar" ? "الخدمة غير متوفرة حالياً" : "Service is currently out of stock")
+                    </p>
+                    <div class="text-center">
+                        <button type="button" class="add-to-cart-btn" disabled>
+                            <i class="fa fa-shopping-cart"></i> @Website.AddToCart
+                        </button>
+                    </div>
+                }
             </div>
-        </div>
-    }
+        }
+        else
+        {
+            <!-- للخدمات المحددة بوقت -->
+            <h3 class="section-title">
+                @(culture == "ar" ? "بدء الاشتراك" : "Start Subscription")
+            </h3>
+
+            <div class="Services-details-desc">
+                <!-- اختيار المدرب -->
+                <div class="selection-wrapper">
+                    <p class="selection-title">@(culture == "ar" ? "اختر المدرب" : "Choose Trainer")</p>
+                    @if (Model.Colors.Any(s => s.IsDeleted == false))
+                    {
+                        <ul class="selection-options justify-content-center">
+                            @foreach (var trainer in Model.Colors.Where(s => s.IsDeleted == false))
+                            {
+                                <li data-size="@trainer.Id" class="@(trainer.Id == Model.Colors.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")">
+                                    <a href="javascript:void(0)">@trainer.Color</a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-center text-muted">
+                            @(culture == "ar" ? "لا توجد مدربين متاحين" : "No trainers available")
+                        </p>
+                    }
+                </div>
+
+                <!-- اختيار تاريخ البدء -->
+                <div class="selection-wrapper text-center">
+                    <p class="selection-title">@Website.StartDate</p>
+                    <div class="Start-input-counter mx-auto">
+                        <input type="date" id="dateInput" min="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")">
+                    </div>
+                </div>
+
+                <div class="total-price">
+                    <strong>@Website.Total:</strong>
+                    <span id="Service-price">@(Model.OfferPrice.HasValue == true ? Model.OfferPrice.Value : Model.OriginalPrice)</span> @Website.SAR
+                </div>
+
+                @if (Model.ServiceDays > 0)
+                {
+                    <div class="text-center">
+                        <button type="button" onclick="AddTimeBoundService()" class="add-to-cart-btn">
+                            <i class="fa fa-shopping-cart"></i> @Website.AddToCart
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <p class="out-of-stock">
+                        @(culture == "ar" ? "الخدمة غير متوفرة حالياً" : "Service is currently out of stock")
+                    </p>
+                    <div class="text-center">
+                        <button type="button" class="add-to-cart-btn" disabled>
+                            <i class="fa fa-shopping-cart"></i> @Website.AddToCart
+                        </button>
+                    </div>
+                }
+            </div>
+        }
+    </div>
 </div>
 
-
+<!-- عناصر مخفية لتخزين البيانات -->
 <span hidden id="current-size-data" data-size="@(Model.Sizes != null && Model.Sizes.FirstOrDefault(s => s.IsDeleted == false) != null ? Model.Sizes.FirstOrDefault(s => s.IsDeleted == false).Id.ToString() : "")"></span>
 <span hidden id="current-color-data" data-color="@(Model.Colors != null && Model.Colors.FirstOrDefault(s => s.IsDeleted == false) != null ? Model.Colors.FirstOrDefault(s => s.IsDeleted == false).Id.ToString() : "")"></span>
 <span hidden id="current-quantity-data" data-quantity="1"></span>
@@ -209,19 +654,21 @@
 <span hidden id="current-price-data" data-price="@(Model.OfferPrice.HasValue == true ? Model.OfferPrice.Value : Model.OriginalPrice)"></span>
 
 @section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
     <script>
-        $('.Services-color-switch li').on('click', function () {
-            $('.Services-color-switch li.active').removeClass('active');
-            $(this).addClass('active');
-            $("#current-color-data").attr("data-color", $(this).attr("data-color"));
-        });
-        $('.Services-size-wrapper li').on('click', function () {
-            $('.Services-size-wrapper li.active').removeClass('active');
+        // تهيئة Wow.js للحركات
+        new WOW().init();
+
+        // أحداث اختيار المدرب
+        $('[data-size]').on('click', function () {
+            $('[data-size].active').removeClass('active');
             $(this).addClass('active');
             $("#current-size-data").attr("data-size", $(this).attr("data-size"));
         });
+
+        // أحداث عداد الكمية
         $('.input-counter').each(function () {
-            var spinner = jQuery(this),
+            var spinner = $(this),
                 input = spinner.find('input[type="number"]'),
                 btnUp = spinner.find('.plus-btn'),
                 btnDown = spinner.find('.minus-btn'),
@@ -230,54 +677,53 @@
 
             btnUp.on('click', function () {
                 var oldValue = parseFloat(input.val());
-                if (oldValue >= max) {
-                    var newVal = oldValue;
-                } else {
-                    var newVal = oldValue + 1;
-                }
-                spinner.find("input").val(newVal);
-                spinner.find("input").trigger("change");
+                var newVal = oldValue >= max ? oldValue : oldValue + 1;
+                spinner.find("input").val(newVal).trigger("change");
                 $("#current-quantity-data").attr("data-quantity", newVal);
-                var price = $("#current-price-data").attr("data-price");
-                $("#Service-price").text(newVal * price + " ");
+                updatePriceDisplay(newVal);
             });
+
             btnDown.on('click', function () {
                 var oldValue = parseFloat(input.val());
-                if (oldValue <= min) {
-                    var newVal = oldValue;
-                } else {
-                    var newVal = oldValue - 1;
-                }
-                spinner.find("input").val(newVal);
-                spinner.find("input").trigger("change");
+                var newVal = oldValue <= min ? oldValue : oldValue - 1;
+                spinner.find("input").val(newVal).trigger("change");
                 $("#current-quantity-data").attr("data-quantity", newVal);
-                var price = $("#current-price-data").attr("data-price");
-                $("#Service-price").text(newVal * price + " ");
+                updatePriceDisplay(newVal);
+            });
+
+            input.on('change', function() {
+                var value = parseInt($(this).val());
+                if (isNaN(value) || value < min) value = min;
+                if (value > max) value = max;
+                $(this).val(value);
+                $("#current-quantity-data").attr("data-quantity", value);
+                updatePriceDisplay(value);
             });
         });
 
+        // تحديث عرض السعر
+        function updatePriceDisplay(quantity) {
+            var price = $("#current-price-data").attr("data-price");
+            $("#Service-price").text((quantity * price).toFixed(2) + " ");
+        }
+
+        // حدث تغيير تاريخ البدء
+        document.getElementById('dateInput').addEventListener('change', function () {
+            document.getElementById('current-startdate-data').setAttribute('data-startdate', this.value);
+        });
+
+        // دوال الإضافة إلى السلة
         function AddTimeBoundService() {
             var SizeId = $("#current-size-data").attr("data-size");
             var date = $("#current-startdate-data").attr("data-startdate");
-            AddTimeBoundServicetobasketToCartFromServicePage('@Model.Id', date, SizeId)
+            AddTimeBoundServicetobasketToCartFromServicePage('@Model.Id', date, SizeId);
         }
+
         function Add() {
             var ColorId = $("#current-color-data").attr("data-color");
             var SizeId = $("#current-size-data").attr("data-size");
             var Quantiy = $("#current-quantity-data").attr("data-quantity");
-            AddToCartFromServicePage('@Model.Id', ColorId, SizeId, Quantiy)
+            AddToCartFromServicePage('@Model.Id', ColorId, SizeId, Quantiy);
         }
-    </script>
-    <script>
-        document.getElementById('dateInput').addEventListener('change', function () {
-            const selectedDate = this.value; // Get the selected date from the input
-            const spanElement = document.getElementById('current-startdate-data');
-
-            // Update the data attribute and the span text (if you want to show the selected date somewhere)
-            spanElement.setAttribute('data-startdate', selectedDate);
-
-            // Optional: If you want to display the selected date as well, you can uncomment this
-            // spanElement.textContent = selectedDate; // Set the text content (for visibility)
-        });
     </script>
 }

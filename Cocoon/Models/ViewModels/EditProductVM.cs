@@ -26,6 +26,8 @@ namespace G4Fit.Models.ViewModels
         public bool IsTimeBoundService { get; set; }
         //[Required(ErrorMessage = "عدد ايام الاشتراك بالخدمه مطلوب")]
         public int ServiceDays { get; set; }
+        public int ServiceFreezingDays { get; set; }
+        public int ServiceFreezingTimes { get; set; }
         public int InBodyCount { get; set; }
         //[Required(ErrorMessage = "الكميه مطلوبه")]
         public long Inventory { get; set; }
@@ -56,6 +58,8 @@ namespace G4Fit.Models.ViewModels
                 IsHidden = !Service.IsHidden,
                 IsTimeBoundService = Service.IsTimeBoundService,
                 ServiceDays = Service.ServiceDays,
+                ServiceFreezingTimes = Service.ServiceFreezingTimes,
+                ServiceFreezingDays = Service.ServiceFreezingDays,
                 InBodyCount = Service.InBodyCount,
                 Price = Service.OriginalPrice,
                 SpecialPrice = Service.SpecialPrice,

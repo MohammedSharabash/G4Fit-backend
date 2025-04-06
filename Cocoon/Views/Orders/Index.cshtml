@@ -3,171 +3,427 @@
 @{
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
 }
+
+<!-- إضافة مكتبة KeenSlider -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/keen-slider@6.8.5/keen-slider.min.css" />
+<style>
+    .member_profile {
+        padding: 2rem 0;
+        background-color: #1e1e1e;
+        color: #fff;
+    }
+
+    .card {
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        border: none;
+        overflow: hidden;
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #3a3a3a 0%, #292929 100%);
+        border-bottom: 1px solid #444;
+        padding: 1.5rem;
+    }
+
+        .card-header h2 {
+            margin: 0;
+            font-weight: 600;
+            color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .card-header h2 span {
+                position: relative;
+            }
+
+                .card-header h2 span:after {
+                    content: "";
+                    position: absolute;
+                    bottom: -5px;
+                    left: 0;
+                    width: 50px;
+                    height: 3px;
+                    background: linear-gradient(90deg, #a0bb3a 0%, #8ca832 100%);
+                }
+
+    .card-body {
+        padding: 2rem;
+    }
+
+    /* أنماط KeenSlider المخصصة */
+    .keen-slider {
+        padding: 10px 0;
+    }
+
+    .keen-slider__slide {
+        min-width: 280px;
+        max-width: 320px;
+        background: #333;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin: 0 10px;
+        transition: all 0.3s ease;
+        border: 1px solid #444;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+        .keen-slider__slide:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border-color: #a0bb3a;
+        }
+
+    .order-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #a0bb3a;
+        margin-bottom: 1rem;
+    }
+
+    .order-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: #f8f9fa;
+    }
+
+    .order-code {
+        font-size: 0.9rem;
+        color: #a0bb3a;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .order-date {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: auto;
+        padding-top: 1rem;
+        border-top: 1px dashed #555;
+    }
+
+        .order-date p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .order-date span {
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+
+        .order-date i {
+            color: #a0bb3a;
+        }
+
+    .purpose-container {
+        width: 100%;
+        margin: 1rem 0;
+        padding: 0.8rem;
+        background: rgba(160, 187, 58, 0.33);
+        border-radius: 8px;
+        border-left: 3px solid #a0bb3a;
+    }
+
+        .purpose-container p {
+            margin: 0 0 5px 0;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .purpose-container span {
+            font-size: 0.9rem;
+            color: #a0bb3a;
+            font-weight: 500;
+        }
+
+    .no-orders {
+        padding: 3rem 0;
+        text-align: center;
+        color: #888;
+        font-size: 1.1rem;
+    }
+
+        .no-orders i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+    /* أزرار التنقل */
+    .navigation-wrapper {
+        position: relative;
+    }
+
+    .arrow {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        -webkit-transform: translateY(-50%);
+        fill: #fff;
+        cursor: pointer;
+        background: rgba(254, 202, 87, 0.8);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+    }
+
+    .arrow--left {
+        left: 10px;
+    }
+
+    .arrow--right {
+        right: 10px;
+    }
+
+    .arrow--disabled {
+        opacity: 0.3;
+    }
+
+    /* مؤشرات النقاط */
+    .dots {
+        display: flex;
+        padding: 10px 0;
+        justify-content: center;
+    }
+
+    .dot {
+        border: none;
+        width: 10px;
+        height: 10px;
+        background: #444;
+        border-radius: 50%;
+        margin: 0 5px;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+        .dot:focus {
+            outline: none;
+        }
+
+    .dot--active {
+        background: #a0bb3a;
+    }
+</style>
+
 <section class="member_profile">
     <div class="container">
+        <!-- طلبات جديدة -->
         <div class="card wow fadeInUp" style="background-color: #292929;">
             <div class="card-header">
-                <h2 class="h3 @(culture == "ar" ? "text-right" : "")"><span>@*<i class="fas fa-star"></i>*@@(culture == "ar" ? "طلبات قيد التحضير " : "New Orders")@*<i class="fas fa-people-carry"></i>*@</span></h2>
+                <h2 class="h3 @(culture == "ar" ? "text-right" : "")">
+                    <span>@(culture == "ar" ? "طلبات قيد التحضير" : "New Orders")</span>
+                </h2>
             </div>
             <div class="card-body">
-                <div class="swiper-container"dir=@(culture == "ar" ? "rtl" : "ltr")>
-                    <div class="swiper-wrapper">
-                        @if (Model == null || Model.Count(s => s.OrderStatus == G4Fit.Models.Enums.OrderStatus.Placed) <= 0)
+                @if (Model == null || Model.Count(s => s.OrderStatus == G4Fit.Models.Enums.OrderStatus.Placed) <= 0)
+                {
+                    <div class="no-orders">
+                        <i class="fas fa-box-open"></i>
+                        <div>@(culture == "ar" ? "لا توجد طلبات جديدة" : "There are no new orders")</div>
+                    </div>
+                }
+                else
+                {
+                    <div id="newOrdersSlider" class="keen-slider" dir="@(culture == "ar" ? "rtl" : "ltr")">
+                        @foreach (var order in Model.Where(o => o.OrderStatus == G4Fit.Models.Enums.OrderStatus.Placed).OrderByDescending(s => s.CreatedOn))
                         {
-                            <div class="py-5 text-center m-auto">
-                                @(culture == "ar" ? "لا توجد طلبات جديدة" : "There is no new orders")
-                            </div>
-                        }
-                        else
-                        {
-                            foreach (var order in Model.OrderByDescending(s => s.CreatedOn))
-                            {
-                                <a href="/Orders/Invoice?OrderId=@order.Id">
-                                    @foreach (var Service in order.Items.Where(s => s.IsDeleted == false))
+                            <a href="/Orders/Invoice?OrderId=@order.Id" class="keen-slider__slide">
+                                @foreach (var Service in order.Items.Where(s => s.IsDeleted == false))
+                                {
+                                    string ServiceImage = null;
+                                    if (Service.Service.Images != null && Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
                                     {
-                                        string ServiceImage = null;
-                                        if (Service.Service.Images != null && Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
-                                        {
-                                            ServiceImage = Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
-                                        }
-                                        <div class="swiper-slide hvr-shrink">
-                                            <img class="rounded-circle" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100px" height="100">
-                                            <h3 class="h4">@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)</h3>
-                                            <h5>#@order.Code</h5>
-                                            @if (order.Items.Any(x => x.Service.IsTimeBoundService))
+                                        ServiceImage = Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
+                                    }
+
+                                    <img class="order-image" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" alt="@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)" />
+                                    <h3 class="order-title">@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)</h3>
+                                    <div class="order-code">#@order.Code</div>
+
+                                    if (order.Items.Any(x => x.Service.IsTimeBoundService))
+                                    {
+                                        <div class="purpose-container">
+                                            <p>@(culture == "ar" ? "الغرض من الاشتراك" : "Purpose Of Subscription")</p>
+                                            @switch (order.PurposeOfSubscription)
                                             {
-                                                <div class="Date d-flex">
-                                                    <div class="From">
-                                                        <p>@(culture == "ar" ? "الغرض من الاشتراك " : "Purpose Of Subscription")</p>
-                                                        @switch (order.PurposeOfSubscription)
-                                                        {
-                                                            case G4Fit.Models.Enums.PurposeOfSubscription.Muscle_Building:
-                                                                <span>
-                                                                    @(culture == "ar" ? "كتله عضليه" : "Muscle Building")
-                                                                </span>
-                                                                break;
-                                                            case G4Fit.Models.Enums.PurposeOfSubscription.Weight_Loss:
-                                                                <span>
-                                                                    @(culture == "ar" ? "خسارة وزن" : "Weight Loss")
-                                                                </span>
-                                                                break;
-                                                            case G4Fit.Models.Enums.PurposeOfSubscription.Weight_Gain:
-                                                                <span>
-                                                                    @(culture == "ar" ? "زياده وزن" : "Weight Gain")
-                                                                </span>
-                                                                break;
-                                                            case G4Fit.Models.Enums.PurposeOfSubscription.General_Health:
-                                                                <span>
-                                                                    @(culture == "ar" ? "صحه عامه" : "General Health")
-                                                                </span>
-                                                                break;
-                                                        }
-
-                                                    </div>
-
-                                                </div>
-
-
+                                                case G4Fit.Models.Enums.PurposeOfSubscription.Muscle_Building:
+                                                    <span>@(culture == "ar" ? "كتلة عضلية" : "Muscle Building")</span>
+                                                    break;
+                                                case G4Fit.Models.Enums.PurposeOfSubscription.Weight_Loss:
+                                                    <span>@(culture == "ar" ? "خسارة وزن" : "Weight Loss")</span>
+                                                    break;
+                                                case G4Fit.Models.Enums.PurposeOfSubscription.Weight_Gain:
+                                                    <span>@(culture == "ar" ? "زيادة وزن" : "Weight Gain")</span>
+                                                    break;
+                                                case G4Fit.Models.Enums.PurposeOfSubscription.General_Health:
+                                                    <span>@(culture == "ar" ? "صحة عامة" : "General Health")</span>
+                                                    break;
                                             }
-                                            <div class="Date d-flex">
-                                                <div class="From">
-                                                    <p>@(culture == "ar" ? "تاريخ الطلب" : "Order Date")</p><span>@order.CreatedOn.ToString("dd MMMM yyyy")</span>
-                                                </div><i class="fas fa-truck fa-2x"></i>
-                                                @*<div class="To">
-                                                        <p>تاريخ الوصول</p><span>20/5/2020</span>
-                                                    </div>*@
-                                            </div>
                                         </div>
                                     }
-                                </a>
-                            }
+
+                                    <div class="order-date">
+                                        <div>
+                                            <p>@(culture == "ar" ? "تاريخ الطلب" : "Order Date")</p>
+                                            <span>@order.CreatedOn.ToString("dd MMMM yyyy")</span>
+                                        </div>
+                                        <i class="fas fa-truck"></i>
+                                    </div>
+                                }
+                            </a>
                         }
                     </div>
-                </div>
+                }
             </div>
         </div>
+
+        <!-- الطلبات السابقة -->
         <div class="card wow zoomIn" style="background-color: #292929;">
             <div class="card-header">
-                <h2 class="h3 @(culture == "ar" ? "text-right" : "")"><span>@*<i class="fas fa-star"></i>*@@(culture == "ar" ? "طلباتى السابقة " : "Previous Orders")@*<i class="fas fa-people-carry"></i>*@</span></h2>
+                <h2 class="h3 @(culture == "ar" ? "text-right" : "")">
+                    <span>@(culture == "ar" ? "طلباتي السابقة" : "Previous Orders")</span>
+                </h2>
             </div>
             <div class="card-body">
-                <div class="swiper-container"dir=@(culture == "ar" ? "rtl" : "ltr")>
-                    <div class="swiper-wrapper">
-                        @if (Model == null || Model.Count(s => s.OrderStatus == G4Fit.Models.Enums.OrderStatus.Delivered) <= 0)
+                @if (Model == null || Model.Count(s => s.OrderStatus == G4Fit.Models.Enums.OrderStatus.Delivered) <= 0)
+                {
+                    <div class="no-orders">
+                        <i class="fas fa-history"></i>
+                        <div>@(culture == "ar" ? "لا توجد طلبات سابقة" : "There are no previous orders")</div>
+                    </div>
+                }
+                else
+                {
+                    <div id="previousOrdersSlider" class="keen-slider" dir="@(culture == "ar" ? "rtl" : "ltr")">
+                        @foreach (var order in Model.Where(o => o.OrderStatus == G4Fit.Models.Enums.OrderStatus.Delivered).OrderByDescending(s => s.CreatedOn))
                         {
-                            <div class="py-5 text-center m-auto">
-                                @(culture == "ar" ? "لا توجد طلبات سابقة" : "There is no old orders")
-                            </div>
-                        }
-                        else
-                        {
-                            foreach (var order in Model.OrderByDescending(s => s.CreatedOn))
-                            {
-                                <a href="/Orders/Invoice?OrderId=@order.Id">
-
-                                    @foreach (var Service in order.Items.Where(s => s.IsDeleted == false))
+                            <a href="/Orders/Invoice?OrderId=@order.Id" class="keen-slider__slide">
+                                @foreach (var Service in order.Items.Where(s => s.IsDeleted == false))
+                                {
+                                    string ServiceImage = null;
+                                    if (Service.Service.Images != null && Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
                                     {
-                                        string ServiceImage = null;
-                                        if (Service.Service.Images != null && Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
-                                        {
-                                            ServiceImage = Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
-                                        }
-                                        <div class="swiper-slide hvr-shrink">
-                                            <img class="rounded-circle" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" width="100px" height="100">
-                                            <h3 class="h4">@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)</h3>
-                                            <h5>#@order.Code</h5>
-                                            @if (order.Items.Any(x => x.Service.IsTimeBoundService))
+                                        ServiceImage = Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
+                                    }
+
+                                    <img class="order-image" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" alt="@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)" />
+                                    <h3 class="order-title">@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)</h3>
+                                    <div class="order-code">#@order.Code</div>
+
+                                    if (order.Items.Any(x => x.Service.IsTimeBoundService))
+                                    {
+                                        <div class="purpose-container">
+                                            <p>@(culture == "ar" ? "الغرض من الاشتراك" : "Purpose Of Subscription")</p>
+                                            @switch (order.PurposeOfSubscription)
                                             {
-                                                <div class="Date d-flex">
-                                                    <div class="From">
-                                                        <p>@(culture == "ar" ? "الغرض من الاشتراك " : "Purpose Of Subscription")</p>
-                                                        @switch (order.PurposeOfSubscription)
-                                                        {
-                                                            case G4Fit.Models.Enums.PurposeOfSubscription.Muscle_Building:
-                                                                <span>
-                                                                    @(culture == "ar" ? "كتله عضليه" : "Muscle Building")
-                                                                </span>
-                                                                break;
-                                                            case G4Fit.Models.Enums.PurposeOfSubscription.Weight_Loss:
-                                                                <span>
-                                                                    @(culture == "ar" ? "خسارة وزن" : "Weight Loss")
-                                                                </span>
-                                                                break;
-                                                            case G4Fit.Models.Enums.PurposeOfSubscription.Weight_Gain:
-                                                                <span>
-                                                                    @(culture == "ar" ? "زياده وزن" : "Weight Gain")
-                                                                </span>
-                                                                break;
-                                                            case G4Fit.Models.Enums.PurposeOfSubscription.General_Health:
-                                                                <span>
-                                                                    @(culture == "ar" ? "صحه عامه" : "General Health")
-                                                                </span>
-                                                                break;
-                                                        }
-
-                                                    </div>
-
-                                                </div>
-
-
+                                                case G4Fit.Models.Enums.PurposeOfSubscription.Muscle_Building:
+                                                    <span>@(culture == "ar" ? "كتلة عضلية" : "Muscle Building")</span>
+                                                    break;
+                                                case G4Fit.Models.Enums.PurposeOfSubscription.Weight_Loss:
+                                                    <span>@(culture == "ar" ? "خسارة وزن" : "Weight Loss")</span>
+                                                    break;
+                                                case G4Fit.Models.Enums.PurposeOfSubscription.Weight_Gain:
+                                                    <span>@(culture == "ar" ? "زيادة وزن" : "Weight Gain")</span>
+                                                    break;
+                                                case G4Fit.Models.Enums.PurposeOfSubscription.General_Health:
+                                                    <span>@(culture == "ar" ? "صحة عامة" : "General Health")</span>
+                                                    break;
                                             }
-                                            <div class="Date d-flex">
-                                                <div class="From">
-                                                    <p>@(culture == "ar" ? "تاريخ الطلب" : "Order Date")</p><span>@order.CreatedOn.ToString("dd MMMM yyyy")</span>
-                                                </div><i class="fas fa-handshake fa-2x"></i>
-                                                @*<div class="To">
-                <p>تاريخ الوصول</p><span>20/5/2020</span>
-            </div>*@
-                                            </div>
                                         </div>
                                     }
 
-                                </a>
-                            }
+                                    <div class="order-date">
+                                        <div>
+                                            <p>@(culture == "ar" ? "تاريخ الطلب" : "Order Date")</p>
+                                            <span>@order.CreatedOn.ToString("dd MMMM yyyy")</span>
+                                        </div>
+                                        <i class="fas fa-handshake"></i>
+                                    </div>
+                                }
+                            </a>
                         }
                     </div>
-                </div>
+                }
             </div>
         </div>
     </div>
 </section>
+
+<!-- إضافة مكتبة KeenSlider -->
+<script src="https://cdn.jsdelivr.net/npm/keen-slider@6.8.5/keen-slider.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // تهيئة سلايدر الطلبات الجديدة
+        if (document.getElementById('newOrdersSlider')) {
+            const newOrdersSlider = new KeenSlider('#newOrdersSlider', {
+                loop: true,
+                slides: {
+                    perView: 'auto',
+                    spacing: 5,
+                },
+                breakpoints: {
+                    '(min-width: 768px)': {
+                        slides: {
+                            perView: 2,
+                        }
+                    },
+                    '(min-width: 992px)': {
+                        slides: {
+                            perView: 3,
+                        }
+                    },
+                    '(min-width: 1200px)': {
+                        slides: {
+                            perView: 4,
+                        }
+                    }
+                }
+            });
+        }
+
+        // تهيئة سلايدر الطلبات السابقة
+        if (document.getElementById('previousOrdersSlider')) {
+            const previousOrdersSlider = new KeenSlider('#previousOrdersSlider', {
+                loop: true,
+                slides: {
+                    perView: 'auto',
+                    spacing: 5,
+                },
+                breakpoints: {
+                    '(min-width: 768px)': {
+                        slides: {
+                            perView: 2,
+                        }
+                    },
+                    '(min-width: 992px)': {
+                        slides: {
+                            perView: 3,
+                        }
+                    },
+                    '(min-width: 1200px)': {
+                        slides: {
+                            perView: 4,
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>

@@ -402,6 +402,7 @@
     <Compile Include="Helpers\RandomGenerator.cs" />
     <Compile Include="Helpers\SMS.cs" />
     <Compile Include="Helpers\UserValidation.cs" />
+    <Compile Include="Jobs\TimeBoundOrdersJob.cs" />
     <Compile Include="Jobs\PromoCodesJob.cs" />
     <Compile Include="Jobs\PackagesJob.cs" />
     <Compile Include="Jobs\OrdersJob.cs" />
@@ -480,6 +481,10 @@
     <Compile Include="Migrations\202503210854337_tamara.cs" />
     <Compile Include="Migrations\202503210854337_tamara.Designer.cs">
       <DependentUpon>202503210854337_tamara.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202504061617233_nowdata.cs" />
+    <Compile Include="Migrations\202504061617233_nowdata.Designer.cs">
+      <DependentUpon>202504061617233_nowdata.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Data\ApplicationDbContext.cs" />
@@ -2034,6 +2039,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202503210854337_tamara.resx">
       <DependentUpon>202503210854337_tamara.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202504061617233_nowdata.resx">
+      <DependentUpon>202504061617233_nowdata.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Website.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

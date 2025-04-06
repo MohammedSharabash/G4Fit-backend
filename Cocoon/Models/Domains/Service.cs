@@ -1,6 +1,7 @@
 ﻿using Antlr.Runtime.Misc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -20,6 +21,8 @@ namespace G4Fit.Models.Domains
         public bool HardDelete { get; set; } = false;
         public bool IsTimeBoundService { get; set; } = false;
         public int ServiceDays { get; set; } = 0;
+        public int ServiceFreezingDays { get; set; } = 0;
+        public int ServiceFreezingTimes { get; set; } = 0;
         public int InBodyCount { get; set; } = 0;
         public int SellCounter { get; set; }
         public long Inventory { get; set; } = 0;

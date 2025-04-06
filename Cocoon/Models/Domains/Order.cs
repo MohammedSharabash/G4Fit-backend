@@ -39,6 +39,7 @@ namespace G4Fit.Models.Domains
         public int SMSNotificationsCount { get; set; }
         public DateTime? LastSMSNotificationDateSent { get; set; }
         public long? PromoId { get; set; }
+        public bool Frezzed { get; set; } = false;
         public virtual PromoCode Promo { get; set; }
         public virtual ICollection<PromoCodeUser> UsedPromos { get; set; }
         public virtual ICollection<PaymentTransactionHistory> PaymentTransactionHistories { get; set; }

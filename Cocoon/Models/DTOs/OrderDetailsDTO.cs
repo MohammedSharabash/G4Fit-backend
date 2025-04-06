@@ -25,6 +25,8 @@ namespace G4Fit.Models.DTOs
         public decimal PromoDiscount { get; set; }
         public string PromoText { get; set; }
         public decimal DeliveryFees { get; set; }
+        public bool Frezzed { get; set; } = false;
+
         public List<OrderDetailsItemDTO> Items { get; set; } = new List<OrderDetailsItemDTO>();
     }
 }

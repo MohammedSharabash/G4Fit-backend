@@ -17,6 +17,11 @@ namespace G4Fit.Models.Domains
         public long? SizeId { get; set; }
         public virtual ServiceSize Size { get; set; }
         public int Quantity { get; set; }
+        public int FreezingDays { get; set; } = 0;
+        public int FreezingTimes { get; set; } = 0;
+        public int RemainServiceDays { get; set; } = 0;
+        public int RemainFreezingDays { get; set; } = 0;
+        public int RemainFreezingTimes { get; set; } = 0;
         public DateTime? StartDate { get; set; }
         public decimal SubTotal { get; set; }
     }

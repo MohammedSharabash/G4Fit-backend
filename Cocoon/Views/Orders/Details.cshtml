@@ -126,6 +126,10 @@
                                 }
                             </tr>
                             <tr>
+                                <td>هل الاشتراك مجمد؟</td>
+                                <td>@(Model.Frezzed ? "نعم" : "لا")</td>
+                            </tr>
+                            <tr>
                                 <td>
                                     عناصر الطلب
                                 </td>
@@ -151,7 +155,16 @@
                                                     <td id="ServiceName">@item.Service.NameAr</td>
                                                     @if (!item.Service.IsTimeBoundService)
                                                     {
-                                                        <td id="quantity">@item.Quantity</td>
+                                                        <td id="quantity">
+                                                            @item.Quantity
+                                                            <div class="mt-2 small text-muted">
+                                                                <div>أيام الخدمة المتبقية: @item.RemainServiceDays</div>
+                                                                <div>أيام التجميد: @item.FreezingDays</div>
+                                                                <div>مرات التجميد: @item.FreezingTimes</div>
+                                                                <div>المتبقي من أيام التجميد: @item.RemainFreezingDays</div>
+                                                                <div>المتبقي من مرات التجميد: @item.RemainFreezingTimes</div>
+                                                            </div>
+                                                        </td>
                                                     }
                                                     else
                                                     {

@@ -43,6 +43,9 @@
             <li><span class="text-blue">حاله الظهور: </span> @(Model.IsHidden == true ? "غير مرئى فى التطبيق" : "مرئى فى التطبيق ")</li>
             @if (Model.IsTimeBoundService)
             {
+                <li><span class="text-blue">عدد أيام التجميد: </span> @Model.ServiceFreezingDays يوم</li>
+                <li><span class="text-blue">عدد مرات التجميد: </span> @Model.ServiceFreezingTimes مره</li>
+
                 <li>
                     <span class="text-blue">المدربات: </span>
                     @if (Model.Colors != null && Model.Colors.Count(s => s.IsDeleted == false) > 0)
