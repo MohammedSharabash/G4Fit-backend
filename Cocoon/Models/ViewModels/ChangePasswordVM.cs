@@ -22,4 +22,15 @@ namespace G4Fit.Models.ViewModels
         [Compare("Password", ErrorMessage = "كلمة السر غير متطابقة")]
         public string ConfirmPassword { get; set; }
     }
+    public class WebsiteChangePasswordVM
+    {
+        [Required(ErrorMessage = "كلمه السر الجديدة مطلوبة")]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "كلمه السر يجب ان لا تقل عن 6 أحرف")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "تأكيد كلمه السر الجديدة مطلوبة")]
+        [Compare("Password", ErrorMessage = "كلمة السر غير متطابقة")]
+        public string ConfirmPassword { get; set; }
+    }
 }

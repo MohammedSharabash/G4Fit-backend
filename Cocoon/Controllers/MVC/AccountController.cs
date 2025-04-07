@@ -1,4 +1,5 @@
 ﻿using G4Fit.Helpers;
+using G4Fit.Models.Domains;
 using G4Fit.Models.DTOs;
 using G4Fit.Models.Enums;
 using G4Fit.Models.ViewModels;
@@ -434,6 +435,57 @@ namespace G4Fit.Controllers.MVC
             return View(model);
         }
 
+        #region ChangePassword
+        [Authorize]
+        public async Task<ActionResult> ChangePassword()
+        {
+            CurrentUserId = User.Identity.GetUserId();
+            if (!string.IsNullOrEmpty(CurrentUserId))
+            {
+                var user = db.Users.Find(CurrentUserId);
+
+                if (user == null)
+                {
+                    return Json(new { Success = false, IsNotLogin = true, Message = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First ." }, JsonRequestBehavior.AllowGet);
+                }
+
+                WebsiteChangePasswordVM vm = new WebsiteChangePasswordVM() { };
+                return View(vm);
+            }
+            else
+            {
+                return Json(new { Success = false, IsNotLogin = true, Message = culture == "ar" ? "عذراً ، يجب تسجيل الدخول أولاً" : "Please Log in First ." }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult ChangePassword(WebsiteChangePasswordVM model)
+        {
+            if (ModelState.ContainsKey("CurrentPassword"))
+            {
+                ModelState["CurrentPassword"].Errors.Clear();
+            }
+            CurrentUserId = User.Identity.GetUserId();
+
+            if (ModelState.IsValid == true)
+            {
+                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+                var user = db.Users.Find(CurrentUserId);
+                if (user != null)
+                {
+                    user.PasswordHash = UserManager.PasswordHasher.HashPassword(model.Password);
+                    db.SaveChanges();
+                    TempData["Success"] = true;
+                    ViewBag.Message = "تم تحديث كلمة المرور بنجاح";
+                    return RedirectToAction("LogOff");
+                }
+            }
+            return View(model);
+        }
+
+        #endregion
         [AllowAnonymous]
         [HttpGet]
         public ActionResult ForgotPassword()

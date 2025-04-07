@@ -1663,6 +1663,11 @@ namespace G4Fit.Controllers.API
                 var Frezzed = !order.Frezzed;
                 order.Frezzed = Frezzed;
                 CRUD<Order>.Update(order);
+                if (order.Frezzed)
+                {
+                    Orderitem.RemainFreezingTimes -= 1;
+                    CRUD<OrderItem>.Update(Orderitem);
+                }
                 db.SaveChanges();
             }
             else

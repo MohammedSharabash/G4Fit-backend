@@ -4,6 +4,20 @@
     string FacebookAppId = System.Configuration.ConfigurationManager.AppSettings["Facebook_App_ID"];
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
 }
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: 'تم بنجاح',
+                text: '@ViewBag.Message',
+                icon: 'success',
+                timer: 2000, // 2 seconds
+                showConfirmButton: false
+            });
+        });
+    </script>
+}
 <section class="m-5 pt-3">
     <div class="card text-center d-block">
         <div class="card-header font-weight-bold text-white" style="background:black;">
@@ -37,18 +51,18 @@
                             <a href="@Url.Action("ForgotPassword", "Account")" class="text-black"><strong>@(culture == "ar" ? "نسيت كلمه المرور؟" : "Forgot your password?")</strong></a><br />
                             <a href="@Url.Action("Register", "Account")" class="text-black"><strong>@(culture == "ar" ? "ليس لديك حساب؟ التسجيل الان" : "Don't have account? register now")</strong></a>
                             @*<div class="separator my-3">@Website.Or</div>
-                            <div class="row m-auto text-center">
-                                <div class="col-lg-12 my-2">
-                                    <div class="fb-login-button" data-scope="public_profile,email" data-size="large" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="true" data-onlogin="checkLoginState()" data-width=""></div>
-                                    @using (Html.BeginForm("FBLogin", "Account", FormMethod.Post, new { @id = "FB-Form" }))
-                                    {
-                                        <input hidden name="accessToken" id="accessToken" />
-                                    }
-                                </div>
-                            </div>*@
+                                <div class="row m-auto text-center">
+                                    <div class="col-lg-12 my-2">
+                                        <div class="fb-login-button" data-scope="public_profile,email" data-size="large" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="true" data-onlogin="checkLoginState()" data-width=""></div>
+                                        @using (Html.BeginForm("FBLogin", "Account", FormMethod.Post, new { @id = "FB-Form" }))
+                                        {
+                                            <input hidden name="accessToken" id="accessToken" />
+                                        }
+                                    </div>
+                                </div>*@
                         </div>
                     </div>
-                    </div>
+                </div>
             </section>
         </div>
     </div>

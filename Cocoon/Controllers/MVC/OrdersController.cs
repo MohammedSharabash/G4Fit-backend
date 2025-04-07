@@ -858,6 +858,67 @@ namespace G4Fit.Controllers.MVC
         }
 
         [HttpGet]
+        public JsonResult ToggleOrderFreeze(long OrderId, string lang = "en")
+        {
+            var response = new BaseResponseDTO();
+            try
+            {
+                var order = db.Orders.Find(OrderId);
+                if (order == null || order.IsDeleted == true)
+                {
+                    response.ErrorCode = Errors.OrderNotFound;
+                    response.ErrorMessage = lang == "ar" ? "الطلب غير موجود" : "Order not found";
+                    return Json(response, JsonRequestBehavior.AllowGet);
+                }
+
+                var Orderitem = db.OrderItems.FirstOrDefault(x => !x.IsDeleted && x.OrderId == OrderId);
+                if (Orderitem == null || (Orderitem.RemainFreezingTimes <= 0 || Orderitem.RemainFreezingDays <= 0))
+                {
+                    response.ErrorCode = Errors.YouUsedAllFreezingTimesOrDays;
+                    response.ErrorMessage = lang == "ar" ?
+                        "لقد استخدمت جميع أيام أو مرات التجميد المتاحة" :
+                        "You have used all available freezing days or times";
+                    return Json(response, JsonRequestBehavior.AllowGet);
+                }
+
+                // تبديل حالة التجميد
+                order.Frezzed = !order.Frezzed;
+                if (order.Frezzed)
+                    Orderitem.RemainFreezingTimes -= 1;
+                db.SaveChanges();
+
+                // إعداد بيانات الإجابة
+                var result = new
+                {
+                    Success = true,
+                    IsFrozen = order.Frezzed,
+                    NewButtonText = order.Frezzed ?
+                        (lang == "ar" ? "تنشيط" : "Activate") :
+                        (lang == "ar" ? "تجميد" : "Freeze"),
+                    NewIconClass = order.Frezzed ? "fa-play" : "fa-pause",
+                    RemainFreezingTimes = Orderitem.RemainFreezingTimes,
+                    RemainFreezingDays = Orderitem.RemainFreezingDays,
+                    Message = order.Frezzed ?
+                        (lang == "ar" ? "تم تجميد الطلب بنجاح" : "Order frozen successfully") :
+                        (lang == "ar" ? "تم تنشيط الطلب بنجاح" : "Order activated successfully")
+                };
+
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                // تسجيل الخطأ
+                // Logger.LogError(ex, "Error in ToggleOrderFreeze");
+
+                return Json(new
+                {
+                    Success = false,
+                    Message = lang == "ar" ? "حدث خطأ في الخادم" : "Server error occurred"
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
         public ActionResult Checkout()
         {
             string Anonymous = null;

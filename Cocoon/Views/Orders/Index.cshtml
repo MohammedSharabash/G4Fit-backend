@@ -220,6 +220,64 @@
     .dot--active {
         background: #a0bb3a;
     }
+
+    .freeze-info-container {
+        width: 100%;
+        margin-top: 15px;
+        text-align: center;
+        padding: 10px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 8px;
+    }
+
+    .freeze-details {
+        margin-top: 8px;
+        font-size: 0.75rem;
+        color: #aaa;
+    }
+
+        .freeze-details small {
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+    /* تحسينات لعنصر واحد فقط */
+    .single-item-slide {
+        max-width: 400px !important;
+        margin: 0 auto !important;
+    }
+
+    /* تحسينات لزر التجميد */
+    .freeze-btn {
+        background: rgba(160, 187, 58, 0.2);
+        border: 1px solid #a0bb3a;
+        color: #a0bb3a;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+        .freeze-btn:hover {
+            background: rgba(160, 187, 58, 0.3);
+        }
+
+        .freeze-btn.active {
+            background: rgba(160, 187, 58, 0.4);
+        }
+
+        .freeze-btn i {
+            font-size: 0.9rem;
+        }
+
+    /* تحسينات للشريط المنزلق عند عنصر واحد */
+    .single-slide-container .keen-slider__slide {
+        margin: 0 auto;
+    }
 </style>
 
 <section class="member_profile">
@@ -228,7 +286,7 @@
         <div class="card wow fadeInUp" style="background-color: #292929;">
             <div class="card-header">
                 <h2 class="h3 @(culture == "ar" ? "text-right" : "")">
-                    <span>@(culture == "ar" ? "طلبات قيد التحضير" : "New Orders")</span>
+                    <span>@(culture == "ar" ? "طلبات قيد التنفيذ" : "New Orders")</span>
                 </h2>
             </div>
             <div class="card-body">
@@ -244,20 +302,21 @@
                     <div id="newOrdersSlider" class="keen-slider" dir="@(culture == "ar" ? "rtl" : "ltr")">
                         @foreach (var order in Model.Where(o => o.OrderStatus == G4Fit.Models.Enums.OrderStatus.Placed).OrderByDescending(s => s.CreatedOn))
                         {
-                            <a href="/Orders/Invoice?OrderId=@order.Id" class="keen-slider__slide">
-                                @foreach (var Service in order.Items.Where(s => s.IsDeleted == false))
+                            var firstItem = order.Items.FirstOrDefault(s => s.IsDeleted == false);
+                            if (firstItem != null)
+                            {
+                                string serviceImage = null;
+                                if (firstItem.Service.Images != null && firstItem.Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
                                 {
-                                    string ServiceImage = null;
-                                    if (Service.Service.Images != null && Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
-                                    {
-                                        ServiceImage = Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
-                                    }
+                                    serviceImage = firstItem.Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
+                                }
 
-                                    <img class="order-image" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" alt="@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)" />
-                                    <h3 class="order-title">@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)</h3>
+                                <a href="/Orders/Invoice?OrderId=@order.Id" class="keen-slider__slide @(order.Items.Count == 1 ? "single-item-slide" : "")">
+                                    <img class="order-image" src="@(serviceImage != null ? "/Content/Images/Services/" + serviceImage : "/Content/assets/imgs/doesnotexist.png")" alt="@(culture == "ar" ? firstItem.Service.NameAr : firstItem.Service.NameEn)" />
+                                    <h3 class="order-title">@(culture == "ar" ? firstItem.Service.NameAr : firstItem.Service.NameEn)</h3>
                                     <div class="order-code">#@order.Code</div>
 
-                                    if (order.Items.Any(x => x.Service.IsTimeBoundService))
+                                    @if (firstItem.Service.IsTimeBoundService)
                                     {
                                         <div class="purpose-container">
                                             <p>@(culture == "ar" ? "الغرض من الاشتراك" : "Purpose Of Subscription")</p>
@@ -277,6 +336,34 @@
                                                     break;
                                             }
                                         </div>
+                                        <div class="freeze-info-container">
+                                            @if (firstItem.RemainFreezingDays > 0 && firstItem.RemainFreezingTimes > 0)
+                                            {
+                                                <div class="freeze-btn-container">
+                                                    <button class="freeze-btn @(order.Frezzed ? "active" : "")"
+                                                            data-order-id="@order.Id"
+                                                            onclick="event.preventDefault(); event.stopPropagation(); toggleFreeze(this);">
+                                                        <i class="fas @(order.Frezzed ? "fa-play" : "fa-pause")"></i>
+                                                        @(order.Frezzed ? (culture == "ar" ? "تنشيط" : "Activate") : (culture == "ar" ? "تجميد" : "Freeze"))
+                                                    </button>
+                                                </div>
+                                            }
+
+                                            <div class="freeze-details" data-order-freeze-info="@order.Id">
+                                                @if (culture == "ar")
+                                                {
+                                                    <strong>الأيام المتبقية في الطلب: @firstItem.RemainServiceDays يوم</strong>
+                                                    <br />
+                                                    <small>أيام  التجميد المتبقية: @firstItem.RemainFreezingDays - مرات التجميد المتبقية: @firstItem.RemainFreezingTimes</small>
+                                                }
+                                                else
+                                                {
+                                                    <strong>Remaining Days: @firstItem.RemainServiceDays Day</strong>
+                                                    <br />
+                                                    <small>Remaining Freezing Days: @firstItem.RemainFreezingDays - Remaining Freezing Times: @firstItem.RemainFreezingTimes</small>
+                                                }
+                                            </div>
+                                        </div>
                                     }
 
                                     <div class="order-date">
@@ -286,8 +373,8 @@
                                         </div>
                                         <i class="fas fa-truck"></i>
                                     </div>
-                                }
-                            </a>
+                                </a>
+                            }
                         }
                     </div>
                 }
@@ -301,7 +388,7 @@
                     <span>@(culture == "ar" ? "طلباتي السابقة" : "Previous Orders")</span>
                 </h2>
             </div>
-            <div class="card-body">
+            <div class="card-body @(Model.Count(s => s.OrderStatus == G4Fit.Models.Enums.OrderStatus.Delivered) == 1 ? "single-slide-container" : "")">
                 @if (Model == null || Model.Count(s => s.OrderStatus == G4Fit.Models.Enums.OrderStatus.Delivered) <= 0)
                 {
                     <div class="no-orders">
@@ -314,20 +401,21 @@
                     <div id="previousOrdersSlider" class="keen-slider" dir="@(culture == "ar" ? "rtl" : "ltr")">
                         @foreach (var order in Model.Where(o => o.OrderStatus == G4Fit.Models.Enums.OrderStatus.Delivered).OrderByDescending(s => s.CreatedOn))
                         {
-                            <a href="/Orders/Invoice?OrderId=@order.Id" class="keen-slider__slide">
-                                @foreach (var Service in order.Items.Where(s => s.IsDeleted == false))
+                            var firstItem = order.Items.FirstOrDefault(s => s.IsDeleted == false);
+                            if (firstItem != null)
+                            {
+                                string serviceImage = null;
+                                if (firstItem.Service.Images != null && firstItem.Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
                                 {
-                                    string ServiceImage = null;
-                                    if (Service.Service.Images != null && Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false) != null)
-                                    {
-                                        ServiceImage = Service.Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
-                                    }
+                                    serviceImage = firstItem.Service.Images.FirstOrDefault(s => s.IsDeleted == false).ImageUrl;
+                                }
 
-                                    <img class="order-image" src="@(ServiceImage != null ? "/Content/Images/Services/" + ServiceImage : "/Content/assets/imgs/doesnotexist.png")" alt="@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)" />
-                                    <h3 class="order-title">@(culture == "ar" ? Service.Service.NameAr : Service.Service.NameEn)</h3>
+                                <a href="/Orders/Invoice?OrderId=@order.Id" class="keen-slider__slide @(order.Items.Count == 1 ? "single-item-slide" : "")">
+                                    <img class="order-image" src="@(serviceImage != null ? "/Content/Images/Services/" + serviceImage : "/Content/assets/imgs/doesnotexist.png")" alt="@(culture == "ar" ? firstItem.Service.NameAr : firstItem.Service.NameEn)" />
+                                    <h3 class="order-title">@(culture == "ar" ? firstItem.Service.NameAr : firstItem.Service.NameEn)</h3>
                                     <div class="order-code">#@order.Code</div>
 
-                                    if (order.Items.Any(x => x.Service.IsTimeBoundService))
+                                    @if (firstItem.Service.IsTimeBoundService)
                                     {
                                         <div class="purpose-container">
                                             <p>@(culture == "ar" ? "الغرض من الاشتراك" : "Purpose Of Subscription")</p>
@@ -356,8 +444,8 @@
                                         </div>
                                         <i class="fas fa-handshake"></i>
                                     </div>
-                                }
-                            </a>
+                                </a>
+                            }
                         }
                     </div>
                 }
@@ -365,6 +453,7 @@
         </div>
     </div>
 </section>
+
 
 <!-- إضافة مكتبة KeenSlider -->
 <script src="https://cdn.jsdelivr.net/npm/keen-slider@6.8.5/keen-slider.min.js"></script>
@@ -376,7 +465,7 @@
                 loop: true,
                 slides: {
                     perView: 'auto',
-                    spacing: 5,
+                    spacing: 15,
                 },
                 breakpoints: {
                     '(min-width: 768px)': {
@@ -393,6 +482,14 @@
                         slides: {
                             perView: 4,
                         }
+                    }
+                },
+                created: function (instance) {
+                    // إذا كان هناك عنصر واحد فقط، قم بتعطيل السحب
+                    if (instance.slides.length <= 1) {
+                        instance.update({
+                            drag: false
+                        });
                     }
                 }
             });
@@ -404,7 +501,7 @@
                 loop: true,
                 slides: {
                     perView: 'auto',
-                    spacing: 5,
+                    spacing: 15,
                 },
                 breakpoints: {
                     '(min-width: 768px)': {
@@ -422,8 +519,88 @@
                             perView: 4,
                         }
                     }
+                },
+                created: function (instance) {
+                    // إذا كان هناك عنصر واحد فقط، قم بتعطيل السحب
+                    if (instance.slides.length <= 1) {
+                        instance.update({
+                            drag: false
+                        });
+                    }
                 }
             });
         }
     });
+
+    function toggleFreeze(button) {
+        const orderId = button.getAttribute('data-order-id');
+        const $button = $(button);
+        const culture = '@culture';
+
+        // حفظ الحالة الأصلية للزر
+        const originalHtml = $button.html();
+        const originalClass = $button.attr('class');
+
+        // إظهار حالة التحميل
+        $button.html('<i class="fas fa-spinner fa-spin"></i> ' + (culture == "ar" ? "جاري المعالجة..." : "Processing..."));
+        $button.prop('disabled', true);
+
+        $.ajax({
+            url: '/Orders/ToggleOrderFreeze',
+            type: 'GET',
+            data: {
+                OrderId: orderId,
+                lang: culture
+            },
+            success: function (response) {
+                if (response.Success) {
+                    // تحديث واجهة المستخدم
+                    $button.toggleClass('active');
+                    const newIcon = $button.hasClass('active') ? 'fa-play' : 'fa-pause';
+                    const newText = $button.hasClass('active') ?
+                        (culture == "ar" ? "تنشيط" : "Activate") :
+                        (culture == "ar" ? "تجميد" : "Freeze");
+
+                    $button.html(`<i class="fas ${newIcon}"></i> ${newText}`);
+
+                    // تحديث معلومات التجميد
+                    $(`[data-order-freeze-info="${orderId}"]`).html(
+                        culture == "ar" ?
+                        `<small>الأيام المتبقية: ${response.RemainFreezingDays} - المرات المتبقية: ${response.RemainFreezingTimes}</small>` :
+                        `<small>Remaining Days: ${response.RemainFreezingDays} - Remaining Times: ${response.RemainFreezingTimes}</small>`
+                    );
+
+                    // إظهار إشعار النجاح
+                    showToast('success', response.Message);
+                } else {
+                    // إعادة الزر لحالته الأصلية
+                    $button.html(originalHtml);
+                    $button.attr('class', originalClass);
+                    showToast('error', response.Message ||
+                        (culture == "ar" ? "حدث خطأ أثناء معالجة الطلب" : "Error processing request"));
+                }
+            },
+            error: function () {
+                // إعادة الزر لحالته الأصلية
+                $button.html(originalHtml);
+                $button.attr('class', originalClass);
+                showToast('error',
+                    culture == "ar" ? "حدث خطأ في الاتصال بالخادم" : "Server connection error");
+            },
+            complete: function () {
+                $button.prop('disabled', false);
+            }
+        });
+    }
+
+    function showToast(type, message) {
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: '@culture' == "ar" ? 'toast-bottom-left' : 'toast-bottom-right',
+            timeOut: 5000,
+            rtl: '@culture' == "ar"
+        };
+        toastr[type](message);
+    }
 </script>
