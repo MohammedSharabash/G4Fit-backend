@@ -525,13 +525,13 @@ namespace G4Fit.Controllers.MVC
                 db.ServiceOffers.Add(new ServiceOffer()
                 {
                     NumberOfUse = 0,
-                    Percentage = offerVM.Percentage,
+                    //Percentage = offerVM.OfferPrice ,
                     ServiceId = offerVM.ServiceId.Value,
                     OriginalPrice = Service.OriginalPrice,
-                    AfterPrice = Service.OriginalPrice - Service.OriginalPrice * offerVM.Percentage / 100,
+                    AfterPrice = Service.OriginalPrice - Service.OriginalPrice * offerVM.OfferPrice  / 100,
                     FinishOn = offerVM.FinishOn
                 });
-                Service.OfferPrice = Service.OriginalPrice - Service.OriginalPrice * offerVM.Percentage / 100;
+                Service.OfferPrice = Service.OriginalPrice - Service.OriginalPrice * offerVM.OfferPrice  / 100;
                 db.SaveChanges();
                 return RedirectToAction("Offers", new { offerVM.ServiceId });
             }
@@ -562,7 +562,7 @@ namespace G4Fit.Controllers.MVC
             {
                 FinishOn = ServiceOffer.FinishOn,
                 OfferId = ServiceOffer.Id,
-                Percentage = ServiceOffer.Percentage,
+                OfferPrice  = ServiceOffer.Percentage,
                 ServiceId = ServiceOffer.ServiceId
             };
             return View(ServiceOfferVM);
@@ -585,10 +585,10 @@ namespace G4Fit.Controllers.MVC
                 var Offer = db.ServiceOffers.Find(offerVM.OfferId);
                 if (Offer != null)
                 {
-                    Service.OfferPrice = Service.OriginalPrice - Service.OriginalPrice * offerVM.Percentage / 100;
-                    Offer.Percentage = offerVM.Percentage;
+                    Service.OfferPrice = Service.OriginalPrice - Service.OriginalPrice * offerVM.OfferPrice  / 100;
+                    //Offer.Percentage = offerVM.OfferPrice ;
                     Offer.OriginalPrice = Service.OriginalPrice;
-                    Offer.AfterPrice = Service.OriginalPrice - Service.OriginalPrice * offerVM.Percentage / 100;
+                    Offer.AfterPrice = Service.OriginalPrice - Service.OriginalPrice * offerVM.OfferPrice  / 100;
                     Offer.FinishOn = offerVM.FinishOn;
                     CRUD<ServiceOffer>.Update(Offer);
                     db.SaveChanges();

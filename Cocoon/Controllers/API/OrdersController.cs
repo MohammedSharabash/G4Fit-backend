@@ -1188,8 +1188,10 @@ namespace G4Fit.Controllers.API
                 {
                     var domain = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
-                    var publicKey = "pk_test_0b12d816-6187-4ce2-b5bb-a4bd1e29dfb6"; // Replace with your public key
-                    var secret_key = "sk_test_e65f1167-311a-496c-94de-acb067614827"; // Replace with your Secret key
+                    //var publicKey = "pk_test_0b12d816-6187-4ce2-b5bb-a4bd1e29dfb6"; // Replace with your public key
+                    var publicKey = "pk_dbae4335-290b-41fd-a744-7ea3b7793111"; 
+                    //var secret_key = "sk_test_e65f1167-311a-496c-94de-acb067614827"; // Replace with your Secret key
+                    var secret_key = "sk_a0ccc0e4-c3f1-407f-82a8-3e5d89d3553f"; 
                     var merchant_code = "g4fitonline";
                     var user = order.User;
                     //var tax = (order.SubTotal * order.StoreOrdersTaxs) / 100;
@@ -1233,10 +1235,10 @@ namespace G4Fit.Controllers.API
                             description = "description",
                             buyer = new
                             {
-                                //phone = user.PhoneNumber,
-                                //email = user.Email,
-                                phone = "+966500000001",
-                                email = "otp.success@tabby.ai",
+                                phone = !string.IsNullOrEmpty(user.PhoneNumber) ? "+966" + user.PhoneNumber.TrimStart('0') : string.Empty,
+                                email = user.Email,
+                                //phone = "+966500000001",
+                                //email = "otp.success@tabby.ai",
                                 name = user.Name,
                                 //dob = "2019-08-24"
                             },
@@ -2140,9 +2142,9 @@ namespace G4Fit.Controllers.API
             <p>✅ تم تنفيذ طلبك بنجاح!</p>
             <p>🔹 <strong>كود الطلب:</strong> {code}</p>
             <p>يمكنك عرض الفاتورة الخاصة بطلبك من خلال الرابط التالي:</p>
-            <a href='{invoiceLink}' class='button'>عرض الفاتورة</a>
-        </div>
-        <div class='footer'>
+            <a href='{invoiceLink}' class='button' style='color:blue;'>عرض الفاتورة</a>
+        </ div >
+        < div class='footer'>
             نشكرك على ثقتك بنا، ونتمنى لك تجربة رائعة! 😊<br>
             — فريق G4Fit
         </div>

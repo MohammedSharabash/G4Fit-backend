@@ -22,13 +22,14 @@
                             <div class="row" style="margin:10px;">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="Percentage" class="col-sm-5 control-label required">نسبة الخصم: </label>
+                                        <label for="OfferPrice" class="col-sm-5 control-label required">سعر العرض: </label>
                                         <div class="col-sm-7">
                                             <div class="input-group">
-                                                @Html.TextBoxFor(s => s.Percentage, new { @class = "form-control" })
-                                                <span class="input-group-addon">%</span>
+                                                @Html.TextBoxFor(s => s.OfferPrice, new { @class = "form-control", type = "number", step = "0.01" })
+                                                <span class="input-group-addon">ر.س</span>
                                             </div>
-                                            @Html.ValidationMessageFor(d => d.Percentage, "", new { @class = "text-danger" })
+                                            @Html.ValidationMessageFor(d => d.OfferPrice, "", new { @class = "text-danger" })
+                                            <small class="text-muted">السعر الأصلي: @ViewBag.OriginalPrice ر.س</small>
                                         </div>
                                     </div>
                                 </div>

@@ -701,29 +701,32 @@ namespace G4Fit.Controllers.MVC
         public ActionResult CreateOffer(ServiceOfferVM offerVM)
         {
             var Service = db.Services.Find(offerVM.ServiceId);
-            if (offerVM.FinishOn.HasValue == true)
+
+            // التحقق من أن سعر العرض أقل من السعر الأصلي
+            if (offerVM.OfferPrice >= Service.OriginalPrice)
             {
-                var DateTimeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Arab Standard Time"));
-                if (offerVM.FinishOn.Value.Date < DateTimeNow.Date)
-                {
-                    ModelState.AddModelError("FinishOn", "تاريخ النهاية قد تخطى");
-                }
+                ModelState.AddModelError("OfferPrice", "يجب أن يكون سعر العرض أقل من السعر الأصلي");
             }
-            if (ModelState.IsValid == true)
+
+            if (ModelState.IsValid)
             {
+                // حساب النسبة المئوية وتحويلها إلى int
+                var percentage = (int)Math.Round((Service.OriginalPrice - offerVM.OfferPrice) / Service.OriginalPrice * 100);
                 db.ServiceOffers.Add(new ServiceOffer()
                 {
                     NumberOfUse = 0,
-                    Percentage = offerVM.Percentage,
+                    Percentage = percentage, // حساب النسبة تلقائياً
                     ServiceId = offerVM.ServiceId.Value,
                     OriginalPrice = Service.OriginalPrice,
-                    AfterPrice = Service.OriginalPrice - Service.OriginalPrice * offerVM.Percentage / 100,
+                    AfterPrice = offerVM.OfferPrice,
                     FinishOn = offerVM.FinishOn
                 });
-                Service.OfferPrice = Service.OriginalPrice - Service.OriginalPrice * offerVM.Percentage / 100;
+
+                Service.OfferPrice = offerVM.OfferPrice;
                 db.SaveChanges();
                 return RedirectToAction("Offers", new { offerVM.ServiceId });
             }
+
             ViewBag.Service = Service;
             return View(offerVM);
         }
@@ -745,9 +748,10 @@ namespace G4Fit.Controllers.MVC
             {
                 FinishOn = ServiceOffer.FinishOn,
                 OfferId = ServiceOffer.Id,
-                Percentage = ServiceOffer.Percentage,
+                OfferPrice = ServiceOffer.Percentage,
                 ServiceId = ServiceOffer.ServiceId
             };
+            ViewBag.OriginalPrice = ServiceOffer.OriginalPrice;
             return View(ServiceOfferVM);
         }
 
@@ -755,33 +759,32 @@ namespace G4Fit.Controllers.MVC
         public ActionResult EditOffer(ServiceOfferVM offerVM)
         {
             var Service = db.Services.Find(offerVM.ServiceId);
-            if (offerVM.FinishOn.HasValue == true)
+
+            // التحقق من أن سعر العرض أقل من السعر الأصلي
+            if (offerVM.OfferPrice >= Service.OriginalPrice)
             {
-                var DateTimeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Arab Standard Time"));
-                if (offerVM.FinishOn.Value.Date < DateTimeNow.Date)
-                {
-                    ModelState.AddModelError("FinishOn", "تاريخ النهاية قد تخطى");
-                }
+                ModelState.AddModelError("OfferPrice", "يجب أن يكون سعر العرض أقل من السعر الأصلي");
             }
-            if (ModelState.IsValid == true)
+
+            if (ModelState.IsValid)
             {
+                // حساب النسبة المئوية وتحويلها إلى int
+                var percentage = (int)Math.Round((Service.OriginalPrice - offerVM.OfferPrice) / Service.OriginalPrice * 100);
                 var Offer = db.ServiceOffers.Find(offerVM.OfferId);
                 if (Offer != null)
                 {
-                    Service.OfferPrice = Service.OriginalPrice - Service.OriginalPrice * offerVM.Percentage / 100;
-                    Offer.Percentage = offerVM.Percentage;
+                    Service.OfferPrice = offerVM.OfferPrice;
+                    Offer.Percentage = percentage;
                     Offer.OriginalPrice = Service.OriginalPrice;
-                    Offer.AfterPrice = Service.OriginalPrice - Service.OriginalPrice * offerVM.Percentage / 100;
+                    Offer.AfterPrice = offerVM.OfferPrice;
                     Offer.FinishOn = offerVM.FinishOn;
                     CRUD<ServiceOffer>.Update(Offer);
                     db.SaveChanges();
                 }
-                db.SaveChanges();
                 return RedirectToAction("Offers", new { offerVM.ServiceId });
             }
             return View(offerVM);
         }
-
         [HttpGet]
         public ActionResult ToggleDeleteOffer(long? OfferId)
         {
