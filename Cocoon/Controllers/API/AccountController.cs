@@ -474,7 +474,6 @@ namespace G4Fit.Controllers.API
         }
 
         [Authorize]
-        [Route("ChangePassword")]
         [HttpDelete]
         [Route("Delete")]
         public async Task<IHttpActionResult> Delete()
@@ -489,6 +488,7 @@ namespace G4Fit.Controllers.API
             return Ok(baseResponse);
         }
         [HttpPost]
+        [Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordDTO changePasswordDTO)
         {
             Errors IsValidData = UserValidation.ValidateChangePasswordApi(changePasswordDTO, ModelState);
