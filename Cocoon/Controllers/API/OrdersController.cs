@@ -1189,9 +1189,9 @@ namespace G4Fit.Controllers.API
                     var domain = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
                     //var publicKey = "pk_test_0b12d816-6187-4ce2-b5bb-a4bd1e29dfb6"; // Replace with your public key
-                    var publicKey = "pk_dbae4335-290b-41fd-a744-7ea3b7793111"; 
+                    var publicKey = "pk_dbae4335-290b-41fd-a744-7ea3b7793111";
                     //var secret_key = "sk_test_e65f1167-311a-496c-94de-acb067614827"; // Replace with your Secret key
-                    var secret_key = "sk_a0ccc0e4-c3f1-407f-82a8-3e5d89d3553f"; 
+                    var secret_key = "sk_a0ccc0e4-c3f1-407f-82a8-3e5d89d3553f";
                     var merchant_code = "g4fitonline";
                     var user = order.User;
                     //var tax = (order.SubTotal * order.StoreOrdersTaxs) / 100;
@@ -1634,6 +1634,7 @@ namespace G4Fit.Controllers.API
                     {
                         Description = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? item.Service.DescriptionAr : item.Service.DescriptionEn,
                         Name = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? item.Service.NameAr : item.Service.NameEn,
+                        Color = item.ColorId.HasValue == true ? item.Color.Color : null,
                         Image = item.Service.Images != null && item.Service.Images.FirstOrDefault(d => d.IsDeleted == false) != null ? "/Content/Images/Services/" + item.Service.Images.FirstOrDefault(d => d.IsDeleted == false).ImageUrl : null,
                         Price = item.Price,
                         Quantity = item.Quantity,
@@ -1732,6 +1733,7 @@ namespace G4Fit.Controllers.API
                     {
                         Description = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? item.Service.DescriptionAr : item.Service.DescriptionEn,
                         Name = !string.IsNullOrEmpty(lang) && lang.ToLower() == "ar" ? item.Service.NameAr : item.Service.NameEn,
+                        Color = item.ColorId.HasValue == true ? item.Color.Color : null,
                         Image = item.Service.Images != null && item.Service.Images.FirstOrDefault(d => d.IsDeleted == false) != null ? "/Content/Images/Services/" + item.Service.Images.FirstOrDefault(d => d.IsDeleted == false).ImageUrl : null,
                         Price = item.Price,
                         Quantity = item.Quantity,

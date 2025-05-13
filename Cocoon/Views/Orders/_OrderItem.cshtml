@@ -17,18 +17,18 @@
         <br /><span>@Website.Size: @Model.Size.Size</span><br />
     }
     @*@if (Model.ColorId.HasValue == true)
-    {
-        <div>
-            @Website.Color:
-            <div class="Tools d-inline">
-                <div class="Colors">
-                    <ul class="list-unstyled">
-                        <li style="background-color:@Model.Color.Color"></li>
-                    </ul>
+        {
+            <div>
+                @Website.Color:
+                <div class="Tools d-inline">
+                    <div class="Colors">
+                        <ul class="list-unstyled">
+                            <li style="background-color:@Model.Color.Color"></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-    }*@
+        }*@
 </td>
 <td>@(Model.Service.OfferPrice.HasValue == true ? Model.Service.OfferPrice.Value : Model.Service.OriginalPrice) @Website.SAR</td>
 @if (Model.Service.IsTimeBoundService)
@@ -43,6 +43,13 @@
 }
 else
 {
-    <td class="Quantity"> <span onclick="IncreaseItem('@Model.Id')" class="Plus"><i class="fas fa-plus-square"></i></span><b class="Total">@Model.Quantity</b><span onclick="DecreaseItem('@Model.Id')" class="Minus"><i class="fas fa-minus-square"></i></span></td>
+    <td class="Quantity">
+        <span onclick="IncreaseItem('@Model.Id')" class="Plus"><i class="fas fa-plus-square"></i></span><b class="Total">@Model.Quantity</b><span onclick="DecreaseItem('@Model.Id')" class="Minus"><i class="fas fa-minus-square"></i></span>
+        @if (Model.ColorId.HasValue)
+        {
+            <br />
+            <span>  المدرب: @Model.Color.Color</span>
+        }
+    </td>
 }
 <td>@Model.SubTotal @Website.SAR</td>

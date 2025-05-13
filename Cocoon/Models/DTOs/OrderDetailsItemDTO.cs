@@ -15,6 +15,7 @@ namespace G4Fit.Models.DTOs
         public int RemainFreezingDays { get; set; } = 0;
         public int RemainFreezingTimes { get; set; } = 0;
         public string Name { get; set; }
+        public string Color { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
     }

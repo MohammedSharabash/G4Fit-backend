@@ -538,112 +538,132 @@
     }
 
     <!-- قسم الإضافة إلى السلة -->
-    <div class="add-to-cart-section wow animate__animated animate__fadeInUp">
-        @if (!Model.IsTimeBoundService)
-        {
-            <!-- للخدمات العادية -->
-            <h3 class="section-title">@Website.AddToCart</h3>
-
-            <div class="Services-details-desc">
-                <div class="selection-wrapper text-center">
-                    <div class="input-counter mx-auto">
-                        <span class="minus-btn"><i class='fa fa-minus'></i></span>
-                        <input type="number" value="1" min="1" max="@Model.Inventory">
-                        <span class="plus-btn"><i class='fa fa-plus'></i></span>
-                    </div>
+<div class="add-to-cart-section wow animate__animated animate__fadeInUp">
+    @if (!Model.IsTimeBoundService)
+    {
+        <!-- للخدمات العادية -->
+        <h3 class="section-title">@Website.AddToCart</h3>
+        <!-- اختيار المدرب -->
+        <div class="selection-wrapper">
+            <p class="selection-title">@(culture == "ar" ? "اختر المدرب" : "Choose Trainer")</p>
+            @if (Model.Colors.Any(s => s.IsDeleted == false))
+            {
+                <ul class="selection-options justify-content-center">
+                    @foreach (var trainer in Model.Colors.Where(s => s.IsDeleted == false))
+                    {
+                        <li data-size="@trainer.Id" class="@(trainer.Id == Model.Colors.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")">
+                            <a href="javascript:void(0)">@trainer.Color</a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-center text-muted">
+                    @(culture == "ar" ? "لا توجد مدربين متاحين" : "No trainers available")
+                </p>
+            }
+        </div>
+        <div class="Services-details-desc">
+            <div class="selection-wrapper text-center">
+                <div class="input-counter mx-auto">
+                    <span class="minus-btn"><i class='fa fa-minus'></i></span>
+                    <input type="number" value="1" min="1" max="@Model.Inventory">
+                    <span class="plus-btn"><i class='fa fa-plus'></i></span>
                 </div>
+            </div>
 
-                <div class="total-price">
-                    <strong>@Website.Total:</strong>
-                    <span id="Service-price">@(Model.OfferPrice.HasValue == true ? Model.OfferPrice.Value : Model.OriginalPrice)</span> @Website.SAR
+            <div class="total-price">
+                <strong>@Website.Total:</strong>
+                <span id="Service-price">@(Model.OfferPrice.HasValue == true ? Model.OfferPrice.Value : Model.OriginalPrice)</span> @Website.SAR
+            </div>
+
+            @if (Model.Inventory > 0)
+            {
+                <div class="text-center">
+                    <button type="button" onclick="Add()" class="add-to-cart-btn">
+                        <i class="fa fa-shopping-cart"></i> @Website.AddToCart
+                    </button>
                 </div>
+            }
+            else
+            {
+                <p class="out-of-stock">
+                    @(culture == "ar" ? "الخدمة غير متوفرة حالياً" : "Service is currently out of stock")
+                </p>
+                <div class="text-center">
+                    <button type="button" class="add-to-cart-btn" disabled>
+                        <i class="fa fa-shopping-cart"></i> @Website.AddToCart
+                    </button>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <!-- للخدمات المحددة بوقت -->
+        <h3 class="section-title">
+            @(culture == "ar" ? "بدء الاشتراك" : "Start Subscription")
+        </h3>
 
-                @if (Model.Inventory > 0)
+        <div class="Services-details-desc">
+            <!-- اختيار المدرب -->
+            <div class="selection-wrapper">
+                <p class="selection-title">@(culture == "ar" ? "اختر المدرب" : "Choose Trainer")</p>
+                @if (Model.Colors.Any(s => s.IsDeleted == false))
                 {
-                    <div class="text-center">
-                        <button type="button" onclick="Add()" class="add-to-cart-btn">
-                            <i class="fa fa-shopping-cart"></i> @Website.AddToCart
-                        </button>
-                    </div>
+                    <ul class="selection-options justify-content-center">
+                        @foreach (var trainer in Model.Colors.Where(s => s.IsDeleted == false))
+                        {
+                            <li data-size="@trainer.Id" class="@(trainer.Id == Model.Colors.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")">
+                                <a href="javascript:void(0)">@trainer.Color</a>
+                            </li>
+                        }
+                    </ul>
                 }
                 else
                 {
-                    <p class="out-of-stock">
-                        @(culture == "ar" ? "الخدمة غير متوفرة حالياً" : "Service is currently out of stock")
+                    <p class="text-center text-muted">
+                        @(culture == "ar" ? "لا توجد مدربين متاحين" : "No trainers available")
                     </p>
-                    <div class="text-center">
-                        <button type="button" class="add-to-cart-btn" disabled>
-                            <i class="fa fa-shopping-cart"></i> @Website.AddToCart
-                        </button>
-                    </div>
                 }
             </div>
-        }
-        else
-        {
-            <!-- للخدمات المحددة بوقت -->
-            <h3 class="section-title">
-                @(culture == "ar" ? "بدء الاشتراك" : "Start Subscription")
-            </h3>
 
-            <div class="Services-details-desc">
-                <!-- اختيار المدرب -->
-                <div class="selection-wrapper">
-                    <p class="selection-title">@(culture == "ar" ? "اختر المدرب" : "Choose Trainer")</p>
-                    @if (Model.Colors.Any(s => s.IsDeleted == false))
-                    {
-                        <ul class="selection-options justify-content-center">
-                            @foreach (var trainer in Model.Colors.Where(s => s.IsDeleted == false))
-                            {
-                                <li data-size="@trainer.Id" class="@(trainer.Id == Model.Colors.FirstOrDefault(s => s.IsDeleted == false).Id ? "active" : "")">
-                                    <a href="javascript:void(0)">@trainer.Color</a>
-                                </li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <p class="text-center text-muted">
-                            @(culture == "ar" ? "لا توجد مدربين متاحين" : "No trainers available")
-                        </p>
-                    }
+            <!-- اختيار تاريخ البدء -->
+            <div class="selection-wrapper text-center">
+                <p class="selection-title">@Website.StartDate</p>
+                <div class="Start-input-counter mx-auto">
+                    <input type="date" id="dateInput" min="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")">
                 </div>
-
-                <!-- اختيار تاريخ البدء -->
-                <div class="selection-wrapper text-center">
-                    <p class="selection-title">@Website.StartDate</p>
-                    <div class="Start-input-counter mx-auto">
-                        <input type="date" id="dateInput" min="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")">
-                    </div>
-                </div>
-
-                <div class="total-price">
-                    <strong>@Website.Total:</strong>
-                    <span id="Service-price">@(Model.OfferPrice.HasValue == true ? Model.OfferPrice.Value : Model.OriginalPrice)</span> @Website.SAR
-                </div>
-
-                @if (Model.ServiceDays > 0)
-                {
-                    <div class="text-center">
-                        <button type="button" onclick="AddTimeBoundService()" class="add-to-cart-btn">
-                            <i class="fa fa-shopping-cart"></i> @Website.AddToCart
-                        </button>
-                    </div>
-                }
-                else
-                {
-                    <p class="out-of-stock">
-                        @(culture == "ar" ? "الخدمة غير متوفرة حالياً" : "Service is currently out of stock")
-                    </p>
-                    <div class="text-center">
-                        <button type="button" class="add-to-cart-btn" disabled>
-                            <i class="fa fa-shopping-cart"></i> @Website.AddToCart
-                        </button>
-                    </div>
-                }
             </div>
-        }
-    </div>
+
+            <div class="total-price">
+                <strong>@Website.Total:</strong>
+                <span id="Service-price">@(Model.OfferPrice.HasValue == true ? Model.OfferPrice.Value : Model.OriginalPrice)</span> @Website.SAR
+            </div>
+
+            @if (Model.ServiceDays > 0)
+            {
+                <div class="text-center">
+                    <button type="button" onclick="AddTimeBoundService()" class="add-to-cart-btn">
+                        <i class="fa fa-shopping-cart"></i> @Website.AddToCart
+                    </button>
+                </div>
+            }
+            else
+            {
+                <p class="out-of-stock">
+                    @(culture == "ar" ? "الخدمة غير متوفرة حالياً" : "Service is currently out of stock")
+                </p>
+                <div class="text-center">
+                    <button type="button" class="add-to-cart-btn" disabled>
+                        <i class="fa fa-shopping-cart"></i> @Website.AddToCart
+                    </button>
+                </div>
+            }
+        </div>
+    }
+</div>
 </div>
 
 <!-- عناصر مخفية لتخزين البيانات -->

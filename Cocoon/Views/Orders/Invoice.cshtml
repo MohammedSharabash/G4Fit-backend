@@ -83,7 +83,15 @@
                         <td><div class="cost">@((item.Service.OfferPrice.HasValue ? item.Service.OfferPrice.Value : item.Service.OriginalPrice)) @(culture == "ar" ? "ريال سعودي" : "SAR")</div></td>
                         @if (!item.Service.IsTimeBoundService)
                         {
-                            <td><div class="qty">@item.Quantity</div></td>
+                            <td>
+                                <div class="qty">@item.Quantity</div>
+                                @if (item.ColorId.HasValue)
+                                {
+
+                                    <br />
+                                    <span>  المدرب: @item.Color.Color</span>
+                                }
+                            </td>
                         }
                         else
                         {

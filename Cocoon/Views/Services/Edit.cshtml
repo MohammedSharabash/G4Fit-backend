@@ -403,7 +403,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             var isTimeBoundServiceCheckbox = document.getElementById("IsTimeBoundService");
             var inventoryContainer = document.getElementById("inventory-container");
-            var FeaturesContainer = document.getElementById("Features-container");
+            //var FeaturesContainer = document.getElementById("Features-container");
             var inventoryInput = document.getElementById("Inventory");
             var serviceDaysContainer = document.getElementById("service-days-container");
             var InBodyCountContainer = document.getElementById("InBodyCount-container");
@@ -414,13 +414,13 @@
                     // Show ServiceDays, hide Inventory and set its value to 1
                     serviceDaysContainer.style.display = "block";
                     InBodyCountContainer.style.display = "block";
-                    FeaturesContainer.style.display = "block";
+                    //FeaturesContainer.style.display = "block";
                     inventoryContainer.style.display = "none";
                 } else {
                     // Hide ServiceDays, show Inventory and clear value
                     serviceDaysContainer.style.display = "none";
                     InBodyCountContainer.style.display = "none";
-                    FeaturesContainer.style.display = "none";
+                    //FeaturesContainer.style.display = "none";
                     inventoryContainer.style.display = "block";
                 }
             }
@@ -455,7 +455,7 @@
             var FreezingDaysContainer = document.getElementById("Freezing-days-container");
             var FreezingTimesContainer = document.getElementById("Freezing-Times-container");
           var InBodyCountContainer = document.getElementById("InBodyCount-container");
-            var FeaturesContainer = document.getElementById("Features-container");
+            //var FeaturesContainer = document.getElementById("Features-container");
 
             if (timeBoundService) {
                 // إذا كانت الخدمة محددة بوقت، إخفاء كمية الخدمة وإظهار عدد أيام الاشتراك
@@ -464,7 +464,7 @@
                 FreezingDaysContainer.style.display = "block";
                 FreezingTimesContainer.style.display = "block";
                 InBodyCountContainer.style.display = "block";
-                FeaturesContainer.style.display = "block";
+                //FeaturesContainer.style.display = "block";
             } else {
                 // إذا لم تكن الخدمة محددة بوقت، إظهار كمية الخدمة وإخفاء عدد أيام الاشتراك
                 inventoryContainer.style.display = "block";
@@ -472,7 +472,7 @@
                 FreezingDaysContainer.style.display = "none";
                 FreezingTimesContainer.style.display = "none";
                 InBodyCountContainer.style.display = "none";
-                FeaturesContainer.style.display = "none";
+                //FeaturesContainer.style.display = "none";
             }
         }
 

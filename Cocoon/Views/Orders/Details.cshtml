@@ -164,6 +164,12 @@
                                                                 <div>المتبقي من أيام التجميد: @item.RemainFreezingDays</div>
                                                                 <div>المتبقي من مرات التجميد: @item.RemainFreezingTimes</div>
                                                             </div>
+                                                            @if (item.ColorId.HasValue)
+                                                            {
+
+                                                                <br />
+                                                                <span>  المدرب: @item.Color.Color</span>
+                                                            }
                                                         </td>
                                                     }
                                                     else
