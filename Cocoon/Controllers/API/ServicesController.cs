@@ -232,7 +232,7 @@ namespace G4Fit.Controllers.API
             };
             if (category.Services != null && category.Services.Count(s => s.IsDeleted == false) > 0)
             {
-                foreach (var Service in category.Services.Where(s => s.IsDeleted == false && s.IsHidden == false).OrderByDescending(s => s.SellCounter)/*.Skip(Skip).Take(PageSize)*/.ToList())
+                foreach (var Service in category.Services.Where(s => s.IsDeleted == false && s.IsHidden == false)/*.OrderByDescending(s => s.SellCounter)*/.OrderBy(s => s.SortingNumber)/*.Skip(Skip).Take(PageSize)*/.ToList())
                 {
                     ServiceDTO ServiceDTO = new ServiceDTO()
                     {
